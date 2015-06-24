@@ -1,0 +1,105 @@
+/* This stylesheet is used to style the admin option form of the plugin. */
+
+
+    label {
+        display: inline-block;
+        width  : 200px;        
+    }
+    .lower_part{
+    	margin-top: 20px;
+    }
+    .upper_part{
+        background: none repeat scroll 0 0 #f4e7ea;
+        border: 1px solid #986265;
+        height: 40px;
+    }
+	.side_l {
+		background: none repeat scroll 0 0 #f4e7ea;
+		position: relative; 
+		top: 0px;
+		margin-left:0px;
+		width: 20%;
+		height: 100%;
+		float: left;
+	}
+
+	.side_r {
+		position: relative;
+		top: 0px;
+		float: left; /* Trying to detect something at my left */
+		height: 100%;
+		width: 80%;
+		float: left;
+	}
+
+
+
+	    /* Example Styles for Demo */
+    .etabs { margin: 0; padding: 0; }
+    .tab { display: inline-block; zoom:1;margin-bottom:0px; *display:inline; background: #eee; border: solid 1px #ddd; border-bottom: none; -moz-border-radius: 4px 4px 0 0; -webkit-border-radius: 4px 4px 0 0; }
+    .tab a { font-size: 14px; line-height: 2em; display: block; padding: 0 10px; outline: none; }
+    .tab a:hover { text-decoration: underline; }
+    .tab.active { background: #fff; position: relative; top: 1px; border-color: #ddd; }
+    .tab a.active { font-weight: bold; }
+    .tab-container .panel-container { background: #fff; padding: 10px; -moz-border-radius: 0 4px 4px 4px; -webkit-border-radius: 0 4px 4px 4px; }
+    .panel-container { margin-bottom: 10px; }
+    .widget_image{width: 100px;height: 80px;}
+
+
+   /* Front Widget Css */
+    .morsel{
+        padding: 0;
+        margin: auto;   
+        text-align: left;
+        max-width: 320px;
+        border: solid 1px #eee;
+        font-family:Arial, Helvetica, sans-serif;
+        
+    }
+    .morsel,.morsel *{box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;-o-box-sizing:border-box;}
+    .morsel ul{padding:0;margin:0;float:left;width:100%;border:1px solid #eee;}
+    .morsel ul li{float:left;width:100%;padding:10px;border-bottom:1px solid #eee;}
+    .morsel .post-img{
+        float: left;
+        padding: 1px;
+        width: 20%;
+    }
+    .morsel .post-img img {/*border-radius: 3px;*/border: 3px solid #FFF;box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);-moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);-ms-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);-o-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);max-width:100%;border-radius: 50%;
+    }
+    .morsel .post{width: 80%;float: left;padding-left:10px;padding-top: 5px;}        
+    .morsel .post h3{margin:0;font-size:16px;margin-bottom:10px;}
+
+    .morsel li p {font-size:12px;line-height:normal;}
+    .morsel li {
+          padding: 2px;
+          overflow: auto;
+        }
+         
+     #morsel-wrapper li:hover {
+          background: #eee;
+          cursor: pointer;
+        }
+    #morsel-wrapper-thumbnail{
+        height: 240px;
+    }
+    #morsel-wrapper-thumbnail .morsel-row:hover{
+        background: #eee;
+        cursor: pointer; 
+    }
+     /*.nano {height: 280px; }*/
+       
+
+     #morsel-wrapper{height: 266px;}
+     .morsel-row{
+        width: 50%;
+        float: left;
+     }
+     .morsel-row .post-img{
+        width: 95% !important;
+     }
+     .morsel-row .post img{
+        width: 100% ;
+     }
+     #morsel-wrapper-thumbnail { text-align: center;}
+
+     
