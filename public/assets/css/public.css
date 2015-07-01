@@ -1,0 +1,11 @@
+/* This stylesheet is used to style the public-facing components of the plugin. */
+.load-more-wrap{
+  padding:10px 0px !important;
+  text-align: center !important;
+}
+
+.morselbtn {
+    background-color: #e96144 !important;
+    border-color: #e96144 !important;
+    height: 40px !important;
+}
