@@ -10,14 +10,11 @@
 		$('#load-morsel').click(function(){
 			var load = $(this);
 			load.html('Fetching... Please wait.');
-			var count = '20';
 
-			if($(this).attr("morsel-count")){
-				count = $(this).attr("morsel-count");
-			}
-
+			
 			$.ajax({
-				url:  "index.php?pagename=morsel_ajax&page_id=" + parseInt(++morsePageCount)+"&morsel-count="+count,          
+				url:  "index.php?pagename=morsel_ajax&page_id=" + parseInt(++morsePageCount),          
+
 				success: function(data) {
 					if(data.trim().length>1)						                      
 				    	$( "#morsel-posts-row" ).append( data );
