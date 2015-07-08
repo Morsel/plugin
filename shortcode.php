@@ -308,7 +308,7 @@ function morsel_post_des(){
               <div class="container-fluid join-page">
                 <div class="row">
                   <div class="col-md-12">
-                    <h1 class="text-center">Sign Up For Morsel</h1>
+                    <h1 class="text-center">Please Sign Up</h1>
                     <div id="mrsl-signup-error-box" class="alert alert-danger" style="display:none"></div>
                     <div class="join-landing" ui-view="landing"></div>
                     <div ui-view="basicInfo" class="">
