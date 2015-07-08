@@ -10,11 +10,8 @@
 		$('#load-morsel').click(function(){
 			var load = $(this);
 			load.html('Fetching... Please wait.');
-
-			
 			$.ajax({
 				url:  "index.php?pagename=morsel_ajax&page_id=" + parseInt(++morsePageCount),          
-
 				success: function(data) {
 					if(data.trim().length>1)						                      
 				    	$( "#morsel-posts-row" ).append( data );
