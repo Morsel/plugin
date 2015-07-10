@@ -34,7 +34,9 @@ function grid($row_sht,$morsel_page_id) {
 
   $atts = shortcode_atts(
     array(
-      'count' => 0      
+      'count' => 0,
+      'gap_in_morsel' => NULL,
+      'center_block' => 0
     ), $atts, 'morsel_post_display' );
 
   $morsel_page_id = get_option( 'morsel_plugin_page_id');
@@ -69,7 +71,24 @@ function grid($row_sht,$morsel_page_id) {
         <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> -->
         <link rel="stylesheet" href="<?php echo MORSEL_PLUGIN_WIDGET_ASSEST.'css/bootstrap.min.css';?>">
         <link rel="stylesheet" type="text/css" href=<?php echo MORSEL_PLUGIN_WIDGET_ASSEST.'css/morsel_list.css'?>>
-        
+        <style type="text/css">
+          <?php if($atts['center_block'] == 1){ ?>
+                 #morsel-posts-row {
+                    font-size: 0;
+                    text-align: center;
+                  }
+                  #morsel-posts-row .col-sm-4.col-md-4 {
+                    display: inline-block;
+                    float: none;                    
+                  }
+          <?php } ?>
+          <?php if(isset($atts['gap_in_morsel'])){ ?>
+                  #morsel-posts-row .col-sm-4.col-md-4 {                    
+                    padding: 0 <?php echo $atts['gap_in_morsel'];?>!important;
+                  }
+          <?php } ?>
+
+        </style>
            <div class="page-wrapper" > 
                   <div class="site">
                       <div class="tab-content">
