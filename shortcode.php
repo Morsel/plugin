@@ -42,13 +42,7 @@ function grid($row_sht,$morsel_page_id) {
   $morsel_page_id = get_option( 'morsel_plugin_page_id');
   $options = get_option( 'morsel_settings');
   $api_key = $options['userid'] . ':' .$options['key'];
-
-  if($atts['count'] > 0){
-    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count'];  
-  } else {
-    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT;  
-  }
-  
+  $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT;
   $json = get_json($jsonurl); 
 
   $morsel_post_sht =  $json->data;
@@ -111,9 +105,7 @@ function grid($row_sht,$morsel_page_id) {
                <div class="col-sm-12 col-md-12 load-more-wrap" >
                <!-- previous code
                   <button class="btn  btn-lg btn-block btn-info" type="button" id="load-morsel">Load more!</button>  -->
-                <?php if($atts['count'] == 0) { ?>  
-                 <button class="btn btn-primary morselbtn" type="button" id="load-morsel" morsel-count="<?php echo $atts['count'];?>" >View more morsels</button>
-                <?php } ?> 
+                 <button class="btn btn-primary morselbtn" type="button" id="load-morsel">View more morsels</button>
                </div>     
           </div>
     <?php
@@ -341,7 +333,7 @@ function morsel_post_des(){
               <div class="container-fluid join-page">
                 <div class="row">
                   <div class="col-md-12">
-                    <h1 class="text-center">Sign Up For Morsel</h1>
+                    <h1 class="text-center">Please Sign Up</h1>
                     <div id="mrsl-signup-error-box" class="alert alert-danger" style="display:none"></div>
                     <div class="join-landing" ui-view="landing"></div>
                     <div ui-view="basicInfo" class="">
@@ -409,9 +401,9 @@ function morsel_post_des(){
                       </div>
                       <p class="help-block"></p>
                     </div>
-	                <div id="morsel-progress" class="progress" style="display:none;">
-	                	<div style="width:100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="100%" role="progressbar" class="progress-bar progress-bar-striped active">Your request is processing, please wait.</div>
-	                </div>
+                  <div id="morsel-progress" class="progress" style="display:none;">
+                    <div style="width:100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="100%" role="progressbar" class="progress-bar progress-bar-striped active">Your request is processing, please wait.</div>
+                  </div>
                     <div class="form-group clearfix">
                       <span id="mrsl-signup-submit-btn-span" data-original-title="Please complete all required fields" data-toggle="tooltip" data-placement="top" class="btn-submit-wrap btn-submit-block disabled">
                         <button id="mrsl-signup-submit-btn" class="btn btn-primary btn-lg" type="submit">Sign Up</button>
@@ -460,8 +452,8 @@ function morsel_post_des(){
             </div> <!-- #mrsl-login-section -->
         </div>
         <div class="powered-by-morsel">
-        	<a target="_blank" href="http://www.eatmorsel.com/">Powered by Morsel</a>
-      	</div>
+          <a target="_blank" href="http://www.eatmorsel.com/">Powered by Morsel</a>
+        </div>
       </div>
       <!-- <div class="modal-footer">
         <footer class="login-footer">
