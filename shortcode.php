@@ -42,7 +42,13 @@ function grid($row_sht,$morsel_page_id) {
   $morsel_page_id = get_option( 'morsel_plugin_page_id');
   $options = get_option( 'morsel_settings');
   $api_key = $options['userid'] . ':' .$options['key'];
-  $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT;
+
+  if($atts['count'] > 0){
+    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count'];  
+  } else {
+    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT;  
+  }
+  
   $json = get_json($jsonurl); 
 
   $morsel_post_sht =  $json->data;
@@ -105,7 +111,9 @@ function grid($row_sht,$morsel_page_id) {
                <div class="col-sm-12 col-md-12 load-more-wrap" >
                <!-- previous code
                   <button class="btn  btn-lg btn-block btn-info" type="button" id="load-morsel">Load more!</button>  -->
-                 <button class="btn btn-primary morselbtn" type="button" id="load-morsel">View more morsels</button>
+                <?php if($atts['count'] == 0) { ?>  
+                 <button class="btn btn-primary morselbtn" type="button" id="load-morsel" morsel-count="<?php echo $atts['count'];?>" >View more morsels</button>
+                <?php } ?> 
                </div>     
           </div>
     <?php
