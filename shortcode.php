@@ -524,7 +524,7 @@ function morsel_post_des(){
             </div>          
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+              <button id="morsel-subscribe" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
             </div>
         </div><!-- /.modal-content -->
      </div><!-- /.modal-dialog -->
@@ -533,7 +533,61 @@ function morsel_post_des(){
   
   <script type="text/javascript">  
   jQuery(function ($) {
-    
+    /*add subscription for other morsel like this*/
+    $("#morsel-subscribe").click(function(event){
+      event.preventDefault();
+      var sessionUserId =  "<?php echo $_SESSION['morsel_user_obj']->id;?>"
+      if(sessionUserId == ''){
+        jQuery("#open-morsel-login1").trigger('click');
+        return;
+      }
+      
+      var subscribeUrl = "<?php echo MORSEL_API_USER_URL.'morsel_subscribe'; ?>";
+      
+      var activity = 'morsel-subscribe';
+      var key = "<?php echo $_SESSION['morsel_user_obj']->id.':'.$_SESSION['morsel_user_obj']->auth_token;?>";
+
+      var morselId = "<?php echo $_REQUEST['morselid'];?>";
+      var post_data = {
+                        user:{subscriptions_attributes : [{morsel_id:morselId}] },
+                        api_key:key
+                      };
+      
+      console.log("post_data : ",post_data);
+
+      jQuery.ajax({
+          url: subscribeUrl,                     
+          type: 'POST',           
+          data: post_data,
+          complete: function(){
+            //alert("Action Complete");
+            waitingDialog.hide();
+          },
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader('share-by',"morsel-plugin")
+            xhr.setRequestHeader('activity',"Morsel Subscribe");            
+            xhr.setRequestHeader('activity-id',"<?php echo $_REQUEST['morselid'];?>");
+            xhr.setRequestHeader('activity-type',"Morsel");
+            xhr.setRequestHeader('user-id',"<?php echo $_SESSION['morsel_user_obj']->id;?>");
+            waitingDialog.show('Loading...');   
+          },
+          success: function(response, status){
+            console.log("response :: ",response);  
+            console.log("status :: ",status);
+            
+            if(status == 'success'){
+              alert("Done");               
+            } else {                  
+              alert("Opps Something wrong happend!"); 
+            }
+          },
+          error:function(response, status, xhr){
+              console.log("error response :: ",response);                
+          }
+      });
+
+    });
+
     //add comment functionality
     jQuery("#add-comment-btn").click(function(event){
       

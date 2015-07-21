@@ -79,6 +79,7 @@ add_action( 'plugins_loaded', array( 'Morsel', 'get_instance' ) );
 function register_my_setting() {
 	register_setting('morsel_settings', 'morsel_settings');
 	register_setting('morsel_post_settings', 'morsel_post_settings');
+        register_setting('morsel_host_details', 'morsel_host_details');
 	//register_setting('morsel_settings', 'morsel_posts_data');	
 } 
 
@@ -309,6 +310,16 @@ function getUniqueUsername($userName) {
     return getUniqueUsername($userName); // <--calling itself.
   }
 }
+
+// This will enqueue the Media Uploader script
+function wp_morsel_manager_admin_scripts () {
+  wp_enqueue_script('jquery'); 
+  wp_enqueue_media();
+}
+  
+add_action('admin_print_styles', 'wp_morsel_manager_admin_scripts');
+
+
 /*----------------------------------------------------------------------------*
  * Dashboard and Administrative Functionality
  *----------------------------------------------------------------------------*/

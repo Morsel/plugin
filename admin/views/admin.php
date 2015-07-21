@@ -24,6 +24,7 @@
  <ul class='etabs'>
    <li class='tab'><a href="#tabs1-settings">Settings</a></li>
    <li class='tab'><a href="#tabs1-js">Post</a></li>
+   <li class='tab'><a href="#host_details">Host Details</a></li>
  </ul>
  <div class='panel-container'>
 	<div id="tabs1-settings">
@@ -69,6 +70,13 @@
 	    <?php } else {?>
            Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
 	    <?php } ?> 
+	 </div>
+	 <div id="host_details">
+        <?php if($options['key']){?>
+          <?php include_once("host-details-tab.php");?>
+	    <?php } else {?>
+           Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
+	    <?php } ?>
 	 </div>
 </div>
 </div>
@@ -139,7 +147,93 @@ window.onload =function(){
 					morsePageCount--;
 				},complete:function(){load.val('Load more!');}
 	        });	
-		})
+		});
+
+		/*save host details function*/
+		jQuery( "#morsel_host_submit" ).click(function(e) {
+			e.preventDefault();
+			if(jQuery("#host_url").val() == ""){
+				alert("Please Fill Host URl");
+				return false;
+			}
+			if(jQuery("#host_logo_path").val() == ""){
+				alert("Please Fill Absoulte Host Logo Path");
+				return false;
+			}
+	  		if(jQuery("#host_address").val() == ""){
+				alert("Please Fill Addess Of The Host Site Organisation/Person");
+				return false;
+			}
+			 
+
+			if(jQuery("#profile_id").val() == ""){
+				var userData =  { 
+									api_key:"<?php echo get_option('morsel_settings')['userid'].':'.get_option('morsel_settings')['key']; ?>",
+									user:{
+										profile_attributes:{
+											host_url: jQuery("#host_url").val(),
+											host_logo: jQuery("#host_logo_path").val(),
+											address : jQuery("#host_address").val()
+										}
+									}
+								};	
+			} else {
+				var userData =  { 
+									api_key:"<?php echo get_option('morsel_settings')['userid'].':'.get_option('morsel_settings')['key']; ?>",
+									user:{
+										profile_attributes:{
+											id:jQuery("#profile_id").val(),
+											host_url: jQuery("#host_url").val(),
+											host_logo: jQuery("#host_logo_path").val(),
+											address : jQuery("#host_address").val()
+										}
+									}
+								};	
+			}			
+			console.log("Userdata : ",userData);
+			jQuery.ajax({
+				url: "<?php echo MORSEL_API_USER_URL.get_option('morsel_settings')['userid'].'.json';?>",
+				data: userData,
+				type:'PUT',
+				success: function(response){					
+					console.log("Success Response : ",response);
+					if(response.meta.status == 200){	
+						jQuery("#profile_id").val(response.data.profile.id); 	
+					 	jQuery("#morsel-host-details-form").submit();
+					} else {
+						alert("Opps something has gone wrong!"); 
+						return false;     
+					}
+				},
+			   	error:function(response){
+			   		console.log("Error Response : ",response);
+			   		alert("Opps something has gone wrong!"); 
+			   	},complete:function(){
+			   		jQuery('#morsel_host_submit').val('Save');
+			   	}
+			});
+		}); 
+		
+		
+		$('#upload_image_button').click(function(e) {
+		    e.preventDefault();
+		    var image = wp.media({ 
+		        title: 'Upload Image',
+		        // mutiple: true if you want to upload multiple files at once
+		        multiple: false
+		    }).open()
+		    .on('select', function(e){
+		        // This will return the selected image from the Media Uploader, the result is an object
+		        var uploaded_image = image.state().get('selection').first();
+		        // We convert uploaded_image to a JSON object to make accessing it easier
+		        // Output to the console uploaded_image
+		        console.log(uploaded_image);
+		        var image_url = uploaded_image.toJSON().url;
+		        // Let's assign the url value to the input field
+		        $('#host_logo_path').val(image_url);
+		    });
+		});
+
 	}(jQuery))
 		
 
