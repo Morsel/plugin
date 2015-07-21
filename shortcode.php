@@ -81,6 +81,11 @@ function grid($row_sht,$morsel_page_id) {
                     display: inline-block;
                     float: none;                    
                   }
+                  @media screen and (max-width: 767px) {
+                      #morsel-posts-row .col-sm-4.col-md-4 {
+	                    display: block;	                    
+	                  }
+                  }
           <?php } ?>
           <?php if(isset($atts['gap_in_morsel'])){ ?>
                   #morsel-posts-row .col-sm-4.col-md-4 {                    
