@@ -219,7 +219,8 @@ a.dark-link:hover,a.dark-link:active {
 
 .page-wrapper {
 	width: 100%;
-	background-color: #fff;
+	/*background-color: #fff;*/
+	background-color:transparent;
 	/*position: absolute;*/
 	overflow: hidden;
 }
@@ -243,7 +244,8 @@ a.dark-link:hover,a.dark-link:active {
 
 @media (min-width: 768px) {
 	.page-wrapper {
-		background-color: #f3f2f0;
+		/*background-color: #f3f2f0;*/
+		background-color:transparent;
 	}
 
 	.main-view {

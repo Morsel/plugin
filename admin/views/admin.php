@@ -24,6 +24,7 @@
  <ul class='etabs'>
    <li class='tab'><a href="#tabs1-settings">Settings</a></li>
    <li class='tab'><a href="#tabs1-js">Post</a></li>
+   <li class='tab'><a href="#tabs1-shortcode">Short Code</a></li>
  </ul>
  <div class='panel-container'>
 	<div id="tabs1-settings">
@@ -69,6 +70,9 @@
 	    <?php } else {?>
            Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
 	    <?php } ?> 
+	 </div>
+	 <div id="tabs1-shortcode">        
+        <?php include_once("shortcode-tab.php");?>	    
 	 </div>
 </div>
 </div>
