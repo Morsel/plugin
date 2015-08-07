@@ -1,8 +1,7 @@
 <div id="morsel_post_display-details" class="shorcode-summry">	
 	<h4>[morsel_post_display]</h4>
-	<p >the shortcode [morsel_post_display] and that page display your top 20 morsels</p>
-	<p>In the shortcode [morsel_post_display] add attribute to it to show no of latest morsel, made them central align, gap between morsel, wrapper_width [morsel_post_display count=4 center_block=1 gap_in_morsel=5px wrapper_width=80 ] like this
-	</p>
+	<p>Shortcode [morsel_post_display] display your top 20 morsels</p>
+	<p>In the shortcode [morsel_post_display] add attribute to it to show no of latest morsel, made them central align, gap between morsel, wrapper_width [morsel_post_display count=4 center_block=1 gap_in_morsel=5px wrapper_width=80 ] like this</p>
 	<div id="short-code-preview"></div>
 	<form method="post" action="" id="morsel-shortcode-form">
 	   <table class="form-table">
