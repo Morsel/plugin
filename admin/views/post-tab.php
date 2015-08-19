@@ -210,7 +210,7 @@
 		    				api_key:"<?php echo $api_key ?>"
 		  			},
 					success: function(response) {
-					  console.log("reloader",response);
+					  //console.log("reloader",response);
 					  if(!response.data.photos)
 					  {
 					   	setTimeout(function(){
@@ -251,7 +251,7 @@
 		  			},
 					success: function(response) {
 
-						    console.log('current response',response);
+						    //console.log('current response',response);
 						    if(response.data =="NOT"){
 						    	alert("Please add morsel keyword or host detail first");
 						    	all_unpublish_morsel_id.addClass('button').text('Publish Morsel');
@@ -300,8 +300,8 @@
 							else{
 
 							var saved_keywords = response.data;
-							 console.log('keyword response',response);
-							  console.log('keyword all keyword',all_keywords);
+							 //console.log('keyword response',response);
+							 // console.log('keyword all keyword',all_keywords);
 							jQuery('#select_keyword_id option[value!="blank"]').remove();
                             var html = '';
 							  								

@@ -93,7 +93,7 @@
 function getKeywords(userid,auth_key){
 	//console.log(userid+" "+auth_key)
 	jQuery.ajax({
-		url:  "<?php echo MORSEL_API_URL_TEST;?>"+"keywords/show_morsel_keyword",
+		url:  "<?php echo MORSEL_API_URL;?>"+"keywords/show_morsel_keyword",
 		type: "POST",
 		data: {
 				keyword:{user_id:userid},
@@ -104,7 +104,7 @@ function getKeywords(userid,auth_key){
 			jQuery("#morsel-keywords").val(JSON.stringify(response.data));
 			jQuery("#morsel-form").submit();
 		},error:function(){
-			Alert('Error in getting morsel keywords of user');
+			alert('Error in getting morsel keywords of user');
 		},complete:function(){
 			console.log('Getting morsel keywords is complete');
 		}
@@ -139,7 +139,9 @@ window.onload =function(){
 				 	jQuery( "#morsel-userid" ).val(response.data.id);
 				 	jQuery( "#morsel-key" ).val(response.data.auth_token);
 				 	//get morsel keywords of user
-				 	getKeywords(response.data.id,response.data.auth_token);				 	
+				 	var auth_key = response.data.id+":"+response.data.auth_token;
+				 	//console.log("response type",auth_key);
+				 	getKeywords(response.data.id,auth_key);				 	
 				 	//jQuery( "#morsel-form" ).submit();
 				} else {
 					alert("Wrong credential"); 
@@ -229,7 +231,7 @@ window.onload =function(){
 				type:'PUT',
 				success: function(response){	
 				jQuery('#morsel_host_submit').val('Save');				
-					console.log("Success Response : ",response);
+					//console.log("Success Response : ",response);
 					if(response.meta.status == 200){	
 						jQuery("#profile_id").val(response.data.profile.id); 	
 					 	jQuery("#morsel-host-details-form").submit();
@@ -239,6 +241,7 @@ window.onload =function(){
 					}
 				},
 			   	error:function(response){
+			   		
 			   		console.log("Error Response : ",response);
 			   		alert("Opps something has gone wrong!"); 
 			   	},complete:function(){
@@ -260,7 +263,7 @@ window.onload =function(){
 		        var uploaded_image = image.state().get('selection').first();
 		        // We convert uploaded_image to a JSON object to make accessing it easier
 		        // Output to the console uploaded_image
-		        console.log(uploaded_image);
+		        //console.log(uploaded_image);
 		        var image_url = uploaded_image.toJSON().url;
 		        // Let's assign the url value to the input field
 		        $('#host_logo_path').val(image_url);

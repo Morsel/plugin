@@ -52,8 +52,6 @@ if(MORSEL_PLUGIN_ENV == 'prod'){
   define('MORSEL_SITE', 'https://dev.eatmorsel.com/');
 }
 
-define('MORSEL_API_URL_TEST','http://localhost:3000/');
-
 define('MORSEL_API_USER_URL', MORSEL_API_URL.'users/');
 define('MORSEL_API_MORSELS_URL', MORSEL_API_URL.'morsels/');
 define('MORSEL_API_ITEMS_URL', MORSEL_API_URL.'items/');

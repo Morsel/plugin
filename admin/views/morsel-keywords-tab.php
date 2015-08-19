@@ -96,7 +96,7 @@
 				
 				if($("#keyword_id").val() != ""){ //for edit keyword
 					$.ajax({
-						url:  "<?php echo MORSEL_API_URL_TEST;?>"+"keywords/edit_morsel_keyword",
+						url:  "<?php echo MORSEL_API_URL;?>"+"keywords/edit_morsel_keyword",
 						type: "POST",
 						data: {
 		    				keyword:{
@@ -106,7 +106,7 @@
 		    				api_key:$("#kwd-morsel-key").val()
 		  				},
 						success: function(response) {
-							console.log("Response in edit keywords : ",response.data);
+							//console.log("Response in edit keywords : ",response.data);
 							$("#morsel-host-keywords-form").submit();
 							
 							
@@ -119,7 +119,7 @@
 		        	});
 				} else { //for add keyword
 					$.ajax({
-						url:  "<?php echo MORSEL_API_URL_TEST;?>"+"keywords/add_morsel_keyword",
+						url:  "<?php echo MORSEL_API_URL;?>"+"keywords/add_morsel_keyword",
 						type: "POST",
 						data: {
 		    				keyword:{user_id:$("#kwd-morsel-userid").val(),name:$("#keyword_name").val()},
@@ -127,17 +127,17 @@
 		  				},	  				
 						success: function(response) {
 
-							console.log("Response in add keywords : ",response.data);
+							//console.log("Response in add keywords : ",response.data);
 							 
 							var keywords =  JSON.parse('<?php echo get_option("morsel_settings")["morsel_keywords"]?>');
-							console.log("current keywords : ",keywords);
+							//console.log("current keywords : ",keywords);
 							if(keywords=="blank") {
 								keywords = [];
 							   
 					    	}
-					    	console.log("current new keywords : ",keywords);
+					    	//console.log("current new keywords : ",keywords);
 					    	keywords.push(response.data);
-							console.log("new current keywords : ",keywords);
+							//console.log("new current keywords : ",keywords);
 							$("#updated_keywords").val(JSON.stringify(keywords));
 							$("#morsel-host-keywords-form").submit();
 							
@@ -162,7 +162,7 @@
 			var keyword_id = $(this).attr("id");
 			$("#keyword_id").val(keyword_id);
 			var keyword_name = $("#keyword-name-"+keyword_id).html();
-			console.log("keyword name for update : ",keyword_name);
+			//console.log("keyword name for update : ",keyword_name);
 			$("#keyword_name").val(keyword_name);			
 			$("#keyword_name").focus();
 		});

@@ -1,10 +1,11 @@
 <?php 
 	//delete_option('morsel_host_details');
 	//set morsel host details info if they exists	
-	if(get_option('morsel_host_details')){
+   	if(get_option('morsel_host_details')){
+
 		$options = array_merge($options,get_option('morsel_host_details'));     	
 	} else {
-
+		
 		//set morsel host details info if they exists from API
 		$ms_options = get_option( 'morsel_settings');
 		if(isset($ms_options['userid']) && $ms_options['userid'] > 0) {
