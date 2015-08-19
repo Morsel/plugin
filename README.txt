@@ -69,4 +69,15 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 = 1.0 =
 * First launch
 
+= 2.0 =
+* Add Morsel Signup and Login functionality
+* Add Comment and like/unlike functionality
+* Add Embed Code functionality
 
+= 2.1 =
+* Modified the shortcode [morsel_post_display] add attribute to it to show no of latest morsel, made them central align, gap between morsel
+[morsel_post_display count=4 center_block=1 gap_in_morsel=5px] like this
+"count" : an integer value , define how much latest morsel you want to show.
+"center_block" : it should be 1 or 0, this is for center the blocks of morsel (Default is 0).
+"gap_in_morsel" : You can set through like 5px or 5% as a string, than it creates gaps between morsel blocks through padding-left and padding right with important,otherwise normal gap is maintained.
+"wrapper_width" : Set the morsel wrapper width in %, if you want to make morsel window smaller in view, default is 100%.

@@ -14,7 +14,7 @@
  * Plugin Name:       Morsel
  * Plugin URI:        eatmorsel.com
  * Description:       Share eatmorsel's content
- * Version:           0.1
+ * Version:           2.1
  * Author:            Nishant
  * Author URI:        
  * Text Domain:       morsel

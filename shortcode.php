@@ -36,7 +36,8 @@ function grid($row_sht,$morsel_page_id) {
     array(
       'count' => 0,
       'gap_in_morsel' => NULL,
-      'center_block' => 0
+      'center_block' => 0,
+      'wrapper_width' => ""
     ), $atts, 'morsel_post_display' );
 
   $morsel_page_id = get_option( 'morsel_plugin_page_id');
@@ -90,6 +91,12 @@ function grid($row_sht,$morsel_page_id) {
           <?php if(isset($atts['gap_in_morsel'])){ ?>
                   #morsel-posts-row .col-sm-4.col-md-4 {                    
                     padding: 0 <?php echo $atts['gap_in_morsel'];?>!important;
+                  }
+          <?php } ?>
+           <?php if(isset($atts['wrapper_width'])){ ?>
+                  .page-wrapper {                    
+                    width: <?php echo $atts['wrapper_width'];?>%;
+                    margin: 0 auto;
                   }
           <?php } ?>
 

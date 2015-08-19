@@ -148,7 +148,7 @@ class Morsel_Admin {
 			wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/admin.js', __FILE__ ), array( 'jquery' ), Morsel::VERSION );
 			wp_enqueue_script( $this->plugin_slug . '-admin-script2', plugins_url( 'assets/js/jquery.hashchange.min.js', __FILE__ ), array( 'jquery' ), Morsel::VERSION );
 			wp_enqueue_script( $this->plugin_slug . '-admin-script3', plugins_url( 'assets/js/jquery.easytabs.js', __FILE__ ), array( 'jquery' ), Morsel::VERSION );
-
+			wp_enqueue_script( $this->plugin_slug . '-admin-script4', plugins_url( 'assets/js/jquery.validate.min.js', __FILE__ ), array( 'jquery' ), Morsel::VERSION );
 		}
 
 	}

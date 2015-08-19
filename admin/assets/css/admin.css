@@ -1,18 +1,26 @@
 /* This stylesheet is used to style the admin option form of the plugin. */
 
 
-    label {
-        display: inline-block;
-        width  : 200px;        
-    }
-    .lower_part{
-    	margin-top: 20px;
-    }
-    .upper_part{
-        background: none repeat scroll 0 0 #f4e7ea;
-        border: 1px solid #986265;
-        height: 40px;
-    }
+  label {
+      display: inline-block;
+      width  : 200px;        
+  }
+  label.error {
+      display: inline-block;
+      width  : 100%;        
+      color : red;
+  }
+  .wid-15{
+      width:15%;
+  }
+  .lower_part{
+  	margin-top: 20px;
+  }
+  .upper_part{
+      background: none repeat scroll 0 0 #f4e7ea;
+      border: 1px solid #986265;
+      height: 40px;
+  }
 	.side_l {
 		background: none repeat scroll 0 0 #f4e7ea;
 		position: relative; 
@@ -22,7 +30,6 @@
 		height: 100%;
 		float: left;
 	}
-
 	.side_r {
 		position: relative;
 		top: 0px;
@@ -101,7 +108,6 @@
         width: 100% ;
      }
      #morsel-wrapper-thumbnail { text-align: center;}
-
     .wp-list-table .column-action { width: 15%; }
     .wp-list-table .column-categories { width: 30% !important; }
     .wp-list-table .column-date { width: 15% !important; }
@@ -112,5 +118,3 @@
       margin-right: 10px;
     }
 
-
-    

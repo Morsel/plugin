@@ -21,6 +21,7 @@
 	   <li class='tab'><a href="#tabs1-js">Post</a></li>
 	   <li class='tab'><a href="#morsel_keywords_panel">Manage Keywords</a></li>
 	   <li class='tab'><a href="#host_details">Host Details</a></li>
+	   <li class='tab'><a href="#tabs1-shortcode">Short Code</a></li>
 	 </ul>
 	 <div class='panel-container'>
 		<div id="tabs1-settings">
@@ -81,6 +82,10 @@
            Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
 	    <?php } ?>
 	 </div>
+	 <div id="tabs1-shortcode">        
+        <?php include_once("shortcode-tab.php");?>	    
+
+	 </div>
 </div>
 </div>
 
@@ -91,20 +96,20 @@
 </script>
 <script>
 function getKeywords(userid,auth_key){
-	//console.log(userid+" "+auth_key)
+	console.log(userid+" "+auth_key)
 	jQuery.ajax({
-		url:  "<?php echo MORSEL_API_URL;?>"+"keywords/show_morsel_keyword",
+		url:  "<?php echo MORSEL_API_URL_TEST;?>"+"keywords/show_morsel_keyword",
 		type: "POST",
 		data: {
-				keyword:{user_id:userid},
-				api_key:auth_key
+				keyword:{user_id:421},
+				api_key:"421:vCw4-xiAtHYjzwAxZUUz"
 			},
 		success: function(response) {
-			//console.log(response.data);
+			console.log(response.data);
 			jQuery("#morsel-keywords").val(JSON.stringify(response.data));
 			jQuery("#morsel-form").submit();
 		},error:function(){
-			alert('Error in getting morsel keywords of user');
+			Alert('Error in getting morsel keywords of user');
 		},complete:function(){
 			console.log('Getting morsel keywords is complete');
 		}
@@ -117,7 +122,7 @@ window.onload =function(){
 	
 
 	jQuery( "#morsel_submit" ).click(function(e) {
-		///console.log("morsel_submit_called");
+		console.log("morsel_submit_called");
 		e.preventDefault();
 		if(jQuery( "#morsel_username" ).val() == ""){
 			 alert("Please Fill UserName");
@@ -139,9 +144,7 @@ window.onload =function(){
 				 	jQuery( "#morsel-userid" ).val(response.data.id);
 				 	jQuery( "#morsel-key" ).val(response.data.auth_token);
 				 	//get morsel keywords of user
-				 	var auth_key = response.data.id+":"+response.data.auth_token;
-				 	//console.log("response type",auth_key);
-				 	getKeywords(response.data.id,auth_key);				 	
+				 	getKeywords(response.data.id,response.data.auth_token);				 	
 				 	//jQuery( "#morsel-form" ).submit();
 				} else {
 					alert("Wrong credential"); 
@@ -210,7 +213,7 @@ window.onload =function(){
 										}
 									}
 								};	
-				//console.log(userData);
+				console.log(userData);
 			} else {
 				var userData =  { 
 									api_key:"<?php echo get_option('morsel_settings')['userid'].':'.get_option('morsel_settings')['key']; ?>",
@@ -224,14 +227,14 @@ window.onload =function(){
 									}
 								};	
 			}			
-			// console.log("Userdata : ",userData);
+			console.log("Userdata : ",userData);
 			jQuery.ajax({
 				url: "<?php echo MORSEL_API_USER_URL.get_option('morsel_settings')['userid'].'.json';?>",
 				data: userData,
 				type:'PUT',
 				success: function(response){	
 				jQuery('#morsel_host_submit').val('Save');				
-					//console.log("Success Response : ",response);
+					console.log("Success Response : ",response);
 					if(response.meta.status == 200){	
 						jQuery("#profile_id").val(response.data.profile.id); 	
 					 	jQuery("#morsel-host-details-form").submit();
@@ -241,7 +244,6 @@ window.onload =function(){
 					}
 				},
 			   	error:function(response){
-			   		
 			   		console.log("Error Response : ",response);
 			   		alert("Opps something has gone wrong!"); 
 			   	},complete:function(){
@@ -263,7 +265,7 @@ window.onload =function(){
 		        var uploaded_image = image.state().get('selection').first();
 		        // We convert uploaded_image to a JSON object to make accessing it easier
 		        // Output to the console uploaded_image
-		        //console.log(uploaded_image);
+		        console.log(uploaded_image);
 		        var image_url = uploaded_image.toJSON().url;
 		        // Let's assign the url value to the input field
 		        $('#host_logo_path').val(image_url);
