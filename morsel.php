@@ -33,16 +33,28 @@ define('MORSEL_PLUGIN_IMG_PATH', plugin_dir_url( __FILE__ ).'img/' );
 define('MORSEL_PLUGIN_PATH', plugin_dir_url( __FILE__ ));
 define('MORSEL_PLUGIN_WIDGET_ASSEST', plugin_dir_url( __FILE__ ).'widget_assests/' );
 
-//define('MORSEL_API_URL', 'http://localhost:3000/' );
-//define('MORSEL_API_URL', 'https://api-staging.eatmorsel.com/');
-define('MORSEL_API_URL', 'https://api.eatmorsel.com/');
-//define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-staging/embed.js');
-define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-production/embed.js');
+//for switch to development env set this constant value "dev" 
+//and for local env set this constant value "local"
+define('MORSEL_PLUGIN_ENV','dev');
+
+if(MORSEL_PLUGIN_ENV == 'prod'){
+  define('MORSEL_API_URL', 'https://api.eatmorsel.com/');  
+  define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-production/embed.js');
+  define('MORSEL_SITE', 'https://www.eatmorsel.com/');
+} else if((MORSEL_PLUGIN_ENV == 'local') || (MORSEL_PLUGIN_ENV == 'dev')){
+  if(MORSEL_PLUGIN_ENV == 'dev'){
+    define('MORSEL_API_URL', 'https://api-staging.eatmorsel.com/');    
+  } else {
+    define('MORSEL_API_URL', 'http://localhost:3000/');
+    //define('MORSEL_API_URL', 'http://301222d4.ngrok.com/');
+  }    
+  define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-staging/embed.js');
+  define('MORSEL_SITE', 'https://dev.eatmorsel.com/');
+}
+
 define('MORSEL_API_USER_URL', MORSEL_API_URL.'users/');
 define('MORSEL_API_MORSELS_URL', MORSEL_API_URL.'morsels/');
 define('MORSEL_API_ITEMS_URL', MORSEL_API_URL.'items/');
-//define('MORSEL_SITE', 'https://dev.eatmorsel.com/');
-define('MORSEL_SITE', 'https://www.eatmorsel.com/');
 define('MORSEL_API_COUNT', 20 );
 /*----------------------------------------------------------------------------*
  * Public-Facing Functionality
@@ -79,6 +91,8 @@ add_action( 'plugins_loaded', array( 'Morsel', 'get_instance' ) );
 function register_my_setting() {
 	register_setting('morsel_settings', 'morsel_settings');
 	register_setting('morsel_post_settings', 'morsel_post_settings');
+  register_setting('morsel_host_details', 'morsel_host_details');
+  register_setting('morsel_keywords', 'morsel_keywords');
 	//register_setting('morsel_settings', 'morsel_posts_data');	
 } 
 
@@ -126,6 +140,7 @@ function morsel_query_vars( $query_vars ){
     exit(0);
   }
 
+  
   if($_REQUEST['pagename']=='morsel_user_login'){
 
     unset($_POST['pagename']);
@@ -243,7 +258,7 @@ function morsel_query_vars( $query_vars ){
       $morsel_post_settings = get_option( 'morsel_post_settings');//gettind excluding id
 
       if(array_key_exists('posts_id', $morsel_post_settings))
-       $post_selected = $morsel_post_settings['posts_id'];
+        $post_selected = $morsel_post_settings['posts_id'];
       else
         $post_selected = array();
 
@@ -309,6 +324,16 @@ function getUniqueUsername($userName) {
     return getUniqueUsername($userName); // <--calling itself.
   }
 }
+
+// This will enqueue the Media Uploader script
+function wp_morsel_manager_admin_scripts () {
+  wp_enqueue_script('jquery'); 
+  wp_enqueue_media();
+}
+  
+add_action('admin_print_styles', 'wp_morsel_manager_admin_scripts');
+
+
 /*----------------------------------------------------------------------------*
  * Dashboard and Administrative Functionality
  *----------------------------------------------------------------------------*/

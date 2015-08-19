@@ -102,4 +102,15 @@
      }
      #morsel-wrapper-thumbnail { text-align: center;}
 
-     
+    .wp-list-table .column-action { width: 15%; }
+    .wp-list-table .column-categories { width: 30% !important; }
+    .wp-list-table .column-date { width: 15% !important; }
+    .wp-list-table .column-author { width: 15% !important; }
+    .wp-list-table .column-title { width: 25% !important; }
+    
+    #morsel_keyword_button{
+      margin-right: 10px;
+    }
+
+
+    
