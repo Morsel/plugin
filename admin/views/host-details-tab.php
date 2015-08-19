@@ -12,17 +12,17 @@
 	      $jsonurl = MORSEL_API_USER_URL."/me.json?api_key=".$api_key;    
 	      $json = get_json($jsonurl);	      
 	      if(isset($json->data->profile)){	      	
-	      	$options = array(
+	      	$options = array_merge($options,array(
 	      					'profile_id'=>$json->data->profile->id,
 	      					'host_address'=>$json->data->profile->address,
 	      					'host_logo_path'=>$json->data->profile->host_logo,
 	      					'host_url'=>$json->data->profile->host_url
-	      					);
+	      					));
 	      } else {
-	      	$options = array('profile_id'=>'','host_address'=>'','host_logo_path'=>'','host_url'=>''); 
+	      	$options = array_merge($options, array('profile_id'=>'','host_address'=>'','host_logo_path'=>'','host_url'=>'')); 
 	      }      	
 	    } else {
-	      $options = array('profile_id'=>'','host_address'=>'','host_logo_path'=>'','host_url'=>''); 
+	      $options = array_merge($options, array('profile_id'=>'','host_address'=>'','host_logo_path'=>'','host_url'=>'')); 
 	    }
 	} 
 ?>
