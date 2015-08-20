@@ -1,4 +1,13 @@
 <?php
+   if(isset(get_option( 'morsel_settings')['morsel_keywords']))
+   {
+   	   $old_option = get_option( 'morsel_settings');
+
+	   $old_option['morsel_keywords'] = str_replace("'","",$old_option['morsel_keywords']);
+	  
+	   update_option("morsel_settings",$old_option);
+   
+   }
    $options = get_option( 'morsel_settings');
 
    $api_key = $options['userid'] . ':' .$options['key'];
@@ -144,7 +153,7 @@
 			</td>
 			<td class="date column-date">
 			    <?php if(!$row->is_submit) { ?>
-			    <abbr title="<?php echo date("d/m/Y", strtotime($row->created_at));?>"><?php echo date("d/m/Y", strtotime($row->created_at));?></abbr>
+			    <abbr title="<?php echo date("m/d/Y", strtotime($row->created_at));?>"><?php echo date("m/d/Y", strtotime($row->created_at));?></abbr>
 			    <br />PUBLISHED
 			    <?php } else { echo "NULL";} ?>
 			   

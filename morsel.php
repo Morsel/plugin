@@ -265,6 +265,7 @@ function morsel_query_vars( $query_vars ){
       $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&page=".$_REQUEST['page_id']."&count=".MORSEL_API_COUNT;
       
       $json = get_json($jsonurl); //getting whole data
+
       foreach ($json->data as $row) {?>
     
 

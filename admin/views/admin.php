@@ -105,7 +105,7 @@ function getKeywords(userid,auth_key){
 				api_key:auth_key
 			},
 		success: function(response) {
-			//console.log(response.data);
+			
 			jQuery("#morsel-keywords").val(JSON.stringify(response.data));
 			jQuery("#morsel-form").submit();
 		},error:function(){
@@ -173,6 +173,7 @@ window.onload =function(){
 			$.ajax({
 				url:  "<?php echo site_url()?>"+"/index.php?pagename=morsel_ajax_admin&page_id=" + parseInt(++morsePageCount),          
 				success: function(data) {
+					console.log(data);
 					if(data.trim().length>1)						                      
 				    	$( "#the-list" ).append( data );
 					else{

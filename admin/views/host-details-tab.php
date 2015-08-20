@@ -1,5 +1,5 @@
 <?php 
-	//delete_option('morsel_host_details');
+	 delete_option('morsel_host_details');
 	//set morsel host details info if they exists	
    	if(get_option('morsel_host_details')){
 

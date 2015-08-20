@@ -1,4 +1,13 @@
 <?php 
+	 if(isset(get_option( 'morsel_settings')['morsel_keywords']))
+   {
+   	   $old_option = get_option( 'morsel_settings');
+
+	   $old_option['morsel_keywords'] = str_replace("'","",$old_option['morsel_keywords']);
+	  
+	   update_option("morsel_settings",$old_option);
+   
+   }
 	if(isset($_POST["keyword"]["name"])){
 		if($_POST["keyword_id"] != ""){
             
@@ -75,7 +84,7 @@
 			</td>            
 			<td class="categories column-categories" id="keyword-name-<?php echo $row->id;?>"><?php echo $row->name;?></td>
 			<td class="date column-date">
-			    <abbr title="<?php echo date("d/m/Y", strtotime($row->created_at));?>"><?php echo date("d/m/Y", strtotime($row->created_at));?></abbr><br />Created
+			    <abbr title="<?php echo date("d/m/Y", strtotime($row->created_at));?>"><?php echo date("m/d/Y", strtotime($row->created_at));?></abbr><br />Created
 			</td>
 			<td class="edit-btn column-categories">
 			  <button class="edit-keyword-btn" id="<?php echo $row->id;?>">Edit</button>
@@ -92,17 +101,28 @@
 		$("#morsel-keywords-submit").click(function(event){
 			event.preventDefault();
 			if($("#keyword_name").val() != ""){
+
+				var keywords_name = $("#keyword_name").val();
+				
+				var regex = /[^\w\s]/gi;
+
+				if(regex.test(keywords_name) == true) {
+				    alert('Your keyword string contains illegal characters.');
+				    return;
+				}
+				
 				$("#morsel-keywords-submit").val('Please wait!');
 				
 				if($("#keyword_id").val() != ""){ //for edit keyword
+					
 					$.ajax({
 						url:  "<?php echo MORSEL_API_URL;?>"+"keywords/edit_morsel_keyword",
 						type: "POST",
 						data: {
 		    				keyword:{
 		    					id:$("#keyword_id").val(),
-		    					name:$("#keyword_name").val()
-		    				},
+		    					name:keywords_name
+		    					},
 		    				api_key:$("#kwd-morsel-key").val()
 		  				},
 						success: function(response) {
@@ -118,17 +138,20 @@
 						}
 		        	});
 				} else { //for add keyword
+
 					$.ajax({
 						url:  "<?php echo MORSEL_API_URL;?>"+"keywords/add_morsel_keyword",
 						type: "POST",
 						data: {
-		    				keyword:{user_id:$("#kwd-morsel-userid").val(),name:$("#keyword_name").val()},
+		    				keyword:{user_id:$("#kwd-morsel-userid").val(),
+		    				name:keywords_name
+		    			    },
 		    				api_key:$("#kwd-morsel-key").val()
 		  				},	  				
 						success: function(response) {
 
-							//console.log("Response in add keywords : ",response.data);
-							 
+		  					//console.log("Response in add keywords : ",response.data);
+		
 							var keywords =  JSON.parse('<?php echo get_option("morsel_settings")["morsel_keywords"]?>');
 							//console.log("current keywords : ",keywords);
 							if(keywords=="blank") {
