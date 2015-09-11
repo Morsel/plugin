@@ -33,9 +33,11 @@ define('MORSEL_PLUGIN_IMG_PATH', plugin_dir_url( __FILE__ ).'img/' );
 define('MORSEL_PLUGIN_PATH', plugin_dir_url( __FILE__ ));
 define('MORSEL_PLUGIN_WIDGET_ASSEST', plugin_dir_url( __FILE__ ).'widget_assests/' );
 
+@ini_set('display_errors', 0);
+
 //for switch to development env set this constant value "dev" 
 //and for local env set this constant value "local"
-define('MORSEL_PLUGIN_ENV','dev');
+define('MORSEL_PLUGIN_ENV','local');
 
 if(MORSEL_PLUGIN_ENV == 'prod'){
   define('MORSEL_API_URL', 'https://api.eatmorsel.com/');  
@@ -255,7 +257,7 @@ function morsel_query_vars( $query_vars ){
 
       $options = get_option( 'morsel_settings');
       $api_key = $options['userid'] . ':' .$options['key'];
-      $morsel_post_settings = get_option( 'morsel_post_settings');//gettind excluding id
+      $morsel_post_settings = get_option('morsel_post_settings');//getting excluding id
 
       if(array_key_exists('posts_id', $morsel_post_settings))
         $post_selected = $morsel_post_settings['posts_id'];

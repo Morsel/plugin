@@ -1,3 +1,4 @@
+
 <?php 
 function grid($row_sht,$morsel_page_id) {
   $morsel_url = add_query_arg( array('morselid' => $row_sht->id), get_permalink($morsel_page_id));
@@ -37,15 +38,16 @@ function grid($row_sht,$morsel_page_id) {
       'count' => 0,
       'gap_in_morsel' => NULL,
       'center_block' => 0,
-      'wrapper_width' => ""
+      'wrapper_width' => "",
+      'keyword_id'=>NULL
     ), $atts, 'morsel_post_display' );
 
   $morsel_page_id = get_option( 'morsel_plugin_page_id');
   $options = get_option( 'morsel_settings');
   $api_key = $options['userid'] . ':' .$options['key'];
 
-  if($atts['count'] > 0){
-    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count'];  
+  if($atts['count'] > 0 || $atts['keyword_id'] > 0 ){
+    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count']."&keyword_id=".$atts['keyword_id'];  
   } else {
     $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT;  
   }
@@ -594,7 +596,8 @@ function morsel_post_des(){
 
       var morselId = "<?php echo $_REQUEST['morselid'];?>";
       var post_data = {
-                        user:{subscriptions_attributes : [{morsel_id:morselId}] },
+                        //user:{subscriptions_attributes : [{morsel_id:morselId}] },
+                        user:{subscribed_morsel_ids : [morselId] },
                         api_key:key
                       };
       
@@ -621,7 +624,7 @@ function morsel_post_des(){
             console.log("status :: ",status);
             
             if(status == 'success'){
-              alert("Done");               
+              alert("you have been subscribed successfully");               
             } else {                  
               alert("Opps Something wrong happend!"); 
             }

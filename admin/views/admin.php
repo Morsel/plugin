@@ -105,9 +105,19 @@ function getKeywords(userid,auth_key){
 				api_key:auth_key
 			},
 		success: function(response) {
-			
-			jQuery("#morsel-keywords").val(JSON.stringify(response.data));
-			jQuery("#morsel-form").submit();
+			console.log(response.data);
+			if(response.data!="blank")
+			{
+				jQuery("#morsel-keywords").val(JSON.stringify(response.data));
+
+			}
+			else
+			{
+				jQuery("#morsel-keywords").val(response.data);
+			}
+			addprofile(userid,auth_key);			 	
+						
+			//jQuery("#morsel-form").submit();
 		},error:function(){
 			alert('Error in getting morsel keywords of user');
 		},complete:function(){
@@ -117,9 +127,48 @@ function getKeywords(userid,auth_key){
     return true;
 }
 
+function addprofile(userid,auth_key){
+	
+	console.log("<?php echo MORSEL_API_USER_URL.get_option('morsel_settings')['userid'].'/create_profile.json';?>");
+	console.log('test', "<?php echo MORSEL_API_USER_URL?>"+ userid+"/create_profile.json" );
+	console.log('test-apikey', auth_key );
+
+ 	jQuery.ajax({
+			url: "<?php echo MORSEL_API_USER_URL?>"+ userid+"/create_profile.json",
+			data: {
+				api_key: auth_key
+				 
+			},
+			type:'POST',
+			success: function(response){	
+			    								
+				if(response.meta.status == 200){	
+					jQuery("#profile_id").val(response.data.id); 	
+					jQuery( "#morsel-form" ).submit();
+				} else {
+					alert("Opps something has gone wrong!"); 
+					return false;     
+				}
+			},
+		   	error:function(response){
+		   		console.log("Error Response : ",response);
+		   		alert("Opps something has gone wrong!"); 
+		   	},complete:function(){
+		   	
+		   	}
+		});
+	
+}
+
+function host_url () {
+	
+	base_url = window.location.protocol+'//'+window.location.hostname;
+	jQuery( "#host_url" ).val(base_url);
+}
+
 window.onload =function(){
 
-	
+	host_url();
 
 	jQuery( "#morsel_submit" ).click(function(e) {
 		///console.log("morsel_submit_called");
@@ -146,8 +195,9 @@ window.onload =function(){
 				 	//get morsel keywords of user
 				 	var auth_key = response.data.id+":"+response.data.auth_token;
 				 	//console.log("response type",auth_key);
-				 	getKeywords(response.data.id,auth_key);				 	
-				 	//jQuery( "#morsel-form" ).submit();
+				 	getKeywords(response.data.id,auth_key);	
+				 	
+				 	
 				} else {
 					alert("Wrong credential"); 
 				  	return false;     
