@@ -1,4 +1,3 @@
-
 <?php 
 function grid($row_sht,$morsel_page_id) {
   $morsel_url = add_query_arg( array('morselid' => $row_sht->id), get_permalink($morsel_page_id));
