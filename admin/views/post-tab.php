@@ -14,6 +14,8 @@
       
    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT."&submit=true";
    $json = json_decode(file_get_contents($jsonurl));
+
+
   
    if(get_option( 'morsel_post_settings')){
    		$morsel_post_settings = get_option( 'morsel_post_settings');	   		
@@ -86,6 +88,11 @@
 		<th scope='col' id='date' class='manage-column column-date sortable asc'  style="">
   		     <span>Date</span>
   		</th>
+  	
+  		<th scope='col' id='action' class='manage-column column-categories' > 
+  			<span>Current Keyword</span>
+  		</th>
+
   		<th scope='col' id='action' class='manage-column column-action' > 
   			<span>Actions</span>
   		</th>
@@ -95,7 +102,7 @@
 	<tfoot>
 	<tr>
 		<th scope='col'  class='manage-column column-cb check-column'  style="">
-		  <label class="screen-reader-text" for="cb-select-all-2">Selecsdt All</label>
+		  <label class="screen-reader-text" for="cb-select-all-2">Select All</label>
 		  <input id="cb-select-all-2" type="checkbox" />
 		</th>
 		<th scope='col'  class='manage-column column-title sortable desc' style="">
@@ -106,15 +113,21 @@
 		<th scope='col' class='manage-column column-date sortable asc' style="">
 		  <span>Date</span>
 		</th>
+		<th scope='col' id='action' class='manage-column column-categories' > 
+  			<span>Current Keyword</span>
+  		</th>
 		<th scope='col' id='action' class='manage-column column-action' > 
   			<span>Actions</span>
   		</th>
+  		
 	</tr>
 	</tfoot>
    
 	<tbody id="the-list">
 
-	 <?php foreach ($json->data as $row) {     ?>
+	 <?php foreach ($json->data as $row) {     
+     
+	 	?>
          
         
 
@@ -158,6 +171,18 @@
 			    <?php } else { echo "NULL";} ?>
 			   
 			</td>
+			<td class="code-keyword categories column-categories">
+
+			   <?php
+
+			   foreach ($row->morsel_keywords as $tag_keyword) 
+			   	{
+			     ?>
+				<code style = "line-height: 2;"><?php echo $tag_keyword->name ?></code><br>
+
+				<?php } ?>
+				
+			</td>
 			<td>	
 			   <?php if($row->is_submit) { ?>
 			   		<?php add_thickbox(); ?>
@@ -168,6 +193,7 @@
 			    <?php } ?>
 				
 			</td>
+			
 		</tr>
 	  <?php } ?>	
 	</tbody>
@@ -352,7 +378,11 @@
 	        	return;
 	        }
 	        var selected_keywords = jQuery('#select_keyword_id').val();
+	        
 	        selected_keywords = selected_keywords.splice( !jQuery.inArray('blank', selected_keywords));
+	      
+
+	        var morsel_id = jQuery('#eatmorsel_id').val();
 	        
 	 		jQuery.ajax({
 			url: "<?php echo MORSEL_API_URL.'morsels/update_keyword.json';?>",
@@ -366,6 +396,21 @@
 			success: function(response){
 				
 				if(response.meta.status == 200){
+
+					var stringhtml = "";
+
+					jQuery('#select_keyword_id option:selected').each(function(){
+				    if(jQuery(this).attr('selected') == 'selected')
+				    {
+				        var name = jQuery(this).text();
+
+				        stringhtml += "<code style='line-height: 2;'>"+name+"</code><br>"
+
+				       
+				     }
+				})
+					 jQuery("#morsel_post-"+morsel_id+" .code-keyword").html(stringhtml);
+
 					alert("Morsels keyword updated successfully");
 					tb_remove();	
 				 	

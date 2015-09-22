@@ -81,3 +81,4 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 "center_block" : it should be 1 or 0, this is for center the blocks of morsel (Default is 0).
 "gap_in_morsel" : You can set through like 5px or 5% as a string, than it creates gaps between morsel blocks through padding-left and padding right with important,otherwise normal gap is maintained.
 "wrapper_width" : Set the morsel wrapper width in %, if you want to make morsel window smaller in view, default is 100%.
+"default email wordpress" : Stopped email for new user is created by morsel plugin. default role is subscriber and wp-admin does not open for subscriber. 
