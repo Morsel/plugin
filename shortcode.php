@@ -200,7 +200,7 @@ function morsel_post_des(){
                     <?php if(!empty($_SESSION['morsel_login_userid'])){?>                  
                       <a href="<?php echo site_url()?>/index.php?pagename=morsel_logout" class="btn btn-danger btn-xs">Logout</a>
                     <?php } else {?>
-                      <a data-toggle="modal" data-target="#morselLoginModal" id="open-morsel-login1" class="btn btn-danger btn-xs">SignUp/Login</a>
+                      <a data-toggle="modal" data-target="#morselLoginModal" id="open-morsel-login1" class="btn btn-danger btn-xs clickeventon">SignUp/Login</a>
                     <?php } ?>
                     </span>
                   </h2>                  
