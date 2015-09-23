@@ -63,7 +63,7 @@
 	  			<td class="wid-15" scope="row">Pick Keyword:</td>
 				<td>
 				<select id="shortcode_keyword">
-					<option id = "none">- Please select keyword -</option>
+					<option id ="none" value = "0">- Please select keyword -</option>
 					<?php foreach(json_decode($options["morsel_keywords"]) as $row){ ?>
 					<option value="<?php echo $row->id;?>" ><?php echo $row->name;?></option>
 					<?php } ?>
