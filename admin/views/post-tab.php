@@ -75,10 +75,10 @@
 	<table class="wp-list-table widefat posts fixed">
 	<thead>
 	<tr>
-		<th scope='col' id='cb' class='manage-column column-cb check-column'  style="">
+		<!-- <th scope='col' id='cb' class='manage-column column-cb check-column'  style="">
 		  <label class="screen-reader-text" for="cb-select-all-1">Select All</label>
 		  <input id="cb-select-all-1" type="checkbox" />
-		</th>
+		</th> -->
 		<th scope='col' id='title' class='manage-column column-title sortable desc'  style="">
 		  <span>Title</span>
 		</th>
@@ -101,10 +101,10 @@
 
 	<tfoot>
 	<tr>
-		<th scope='col'  class='manage-column column-cb check-column'  style="">
+		<!-- <th scope='col'  class='manage-column column-cb check-column'  style="">
 		  <label class="screen-reader-text" for="cb-select-all-2">Select All</label>
 		  <input id="cb-select-all-2" type="checkbox" />
-		</th>
+		</th> -->
 		<th scope='col'  class='manage-column column-title sortable desc' style="">
 		  <span>Title</span>
 		</th>
@@ -127,17 +127,16 @@
 
 	 <?php foreach ($json->data as $row) {     
      
-	 	?>
-         
-        
 
+	 	?>
+      
 	    <tr id="morsel_post-<?php echo $row->id;?>" class="post-<?php echo $k;?> type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">
-		    <th scope="row" class="check-column">
+		   <!--  <th scope="row" class="check-column">
 				<input id="cb-select-"<?php echo $k;?> type="checkbox" name="morsel_post_settings[posts_id][]" value="<?php echo $row->id?>"  
 				<?php echo (in_array($row->id, $post_selected))?"checked":""?> />
-				<!-- <input <?php echo (in_array($row->id, $post_selected))?"disabled":""?> type="hidden" name="morsel_post_settings[data][]" value='<?php echo json_encode($tmpData);?>'> -->
+				<!-- <input <?php echo (in_array($row->id, $post_selected))?"disabled":""?> type="hidden" name="morsel_post_settings[data][]" value='<?php echo json_encode($tmpData);?>'> 
 				
-			</th>
+			</th> -->
 			<td class="post-title page-title column-title">
 			    <strong>
 			    <?php if($row->is_submit) { ?>
@@ -184,13 +183,16 @@
 				
 			</td>
 			<td>	
-			   <?php if($row->is_submit) { ?>
+			    <?php if($row->is_submit || count($row->morsel_keywords) == 0) { ?>
 			   		<?php add_thickbox(); ?>
 					<a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_keyowrd_id button">Pick Keywords</a>
+				    <?php } ?>
 					<br>
+				 <?php if($row->is_submit) { ?>
 					<a morsel-id = "<?php echo $row->id ?>" class="all_unpublish_morsel_id button">Publish Morsel</a>
+				<?php } ?>
 				 
-			    <?php } ?>
+		
 				
 			</td>
 			
