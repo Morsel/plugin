@@ -79,17 +79,17 @@
 		  <label class="screen-reader-text" for="cb-select-all-1">Select All</label>
 		  <input id="cb-select-all-1" type="checkbox" />
 		</th> -->
-		<th scope='col' id='title' class='manage-column column-title sortable desc'  style="">
+		<th scope='col' id='title' class='manage-column column-title sortable desc'  style="padding-left: 10px;">
 		  <span>Title</span>
 		</th>
 		<th scope='col' id='author' class='manage-column column-author'  style="">Image</th>
 		<th scope='col' id='categories' class='manage-column column-categories'  style="">
 		Description</th>
 		<th scope='col' id='date' class='manage-column column-date sortable asc'  style="">
-  		     <span>Date</span>
+  		     <span>Published Date</span>
   		</th>
   	
-  		<th scope='col' id='action' class='manage-column column-categories' > 
+  		<th scope='col' id='action' class='manage-column column-current-keyowrd' > 
   			<span>Current Keyword</span>
   		</th>
 
@@ -111,9 +111,9 @@
 		<th scope='col' class='manage-column column-author' style="">Image</th>
 		<th scope='col' class='manage-column column-categories' style="">Description</th>
 		<th scope='col' class='manage-column column-date sortable asc' style="">
-		  <span>Date</span>
+		  <span>Published Date</span>
 		</th>
-		<th scope='col' id='action' class='manage-column column-categories' > 
+		<th scope='col' id='action' class='manage-column column-current-keyowrd' > 
   			<span>Current Keyword</span>
   		</th>
 		<th scope='col' id='action' class='manage-column column-action' > 
