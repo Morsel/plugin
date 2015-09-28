@@ -33,6 +33,8 @@ define('MORSEL_PLUGIN_IMG_PATH', plugin_dir_url( __FILE__ ).'img/' );
 define('MORSEL_PLUGIN_PATH', plugin_dir_url( __FILE__ ));
 define('MORSEL_PLUGIN_WIDGET_ASSEST', plugin_dir_url( __FILE__ ).'widget_assests/' );
 
+@ini_set('display_errors', 0);
+
 //for switch to development env set this constant value "dev" 
 //and for local env set this constant value "local"
 define('MORSEL_PLUGIN_ENV','prod');
@@ -210,6 +212,8 @@ function morsel_query_vars( $query_vars ){
           //if(!username_exists($newUserName) ){ //check username is exist or not
           $random_password = wp_generate_password(6,false);
           $newWpUserID = wp_create_user($newUserName,$random_password,$result->data->email);
+          $newlyCreatedUser = new WP_User($newWpUserID);
+          $newlyCreatedUser->set_role('subscriber');
           //}
 
           $message = "Welcome ".$newUserName.",
@@ -218,7 +222,7 @@ function morsel_query_vars( $query_vars ){
                           Thank you.";
                           
           //send email to new user
-          wp_mail($result->data->email,'New Registration',$message);
+          //wp_mail($result->data->email,'New Registration',$message);
 
           // login user
           if ( !is_wp_error($newWpUserID) ) {
@@ -255,7 +259,7 @@ function morsel_query_vars( $query_vars ){
 
       $options = get_option( 'morsel_settings');
       $api_key = $options['userid'] . ':' .$options['key'];
-      $morsel_post_settings = get_option( 'morsel_post_settings');//gettind excluding id
+      $morsel_post_settings = get_option('morsel_post_settings');//getting excluding id
 
       if(array_key_exists('posts_id', $morsel_post_settings))
         $post_selected = $morsel_post_settings['posts_id'];
@@ -357,3 +361,25 @@ if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 	add_action( 'plugins_loaded', array( 'Morsel_Admin', 'get_instance' ) );
 
 }
+
+/**
+* Disable admin bar on the frontend of your website
+* for subscribers.
+*/
+function themeblvd_disable_admin_bar() { 
+  if ( ! current_user_can('edit_posts') ) {
+    add_filter('show_admin_bar', '__return_false'); 
+  }
+}
+add_action( 'after_setup_theme', 'themeblvd_disable_admin_bar' );
+/**
+* Redirect back to homepage and not allow access to 
+* WP admin for Subscribers.
+*/
+function themeblvd_redirect_admin(){
+  if ( ! defined('DOING_AJAX') && ! current_user_can('edit_posts') ) {
+    wp_redirect( site_url() );
+    exit;   
+  }
+}
+add_action( 'admin_init', 'themeblvd_redirect_admin' );

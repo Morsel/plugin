@@ -1,13 +1,16 @@
 <?php 
-	 if(isset(get_option( 'morsel_settings')['morsel_keywords']))
-   {
-   	   $old_option = get_option( 'morsel_settings');
 
+	 if(isset(get_option( 'morsel_settings')['morsel_keywords']))
+   	 {
+   	   $old_option = get_option( 'morsel_settings');
+       
 	   $old_option['morsel_keywords'] = str_replace("'","",$old_option['morsel_keywords']);
-	  
+	 
 	   update_option("morsel_settings",$old_option);
    
-   }
+   	 }
+   	
+  
 	if(isset($_POST["keyword"]["name"])){
 		if($_POST["keyword_id"] != ""){
             
@@ -75,9 +78,9 @@
 	</tfoot>
 
 	<tbody id="morsel-keyword-list">
-		<?php if($options["morsel_keywords"]) {
-
-				foreach(json_decode($options["morsel_keywords"]) as $row){ ?>
+		<?php if($options["morsel_keywords"]!="blank") {
+			 
+			foreach(json_decode($options["morsel_keywords"]) as $row){ ?>
 		<tr id="morsel_keyword-<?php echo $row->id;?>" class="post-<?php echo $k;?> type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">		    
 			<td class="post-title page-title column-title">
 			    <strong><?php echo $row->id?></strong>
@@ -91,7 +94,17 @@
 			</td>
 		</tr>
 		<?php }
-		}?>
+		}else{
+
+			?>
+			<tr>
+				<td></td>
+				<td><b>NO RESULT FOUND</b></td>
+				<td></td>
+				<td></td>
+			</tr>
+
+		<?php } ?>
 	</tbody>
 </table>
 <div class="clear"><br></div>
@@ -150,17 +163,16 @@
 		  				},	  				
 						success: function(response) {
 
-		  					//console.log("Response in add keywords : ",response.data);
-		
-							var keywords =  JSON.parse('<?php echo get_option("morsel_settings")["morsel_keywords"]?>');
-							//console.log("current keywords : ",keywords);
-							if(keywords=="blank") {
-								keywords = [];
-							   
-					    	}
-					    	//console.log("current new keywords : ",keywords);
+		  					
+		  					var keywords = [];
+							<?php if(get_option("morsel_settings")["morsel_keywords"]!="blank")
+							{
+							 ?>
+							 	keywords = JSON.parse('<?php echo get_option("morsel_settings")["morsel_keywords"]?>');
+							<?php } ?>
+							
 					    	keywords.push(response.data);
-							//console.log("new current keywords : ",keywords);
+							
 							$("#updated_keywords").val(JSON.stringify(keywords));
 							$("#morsel-host-keywords-form").submit();
 							

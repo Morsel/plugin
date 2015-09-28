@@ -31,26 +31,34 @@ function grid($row_sht,$morsel_page_id) {
 
 // WP Shortcode to display Morsel Post list on any page or post.
  function morsel_post_display($atts){  
+ 
 
   $atts = shortcode_atts(
     array(
       'count' => 0,
       'gap_in_morsel' => NULL,
       'center_block' => 0,
-      'wrapper_width' => ""
+      'wrapper_width' => "",
+      'keyword_id'=>NULL
     ), $atts, 'morsel_post_display' );
 
   $morsel_page_id = get_option( 'morsel_plugin_page_id');
   $options = get_option( 'morsel_settings');
   $api_key = $options['userid'] . ':' .$options['key'];
+  if($atts['keyword_id'] > 0)
+  {
+    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count']."&keyword_id=".$atts['keyword_id'];  
+  }
+   elseif($atts['count'] > 0   ){
 
-  if($atts['count'] > 0){
-    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count'];  
+    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count'];
   } else {
     $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT;  
   }
   
   $json = get_json($jsonurl); 
+
+
 
   $morsel_post_sht =  $json->data;
 
@@ -101,6 +109,8 @@ function grid($row_sht,$morsel_page_id) {
           <?php } ?>
 
         </style>
+        <?php  /* Turn on buffering */
+            ob_start(); ?>
            <div class="page-wrapper" > 
                   <div class="site">
                       <div class="tab-content">
@@ -113,7 +123,7 @@ function grid($row_sht,$morsel_page_id) {
                                  
                                   if(in_array($row_sht->id, $post_selected))
                                     continue;
-                                  echo grid($row_sht,$morsel_page_id);
+                                 echo grid($row_sht,$morsel_page_id);
 
                                } ?>
                               </div>
@@ -128,12 +138,23 @@ function grid($row_sht,$morsel_page_id) {
                 <?php } ?> 
                </div>     
           </div>
+          <?php
+          /* Get the buffered content into a var */
+         $sc = ob_get_contents();
+
+         /* Clean buffer */
+        ob_end_clean();
+
+           /* Return the content as usual */
+          return $sc;
+          ?>
     <?php
       } else { //end if
          echo "You have no morsel!";
       } ?> 
 
-  <?php  }
+  <?php  
+    }
     add_shortcode('morsel_post_display', 'morsel_post_display');
 
 //shortcode for description
@@ -199,7 +220,7 @@ function morsel_post_des(){
                     <?php if(!empty($_SESSION['morsel_login_userid'])){?>                  
                       <a href="<?php echo site_url()?>/index.php?pagename=morsel_logout" class="btn btn-danger btn-xs">Logout</a>
                     <?php } else {?>
-                      <a data-toggle="modal" data-target="#morselLoginModal" id="open-morsel-login1" class="btn btn-danger btn-xs">SignUp/Login</a>
+                      <a data-toggle="modal" data-target="#morselLoginModal" id="open-morsel-login1" class="btn btn-danger btn-xs clickeventon">SignUp/Login</a>
                     <?php } ?>
                     </span>
                   </h2>                  
@@ -210,8 +231,8 @@ function morsel_post_des(){
                         <?php echo $creator = $morsel_detail->creator->first_name." ".$morsel_detail->creator->last_name; ?>
                   </div>
                 </div>
-        <?php if($morsel_detail->primary_item_photos->_992x992)
-                $img_url = $morsel_detail->primary_item_photos->_992x992;
+        <?php if($morsel_detail->primary_item_photos->_640x640)
+                $img_url = $morsel_detail->primary_item_photos->_640x640;
               else 
                 $img_url = MORSEL_PLUGIN_IMG_PATH.'no_image.png';
         ?>
@@ -236,8 +257,8 @@ function morsel_post_des(){
         <!-- Item start -->
         <?php foreach ($items as $row_item) {?>
         
-        <?php if($row_item->photos->_992x992)
-                $items_url = $row_item->photos->_992x992;
+        <?php if($row_item->photos->_640x640)
+                $items_url = $row_item->photos->_640x640;
               else 
                 $items_url = MORSEL_PLUGIN_IMG_PATH.'no_image.png';
         ?>
@@ -594,7 +615,8 @@ function morsel_post_des(){
 
       var morselId = "<?php echo $_REQUEST['morselid'];?>";
       var post_data = {
-                        user:{subscriptions_attributes : [{morsel_id:morselId}] },
+                        //user:{subscriptions_attributes : [{morsel_id:morselId}] },
+                        user:{subscribed_morsel_ids : [morselId] },
                         api_key:key
                       };
       
@@ -621,7 +643,7 @@ function morsel_post_des(){
             console.log("status :: ",status);
             
             if(status == 'success'){
-              alert("Done");               
+              alert("you have been subscribed successfully");               
             } else {                  
               alert("Opps Something wrong happend!"); 
             }

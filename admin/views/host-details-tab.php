@@ -35,7 +35,7 @@
   			<input type="hidden" style="width:50%" name="morsel_host_details[profile_id]" id="profile_id" value="<?php echo $options['profile_id'] ?>"/>
   			<td scope="row">Host Url:</td>
 			<td>
-				<input type="text" style="width:50%" name="morsel_host_details[host_url]" id="host_url" value="<?php echo $options['host_url'] ?>"/>
+				<input type="text" style="width:50%" name="morsel_host_details[host_url]" id="host_url" value="<?php echo $options['host_url'] ?>" disabled/>
 			</td>
   		</tr>
   		<tr valign="top">

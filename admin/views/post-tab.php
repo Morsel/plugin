@@ -14,6 +14,8 @@
       
    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT."&submit=true";
    $json = json_decode(file_get_contents($jsonurl));
+
+
   
    if(get_option( 'morsel_post_settings')){
    		$morsel_post_settings = get_option( 'morsel_post_settings');	   		
@@ -73,19 +75,24 @@
 	<table class="wp-list-table widefat posts fixed">
 	<thead>
 	<tr>
-		<th scope='col' id='cb' class='manage-column column-cb check-column'  style="">
+		<!-- <th scope='col' id='cb' class='manage-column column-cb check-column'  style="">
 		  <label class="screen-reader-text" for="cb-select-all-1">Select All</label>
 		  <input id="cb-select-all-1" type="checkbox" />
-		</th>
-		<th scope='col' id='title' class='manage-column column-title sortable desc'  style="">
+		</th> -->
+		<th scope='col' id='title' class='manage-column column-title sortable desc'  style="padding-left: 10px;">
 		  <span>Title</span>
 		</th>
 		<th scope='col' id='author' class='manage-column column-author'  style="">Image</th>
 		<th scope='col' id='categories' class='manage-column column-categories'  style="">
 		Description</th>
 		<th scope='col' id='date' class='manage-column column-date sortable asc'  style="">
-  		     <span>Date</span>
+  		     <span>Published Date</span>
   		</th>
+  	
+  		<th scope='col' id='action' class='manage-column column-current-keyowrd' > 
+  			<span>Current Keyword</span>
+  		</th>
+
   		<th scope='col' id='action' class='manage-column column-action' > 
   			<span>Actions</span>
   		</th>
@@ -94,37 +101,42 @@
 
 	<tfoot>
 	<tr>
-		<th scope='col'  class='manage-column column-cb check-column'  style="">
-		  <label class="screen-reader-text" for="cb-select-all-2">Selecsdt All</label>
+		<!-- <th scope='col'  class='manage-column column-cb check-column'  style="">
+		  <label class="screen-reader-text" for="cb-select-all-2">Select All</label>
 		  <input id="cb-select-all-2" type="checkbox" />
-		</th>
+		</th> -->
 		<th scope='col'  class='manage-column column-title sortable desc' style="">
 		  <span>Title</span>
 		</th>
 		<th scope='col' class='manage-column column-author' style="">Image</th>
 		<th scope='col' class='manage-column column-categories' style="">Description</th>
 		<th scope='col' class='manage-column column-date sortable asc' style="">
-		  <span>Date</span>
+		  <span>Published Date</span>
 		</th>
+		<th scope='col' id='action' class='manage-column column-current-keyowrd' > 
+  			<span>Current Keyword</span>
+  		</th>
 		<th scope='col' id='action' class='manage-column column-action' > 
   			<span>Actions</span>
   		</th>
+  		
 	</tr>
 	</tfoot>
    
 	<tbody id="the-list">
 
-	 <?php foreach ($json->data as $row) {     ?>
-         
-        
+	 <?php foreach ($json->data as $row) {     
+     
 
+	 	?>
+      
 	    <tr id="morsel_post-<?php echo $row->id;?>" class="post-<?php echo $k;?> type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">
-		    <th scope="row" class="check-column">
+		   <!--  <th scope="row" class="check-column">
 				<input id="cb-select-"<?php echo $k;?> type="checkbox" name="morsel_post_settings[posts_id][]" value="<?php echo $row->id?>"  
 				<?php echo (in_array($row->id, $post_selected))?"checked":""?> />
-				<!-- <input <?php echo (in_array($row->id, $post_selected))?"disabled":""?> type="hidden" name="morsel_post_settings[data][]" value='<?php echo json_encode($tmpData);?>'> -->
+				<!-- <input <?php echo (in_array($row->id, $post_selected))?"disabled":""?> type="hidden" name="morsel_post_settings[data][]" value='<?php echo json_encode($tmpData);?>'> 
 				
-			</th>
+			</th> -->
 			<td class="post-title page-title column-title">
 			    <strong>
 			    <?php if($row->is_submit) { ?>
@@ -158,16 +170,32 @@
 			    <?php } else { echo "NULL";} ?>
 			   
 			</td>
-			<td>	
-			   <?php if($row->is_submit) { ?>
-			   		<?php add_thickbox(); ?>
-					<a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_keyowrd_id button">Pick Keywords</a>
-					<br>
-					<a morsel-id = "<?php echo $row->id ?>" class="all_unpublish_morsel_id button">Publish Morsel</a>
-				 
-			    <?php } ?>
+			<td class="code-keyword categories column-categories">
+
+			   <?php
+
+			   foreach ($row->morsel_keywords as $tag_keyword) 
+			   	{
+			     ?>
+				<code style = "line-height: 2;"><?php echo $tag_keyword->name ?></code><br>
+
+				<?php } ?>
 				
 			</td>
+			<td>	
+			    <?php if($row->is_submit || count($row->morsel_keywords) == 0) { ?>
+			   		<?php add_thickbox(); ?>
+					<a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_keyowrd_id button">Pick Keywords</a>
+				    <?php } ?>
+					<br>
+				 <?php if($row->is_submit) { ?>
+					<a morsel-id = "<?php echo $row->id ?>" class="all_unpublish_morsel_id button">Publish Morsel</a>
+				<?php } ?>
+				 
+		
+				
+			</td>
+			
 		</tr>
 	  <?php } ?>	
 	</tbody>
@@ -352,7 +380,11 @@
 	        	return;
 	        }
 	        var selected_keywords = jQuery('#select_keyword_id').val();
+	        
 	        selected_keywords = selected_keywords.splice( !jQuery.inArray('blank', selected_keywords));
+	      
+
+	        var morsel_id = jQuery('#eatmorsel_id').val();
 	        
 	 		jQuery.ajax({
 			url: "<?php echo MORSEL_API_URL.'morsels/update_keyword.json';?>",
@@ -366,6 +398,21 @@
 			success: function(response){
 				
 				if(response.meta.status == 200){
+
+					var stringhtml = "";
+
+					jQuery('#select_keyword_id option:selected').each(function(){
+				    if(jQuery(this).attr('selected') == 'selected')
+				    {
+				        var name = jQuery(this).text();
+
+				        stringhtml += "<code style='line-height: 2;'>"+name+"</code><br>"
+
+				       
+				     }
+				})
+					 jQuery("#morsel_post-"+morsel_id+" .code-keyword").html(stringhtml);
+
 					alert("Morsels keyword updated successfully");
 					tb_remove();	
 				 	
