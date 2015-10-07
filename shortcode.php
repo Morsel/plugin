@@ -56,9 +56,13 @@ function grid($row_sht,$morsel_page_id) {
     $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT;  
   }
   
-  $json = get_json($jsonurl); 
 
+    $json = json_decode(file_get_contents($jsonurl));
 
+    if(count($json->data)==0){
+        $json = json_decode(wp_remote_fopen($jsonurl));
+
+    }
 
   $morsel_post_sht =  $json->data;
 
@@ -464,7 +468,7 @@ function morsel_post_des(){
             <!-- login div-->
             <div id="mrsl-login-section" style="display:none">
               <div class="container-fluid login-page">
-                  <h1 class="text-center">Log In to Morsel</h1>
+                  <h1 class="text-center">Log In to <?php echo ucwords($blog_title = get_bloginfo('name')); ?></h1>
                   <form action="<?php echo site_url()?>/index.php" class="padded-form" method="post" name="loginForm" id="morsel-front-login-form">                      
                       <div class="row">
                         <div class="col-md-12 center-block">

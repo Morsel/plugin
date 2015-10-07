@@ -37,7 +37,7 @@ define('MORSEL_PLUGIN_WIDGET_ASSEST', plugin_dir_url( __FILE__ ).'widget_assests
 
 //for switch to development env set this constant value "dev" 
 //and for local env set this constant value "local"
-define('MORSEL_PLUGIN_ENV','dev');
+define('MORSEL_PLUGIN_ENV','local');
 
 if(MORSEL_PLUGIN_ENV == 'prod'){
   define('MORSEL_API_URL', 'https://api.eatmorsel.com/');  
@@ -95,14 +95,19 @@ function register_my_setting() {
 	register_setting('morsel_post_settings', 'morsel_post_settings');
   register_setting('morsel_host_details', 'morsel_host_details');
   register_setting('morsel_keywords', 'morsel_keywords');
-	//register_setting('morsel_settings', 'morsel_posts_data');	
+  register_setting('morsel_associated_user', 'morsel_associated_user');
+	register_setting('morsel_advanced_tab', 'morsel_advanced_tab');	
+  register_setting('morsel_settings_Preview', 'morsel_settings_Preview'); 
 } 
+
+// add_action( 'admin_menu', 'register_my_setting' );
 
 add_action( 'admin_init', 'register_my_setting' );
 
 add_action('init', 'morsel_page_plugin_add'); //for add page
 
-add_action( 'init', 'morsel_rewrites_init' );
+// add_action( 'init', 'morsel_rewrites_init' );
+
 function morsel_rewrites_init(){
     add_rewrite_rule(
         '/([0-9]+)/?$',
@@ -256,7 +261,7 @@ function morsel_query_vars( $query_vars ){
 
    if($_REQUEST['pagename']=='morsel_ajax_admin')
     {
-
+      $morsel_page_id = get_option( 'morsel_plugin_page_id');
       $options = get_option( 'morsel_settings');
       $api_key = $options['userid'] . ':' .$options['key'];
       $morsel_post_settings = get_option('morsel_post_settings');//getting excluding id
@@ -266,27 +271,26 @@ function morsel_query_vars( $query_vars ){
       else
         $post_selected = array();
 
-      $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&page=".$_REQUEST['page_id']."&count=".MORSEL_API_COUNT;
+      $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&page=".$_REQUEST['page_id']."&count=".MORSEL_API_COUNT."&submit=true";
       
       $json = get_json($jsonurl); //getting whole data
 
-      foreach ($json->data as $row) {?>
+      foreach ($json->data as $row) {
+        $morsel_url = add_query_arg( array('morselid' => $row->id), get_permalink($morsel_page_id));?>
+        ?>
     
 
       <tr id="morsel_post-<?php echo $row->id;?>" class="post-<?php echo $k;?> type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">
-        <th scope="row" class="check-column">
-        <input id="cb-select-"<?php echo $k;?> type="checkbox" name="morsel_post_settings[posts_id][]" value="<?php echo $row->id?>"  
-        <?php echo (in_array($row->id, $post_selected))?"checked":""?> />
-        <!-- <input <?php echo (in_array($row->id, $post_selected))?"disabled":""?> type="hidden" name="morsel_post_settings[data][]" value='<?php echo json_encode($tmpData);?>'> -->        
-      </th>
+       
       <td class="post-title page-title column-title">
-          <strong><a href="<?php echo $row->url?>" target="_blank"><?php echo $row->title?></strong>
+
+          <strong><a href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?></strong>
       </td>
             <td class="author column-author">
               <?php if($row->photos->_800x600 != ''){?>
                 <img src="<?php echo $row->photos->_800x600;?>" height="100" width="100">
               <?php } else { 
-                 echo "No Image";
+                 echo "No Image Found";
               } ?>
             </td>
       <td class="categories column-categories">
@@ -294,6 +298,31 @@ function morsel_query_vars( $query_vars ){
       </td>
       <td class="date column-date">
           <abbr title="<?php echo date("d/m/Y", strtotime($row->created_at));?>"><?php echo date("d/m/Y", strtotime($row->created_at));?></abbr><br />Published
+      </td>
+      <td class="code-keyword categories column-categories">
+
+         <?php
+
+         foreach ($row->morsel_keywords as $tag_keyword) 
+          {
+           ?>
+        <code style = "line-height: 2;"><?php echo $tag_keyword->name ?></code><br>
+
+        <?php } ?>
+        
+      </td>
+      <td>  
+          <?php if($row->is_submit || count($row->morsel_keywords) == 0) { ?>
+            <?php add_thickbox(); ?>
+          <a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_keyowrd_id button">Pick Keywords</a>
+            <?php } ?>
+          <br>
+         <?php if($row->is_submit) { ?>
+          <a morsel-id = "<?php echo $row->id ?>" class="all_unpublish_morsel_id button">Publish Morsel</a>
+        <?php } ?>
+         
+    
+        
       </td>
     </tr>
     <?php }       
@@ -382,4 +411,4 @@ function themeblvd_redirect_admin(){
     exit;   
   }
 }
-add_action( 'admin_init', 'themeblvd_redirect_admin' );
+// add_action( 'admin_init', 'themeblvd_redirect_admin' );

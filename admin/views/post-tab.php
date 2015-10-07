@@ -1,4 +1,5 @@
 <?php
+if( get_option('morsel_host_details') ){
    if(isset(get_option( 'morsel_settings')['morsel_keywords']))
    {
    	   $old_option = get_option( 'morsel_settings');
@@ -13,9 +14,16 @@
    $api_key = $options['userid'] . ':' .$options['key'];
       
    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT."&submit=true";
+   
+   
    $json = json_decode(file_get_contents($jsonurl));
 
+    if(count($json->data)==0){
+        $json = json_decode(wp_remote_fopen($jsonurl));
 
+    }
+      
+   $morsel_page_id = get_option( 'morsel_plugin_page_id');
   
    if(get_option( 'morsel_post_settings')){
    		$morsel_post_settings = get_option( 'morsel_post_settings');	   		
@@ -27,6 +35,14 @@
    	$post_selected = $morsel_post_settings['posts_id'];
    else
    	$post_selected = array();
+
+
+
+
+
+
+
+
 ?>
 
 <?php 
@@ -60,16 +76,33 @@
 		}
 	}
 ?>
+<?php 
+//save preview Text
+if(isset($_POST["morsel_settings_Preview"])){
+		
+	$new_settings = $_POST["morsel_settings_Preview"]; 
+   	update_option("morsel_settings_Preview",$new_settings);
+		
+}
 
+?>
 <?php if(count($json->data)>0){?>   
- <form method="post" action="options.php" id="morsel-form">
-      <?php settings_fields( 'morsel_post_settings' ); ?>
-      <?php do_settings_sections( 'morsel_post_settings' ); ?>   
-      <p>
-      	<h3>Selected posts will not be display on your site.</h3>
-      </p>
- 
-
+ <form method="post" action="" id="morsel-form-preview-text">
+      <?php settings_fields( 'morsel_settings_Preview' ); ?>
+          <?php do_settings_sections( 'morsel_settings_Preview' ); ?>
+    <input type="hidden" style="width:50%" name="morsel_host_details[profile_id]" id="profile_id_Text" value="<?php echo get_option('morsel_host_details')['profile_id'] ?>"/>
+      <table class="form-table">
+  		<tr valign="top">
+  			<td scope="row">Preview Text:</td>
+			<td>
+				<input style="width:200px;" type="text" name="morsel_settings_Preview" id="preview_text" value="<?php echo (get_option('morsel_settings_Preview'))? get_option('morsel_settings_Preview') : 'You have subscribed for Morsel.' ?>"/>
+			    <?php submit_button("Save","primary","save",null,array( 'id' => 'morsel_preview_Text_submit' ) ); ?>
+		  		    
+			</td>
+			<!-- <td><input type="submit" value="Update Preview" id="morsel_preview_Text_submit"></td> -->
+  		</tr>
+      </table>
+</form>
 
 	
 	<table class="wp-list-table widefat posts fixed">
@@ -139,10 +172,13 @@
 			</th> -->
 			<td class="post-title page-title column-title">
 			    <strong>
+			    <? 
+			      //$row->url; used before 
+			      $morsel_url = add_query_arg( array('morselid' => $row->id), get_permalink($morsel_page_id));?>
 			    <?php if($row->is_submit) { ?>
-			    <a style="color:red;" href="<?php echo $row->url?>" target="_blank"><?php echo $row->title?><b style="font-size:15px;">&nbsp;(UNPUBLISHED)</b></a>
+			    <a style="color:red;" href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?><b style="font-size:15px;">&nbsp;(UNPUBLISHED)</b></a>
 			    <?php }else{ ?>
-			    <a href="<?php echo $row->url?>" target="_blank"><?php echo $row->title?>
+			    <a href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?>
 			    <?php } ?></a>
 			    </strong>
 			</td>
@@ -226,7 +262,7 @@
 </div>
 <div class="clear"><br></div>
 <div>
-<?php submit_button("Save","primary","Select",null,array( 'id' => 'morsel_post_selection' ) ); ?>
+<?php //submit_button("Save","primary","Select",null,array( 'id' => 'morsel_post_selection' ) ); ?>
 <input type="button" value="Load more!" class="button" id="admin_loadmore" name="load" style="margin-left:20px"></div>
 </form>
 
@@ -270,9 +306,8 @@
 		jQuery( "#TB_closeWindowButton" ).trigger( "click" )
 	});
 
-
-	jQuery('.all_unpublish_morsel_id').click(function(){
-		
+    jQuery('#the-list ').on('click', '.all_unpublish_morsel_id', function() {
+			
 		var all_unpublish_morsel_id = jQuery(this); 
         all_unpublish_morsel_id.removeClass('button').text('Your morsel is publishing...');
 		
@@ -305,7 +340,7 @@
 		        });
 			});
         
-	   jQuery('.all_morsel_keyowrd_id').click(function(){
+	   jQuery('#the-list ').on('click', '.all_morsel_keyowrd_id', function() {
 		
 		var all_morsel_keyowrd_id = jQuery(this); 
         all_morsel_keyowrd_id.text('Please wait!');
@@ -328,14 +363,14 @@
                            
 							all_morsel_keyowrd_id.text('Pick Keywords');
 
-							var all_keywords =JSON.parse('<?php echo get_option("morsel_settings")["morsel_keywords"]; ?>');
+					
 							if(response.data=="empty" || response.data=="blank"){
 
         						alert('Please add keyword list first!');
         				
 							}
 							else{
-
+							var all_keywords =JSON.parse('<?php echo get_option("morsel_settings")["morsel_keywords"]; ?>');
 							var saved_keywords = response.data;
 							 //console.log('keyword response',response);
 							 // console.log('keyword all keyword',all_keywords);
@@ -431,4 +466,49 @@
 			});
 	 });
 
+
+		/*save host details function*/
+		jQuery( "#morsel_preview_Text_submit" ).click(function(e) {
+			e.preventDefault();
+			jQuery('#morsel_preview_Text_submit').val('Please wait!'); 
+           
+				var userData =  { 
+									api_key:"<?php echo get_option('morsel_settings')['userid'].':'.get_option('morsel_settings')['key']; ?>",
+									user:{
+										profile_attributes:{
+											id:jQuery("#profile_id_Text").val(),
+											preview_text: jQuery("#preview_text").val()
+										}
+									}
+								};	
+						
+			// console.log("Userdata : ",userData);
+			jQuery.ajax({
+				url: "<?php echo MORSEL_API_USER_URL.get_option('morsel_settings')['userid'].'.json';?>",
+				data: userData,
+				type:'PUT',
+				success: function(response){	
+				jQuery('#morsel_preview_Text_submit').val('Save');				
+					//console.log("Success Response : ",response);
+					if(response.meta.status == 200){	
+						jQuery("#profile_id_Text").val(response.data.profile.id); 	
+					 	jQuery("#morsel-form-preview-text").submit();
+					} else {
+						alert("Opps something has gone wrong!"); 
+						return false;     
+					}
+				},
+			   	error:function(response){
+			   		
+			   		console.log("Error Response : ",response);
+			   		alert("Opps something has gone wrong!"); 
+			   	},complete:function(){
+			   		jQuery('#morsel_preview_Text_submit').val('Connecting');
+			   	}
+			});
+		}); 
+
 </script>
+ <? } else { ?>
+Please Enter Host Details First.
+<? } ?>
