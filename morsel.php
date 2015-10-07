@@ -37,7 +37,7 @@ define('MORSEL_PLUGIN_WIDGET_ASSEST', plugin_dir_url( __FILE__ ).'widget_assests
 
 //for switch to development env set this constant value "dev" 
 //and for local env set this constant value "local"
-define('MORSEL_PLUGIN_ENV','local');
+define('MORSEL_PLUGIN_ENV','dev');
 
 if(MORSEL_PLUGIN_ENV == 'prod'){
   define('MORSEL_API_URL', 'https://api.eatmorsel.com/');  
