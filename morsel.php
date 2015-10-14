@@ -297,7 +297,7 @@ function morsel_query_vars( $query_vars ){
         <?php echo substr($row->summary,0,150); echo (strlen($row->summary) > 150 ? "..." :"");?>  
       </td>
       <td class="date column-date">
-          <abbr title="<?php echo date("d/m/Y", strtotime($row->created_at));?>"><?php echo date("d/m/Y", strtotime($row->created_at));?></abbr><br />Published
+          <abbr title="<?php echo date("d/m/Y", strtotime($row->published_at));?>"><?php echo date("d/m/Y", strtotime($row->published_at));?></abbr><br />Published
       </td>
       <td class="code-keyword categories column-categories">
 

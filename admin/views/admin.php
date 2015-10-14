@@ -281,11 +281,7 @@ function getKeywords(userid,auth_key){
 
 function addprofile(userid,auth_key){
 	
-	console.log("<?php echo MORSEL_API_USER_URL.get_option('morsel_settings')['userid'].'/create_profile.json';?>");
-	console.log('test', "<?php echo MORSEL_API_USER_URL?>"+ userid+"/create_profile.json" );
-	console.log('test-apikey', auth_key );
-
- 	jQuery.ajax({
+	jQuery.ajax({
 			url: "<?php echo MORSEL_API_USER_URL?>"+ userid+"/create_profile.json",
 			data: {
 				api_key: auth_key

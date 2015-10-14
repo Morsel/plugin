@@ -201,7 +201,7 @@ if(isset($_POST["morsel_settings_Preview"])){
 			</td>
 			<td class="date column-date">
 			    <?php if(!$row->is_submit) { ?>
-			    <abbr title="<?php echo date("m/d/Y", strtotime($row->created_at));?>"><?php echo date("m/d/Y", strtotime($row->created_at));?></abbr>
+			    <abbr title="<?php echo date("m/d/Y", strtotime($row->published_at));?>"><?php echo date("m/d/Y", strtotime($row->published_at));?></abbr>
 			    <br />PUBLISHED
 			    <?php } else { echo "NULL";} ?>
 			   
