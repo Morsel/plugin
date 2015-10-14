@@ -1,5 +1,5 @@
 <?php 
-
+if( get_option('morsel_host_details') ){
 	 if(isset(get_option( 'morsel_settings')['morsel_keywords']))
    	 {
    	   $old_option = get_option( 'morsel_settings');
@@ -203,3 +203,6 @@
 		});
 	}(jQuery));
 </script>
+ <? } else { ?>
+Please Enter Host Details First.
+<? } ?>

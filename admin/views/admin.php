@@ -12,16 +12,18 @@
  * @copyright 2014 Nishant
  */
 ?>
-
+   
 <div class="wrap">
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 	<div id="tab-container" class='tab-container'>
 	 <ul class='etabs'>
 	   <li class='tab'><a href="#tabs1-settings">Settings</a></li>
+	   <li class='tab'><a href="#associated_user">Associated User</a></li>
 	   <li class='tab'><a href="#tabs1-js">Post</a></li>
 	   <li class='tab'><a href="#morsel_keywords_panel">Manage Keywords</a></li>
-	   <li class='tab'><a href="#host_details">Host Details</a></li>
-	   <li class='tab'><a href="#tabs1-shortcode">Short Code</a></li>
+	   <!-- <li class='tab'><a href="#host_details">Host Details</a></li> -->
+	   <li class='tab'><a href="#tabs1-shortcode">Display</a></li>
+	   <li class='tab'><a href="#tabs1-morsel_advanced_tab">Advanced</a></li>
 	 </ul>
 	 <div class='panel-container'>
 		<div id="tabs1-settings">
@@ -38,6 +40,8 @@
           	<input type="hidden" name="morsel_settings[userid]" id="morsel-userid" value="<?php echo $options['userid'] ?>"/>
             <input type="hidden" name="morsel_settings[key]" id="morsel-key" value="<?php echo $options['key'] ?>"/>
             <input type="hidden" name="morsel_settings[morsel_keywords]" id="morsel-keywords" value=""/>
+            <input type="hidden" name="morsel_settings[morsel_associated_user]" id="morsel_associated_user" value=""/>
+            <input type="hidden" name="morsel_settings[morsel_advanced_tab]" id="morsel_advanced_tab" value=""/>
                <table class="form-table">
 		      		<tr valign="top">
 		      			<td scope="row">UserName:</td>
@@ -57,8 +61,149 @@
 	      				</td>
 		      		</tr>    		
     		</table>
-		  </form>		
+		  </form>	
+		  <!-- Host Details Form -->
+		  <h2>Host Details </h2>
+		  <?php 
+			//  delete_option('morsel_host_details');
+			// //set morsel host details info if they exists	
+		 //   	if(get_option('morsel_host_details')){
+
+			// 	$options = array_merge($options,get_option('morsel_host_details'));     	
+			// } else {
+				
+				//set morsel host details info if they exists from API
+				$ms_options = get_option( 'morsel_settings');
+				if(isset($ms_options['userid']) && $ms_options['userid'] > 0) {
+				  $api_key = $ms_options['userid'] . ':' .$ms_options['key'];      
+			      $jsonurl = MORSEL_API_USER_URL."/me.json?api_key=".$api_key;    
+			      $json = get_json($jsonurl);	      
+			      if(isset($json->data->profile)){	      	
+			      	$options = array_merge($options,array(
+			      					'profile_id'=>$json->data->profile->id,
+			      					// 'host_address'=>$json->data->profile->address,
+			      					'host_logo_path'=>$json->data->profile->host_logo,
+			      					'host_url'=>$json->data->profile->host_url,
+			      					'host_company'=>$json->data->profile->company_name,
+			      					'host_street'=>$json->data->profile->street_address,
+			      					'host_city'=>$json->data->profile->city,
+			      					'host_state'=>$json->data->profile->state,
+			      					'host_zip'=>$json->data->profile->zip
+			      					));
+			      } else {
+			      	$options = array_merge($options, array('profile_id'=>'','host_logo_path'=>'','host_url'=>'','host_company'=>'','host_street'=>'','host_city'=>'','host_zip'=>'','host_state'=>'')); 
+			      }      	
+			    } else {
+			      $options = array_merge($options, array('profile_id'=>'','host_logo_path'=>'','host_url'=>'','host_company'=>'','host_street'=>'','host_city'=>'','host_zip'=>'','host_state'=>'')); 
+			    }
+			// } 
+		?>
+		<form method="post" action="options.php" id="morsel-host-details-form" >
+		 	<?php settings_fields('morsel_host_details'); ?>
+		  	<?php do_settings_sections( 'morsel_host_details' ); ?>          	
+		   	<table class="form-table">
+		  		<tr valign="top">
+		  			<input type="hidden" style="width:50%" name="morsel_host_details[profile_id]" id="profile_id" value="<?php echo $options['profile_id'] ?>"/>
+		  			<td scope="row">Host Url:</td>
+					<td>
+						<input type="text" style="width:50%" name="morsel_host_details[host_url]" id="host_url" value="<?php echo $options['host_url'] ?>" disabled/>
+					</td>
+		  		</tr>
+		  		<tr valign="top">
+		  			<td scope="row">Host Logo:</td>
+		  			<td>
+		  				<input type="text" style="width:50%" name="morsel_host_details[host_logo_path]" id="host_logo_path" value="<?php echo $options['host_logo_path']; ?>" /> 
+		  				<input type="button" id="upload_image_button" value="Upload Logo" />
+		  			</td>
+		  		</tr>
+		  		<tr valign="top">
+		  			<td scope="row" style="vertical-align:top;">Host Address:</td>
+		  			<td><!-- <textarea column="50" style="width:50%" rows="5" name="morsel_host_details[host_address]" id="host_address"/><?php echo $options['host_address']; ?></textarea> -->
+		  			<input type="text" style="width:50%" name="morsel_host_details[host_company]" id="host_company" value="<?php echo $options['host_company'] ?>" placeholder="Company Name" />
+		  			<input type="text" style="width:50%; margin-top:5px" name="morsel_host_details[host_street]" id="host_street" value="<?php echo $options['host_street'] ?>" placeholder="Street Address" />
+		  			<input type="text" style="width:50%; margin-top:5px" name="morsel_host_details[host_city]" id="host_city" value="<?php echo $options['host_city'] ?>" placeholder="City" />
+		  			<input type="text" style="width:50%; margin-top:5px" name="morsel_host_details[host_state]" id="host_state" value="<?php echo $options['host_state'] ?>" placeholder="State"/>
+		  			<input type="text" style="width:50%; margin-top:5px" name="morsel_host_details[host_zip]" id="host_zip" value="<?php echo $options['host_zip'] ?>" placeholder="Zip"/>
+		  			</td>
+		  		</tr>
+				<tr valign="top">
+		  			<td scope="row">&nbsp;</td>
+					<td>
+					<?php if(isset($ms_options['userid']) && $ms_options['userid'] > 0) {?>
+					<?php submit_button("Save","primary","save",null,array( 'id' => 'morsel_host_submit' ) ); ?>
+		  		    <? } else { ?>
+                    Please Eneter username And Password first
+		  		    <? } ?>
+		  		    </td>
+		  		</tr>    		
+			</table>
+		</form>
+		<script type="text/javascript">
+		
+	(function($){
+		
+		$("#morsel_host_submit_button").click(function(event){
+			event.preventDefault();
+			// alert("test");
+			$("#morsel-host-details-form").valid();
+		});
+
+		$("#morsel-host-details-form").validate({
+			  rules: {
+			   "morsel_host_details[host_company]": {
+			      required: true,
+			      number: false		      
+			    },
+			    "morsel_host_details[host_street]": {
+			      required: true,
+			      number: false		      
+			    },
+			    "morsel_host_details[host_city]": {
+			      required: true,
+			      number: false		      
+			    },
+			    "morsel_host_details[host_state]": {
+			      required: true,
+			      number: false		      
+			    },
+			    "morsel_host_details[host_zip]": {
+			      required: true,
+			      number: false		      
+			    }		    
+			  },
+			  messages: {
+			    "morsel_host_details[host_company]": {
+			      required: "Please enter Company Name."
+			    },
+			    "morsel_host_details[host_street]": {
+			      required: "Please enter Street Name."
+			    },
+			    "morsel_host_details[host_city]": {
+			      required: "Please enter City Name."
+			    },
+			    "morsel_host_details[host_state]": {
+			      required: "Please enter State Name."
+			    },
+			    "morsel_host_details[host_zip]": {
+			      required: "Please enter Zip Code."
+			    }
+			  }
+			});
+
+		
+	}(jQuery))
+</script>
+		  <!-- Host Details Form End -->	
 			
+	 </div>
+
+	   <div id="associated_user">        
+        
+        <?php if($options['key']){?>
+          <?php include_once("associated-user-tab.php");?>
+	    <?php } else {?>
+           Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
+	    <?php } ?>
 	 </div>
 
 	 <div id="tabs1-js">
@@ -68,9 +213,9 @@
            Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
 	    <?php } ?> 
 	 </div>
-	 <div id="host_details">        
+	 <div id="host_details" style="display:none">        
         <?php if($options['key']){?>
-          <?php include_once("host-details-tab.php");?>
+          <?php //include_once("host-details-tab.php");?>
 	    <?php } else {?>
            Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
 	    <?php } ?>
@@ -84,6 +229,13 @@
 	 </div>
 	 <div id="tabs1-shortcode">        
         <?php include_once("shortcode-tab.php");?>	    
+
+	 </div>
+	 <div id="tabs1-morsel_advanced_tab">        
+        <?php include_once("advanced.php");?>	    
+
+	 </div>
+	
 
 	 </div>
 </div>
@@ -129,11 +281,7 @@ function getKeywords(userid,auth_key){
 
 function addprofile(userid,auth_key){
 	
-	console.log("<?php echo MORSEL_API_USER_URL.get_option('morsel_settings')['userid'].'/create_profile.json';?>");
-	console.log('test', "<?php echo MORSEL_API_USER_URL?>"+ userid+"/create_profile.json" );
-	console.log('test-apikey', auth_key );
-
- 	jQuery.ajax({
+	jQuery.ajax({
 			url: "<?php echo MORSEL_API_USER_URL?>"+ userid+"/create_profile.json",
 			data: {
 				api_key: auth_key
@@ -223,10 +371,11 @@ window.onload =function(){
 			$.ajax({
 				url:  "<?php echo site_url()?>"+"/index.php?pagename=morsel_ajax_admin&page_id=" + parseInt(++morsePageCount),          
 				success: function(data) {
-					console.log(data);
-					if(data.trim().length>1)						                      
-				    	$( "#the-list" ).append( data );
-					else{
+					
+					if(data.trim().length>1){			
+						$('#the-list tr:last').after(data);			                      
+				    	// $( "#the-list" ).append( data );
+					}else{
 						morsePageCount--;
 						alert("No more morsel.")
 					}
@@ -252,17 +401,20 @@ window.onload =function(){
 				alert("Please Fill Addess Of The Host Site Organisation/Person");
 				return false;
 			}
-			
-			jQuery('#morsel_host_submit').val('Please wait!'); 
-
-			if(jQuery("#profile_id").val() == ""){
+			if($("#morsel-host-details-form").valid()){
+			   jQuery('#morsel_host_submit').val('Please wait!'); 
+           if(jQuery("#profile_id").val() == ""){
 				var userData =  { 
 									api_key:"<?php echo get_option('morsel_settings')['userid'].':'.get_option('morsel_settings')['key']; ?>",
 									user:{
 										profile_attributes:{
 											host_url: jQuery("#host_url").val(),
 											host_logo: jQuery("#host_logo_path").val(),
-											address : jQuery("#host_address").val()
+											company_name : jQuery("#host_company").val(),
+											street_address : jQuery("#host_street").val(),
+											city : jQuery("#host_city").val(),
+											state : jQuery("#host_state").val(),
+											zip : jQuery("#host_zip").val()
 										}
 									}
 								};	
@@ -275,7 +427,11 @@ window.onload =function(){
 											id:jQuery("#profile_id").val(),
 											host_url: jQuery("#host_url").val(),
 											host_logo: jQuery("#host_logo_path").val(),
-											address : jQuery("#host_address").val()
+											company_name : jQuery("#host_company").val(),
+											street_address : jQuery("#host_street").val(),
+											city : jQuery("#host_city").val(),
+											state : jQuery("#host_state").val(),
+											zip : jQuery("#host_zip").val()
 										}
 									}
 								};	
@@ -304,6 +460,7 @@ window.onload =function(){
 			   		jQuery('#morsel_host_submit').val('Connecting');
 			   	}
 			});
+		}
 		}); 
 		
 		

@@ -120,3 +120,9 @@
       margin-right: 10px;
     }
 
+    #circle-red { width: 12px; height: 12px; background: red; -moz-border-radius: 50px; -webkit-border-radius: 50px; border-radius: 50px; }
+
+    #circle-green { width: 12px; height: 12px; background: green; -moz-border-radius: 50px; -webkit-border-radius: 50px; border-radius: 50px; }
+
+/*Footer position set*/
+ #wpfooter { position: unset !important; }

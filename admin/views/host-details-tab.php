@@ -17,13 +17,18 @@
 	      					'profile_id'=>$json->data->profile->id,
 	      					'host_address'=>$json->data->profile->address,
 	      					'host_logo_path'=>$json->data->profile->host_logo,
-	      					'host_url'=>$json->data->profile->host_url
+	      					'host_url'=>$json->data->profile->host_url,
+	      					'host_company'=>$json->data->profile->company_name,
+	      					'host_street'=>$json->data->profile->street_address,
+	      					'host_city'=>$json->data->profile->city,
+	      					'host_state'=>$json->data->profile->state,
+	      					'host_zip'=>$json->data->profile->zip
 	      					));
 	      } else {
-	      	$options = array_merge($options, array('profile_id'=>'','host_address'=>'','host_logo_path'=>'','host_url'=>'')); 
+	      	$options = array_merge($options, array('profile_id'=>'','host_logo_path'=>'','host_url'=>'','host_company'=>'','host_street'=>'','host_city'=>'','host_zip'=>'','host_state'=>'')); 
 	      }      	
 	    } else {
-	      $options = array_merge($options, array('profile_id'=>'','host_address'=>'','host_logo_path'=>'','host_url'=>'')); 
+	      $options = array_merge($options, array('profile_id'=>'','host_logo_path'=>'','host_url'=>'','host_company'=>'','host_street'=>'','host_city'=>'','host_zip'=>'','host_state'=>'')); 
 	    }
 	} 
 ?>
@@ -46,8 +51,14 @@
   			</td>
   		</tr>
   		<tr valign="top">
-  			<td scope="row">Host Address:</td>
-  			<td><textarea column="50" style="width:50%" rows="5" name="morsel_host_details[host_address]" id="host_address"/><?php echo $options['host_address']; ?></textarea></td>
+  			<td scope="row" style="vertical-align:top;">Host Address:</td>
+  			<td><!-- <textarea column="50" style="width:50%" rows="5" name="morsel_host_details[host_address]" id="host_address"/><?php echo $options['host_address']; ?></textarea> -->
+  			<input type="text" style="width:50%" name="morsel_host_details[host_company]" id="host_company" value="<?php echo $options['host_company'] ?>" placeholder="Company Name"  required/>
+  			<input type="text" style="width:50%; margin-top:5px" name="morsel_host_details[host_street]" id="host_street" value="<?php echo $options['host_street'] ?>" placeholder="Street Address" required />
+  			<input type="text" style="width:50%; margin-top:5px" name="morsel_host_details[host_city]" id="host_city" value="<?php echo $options['host_city'] ?>" placeholder="City" required />
+  			<input type="text" style="width:50%; margin-top:5px" name="morsel_host_details[host_state]" id="host_state" value="<?php echo $options['host_state'] ?>" placeholder="State"  required/>
+  			<input type="text" style="width:50%; margin-top:5px" name="morsel_host_details[host_zip]" id="host_zip" value="<?php echo $options['host_zip'] ?>" placeholder="Zip" required/>
+  			</td>
   		</tr>
 		<tr valign="top">
   			<td scope="row">&nbsp;</td>
