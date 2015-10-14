@@ -1,4 +1,4 @@
-<?php
+<?php   
 if( get_option('morsel_host_details') ){
    if(isset(get_option( 'morsel_settings')['morsel_keywords']))
    {
