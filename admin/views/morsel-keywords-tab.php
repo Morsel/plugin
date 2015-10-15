@@ -1,69 +1,94 @@
-<?php 
-if( get_option('morsel_host_details') ){
-	 if(isset(get_option( 'morsel_settings')['morsel_keywords']))
-   	 {
-   	   $old_option = get_option( 'morsel_settings');
-       
-	   $old_option['morsel_keywords'] = str_replace("'","",$old_option['morsel_keywords']);
-	 
-	   update_option("morsel_settings",$old_option);
-   
-   	 }
-   	
-  
-	if(isset($_POST["keyword"]["name"])){
-		if($_POST["keyword_id"] != ""){
-            
-			$new_settings = get_option("morsel_settings"); 
-	    	$allKeywords = json_decode($new_settings['morsel_keywords']);
-
-	    	foreach($allKeywords as $kwd){
-	    		if($kwd->id == $_POST["keyword_id"]){
-	    			$kwd->name = $_POST["keyword"]["name"];
-	    		}
-	    	}
-
-	    	$new_settings['morsel_keywords'] = json_encode($allKeywords);
-	    	update_option("morsel_settings",$new_settings);
-	    	
-	    	if(isset($options["morsel_keywords"])) {
-	    	 	$options["morsel_keywords"] = $new_settings['morsel_keywords'];
-	    	}		    	
-		} else {
-			$new_keyword = stripslashes($_POST["updated_keywords"]);
-		    $new_settings = get_option("morsel_settings"); 
-	    	$new_settings['morsel_keywords'] = ($new_keyword);
-	    	update_option("morsel_settings",$new_settings);
-	    	if(isset($options["morsel_keywords"])) {
-	    	 	$options["morsel_keywords"] = ($new_keyword);
-	    	}	
-		}
-	}
+<?php
+if(isset($hostCompany) && $hostCompany != ""){
 ?>
-<form method="post" action="" id="morsel-host-keywords-form"> 	         	
+<script type="text/javascript">
+jQuery( document ).ready(function() {
+	getKeywordsData("<?php echo $options['userid'] ?>","<?php echo $options['userid'].':'.$options['key'] ?>")
+});
+
+	function getKeywordsData(userid,auth_key){
+	
+	jQuery.ajax({
+		url:  "<?php echo MORSEL_API_URL;?>"+"keywords/show_morsel_keyword",
+		type: "POST",
+		data: {
+				keyword:{user_id:userid},
+				api_key:auth_key
+			},
+		success: function(response) {
+			
+			if(response.data!="blank")
+			{
+		         
+                var data = response.data;
+                jQuery('#post_keyword_id').val(JSON.stringify(data));
+
+				/*create option for shortcode tab*/ 
+      			var sel = jQuery('#shortcode_keyword');
+					jQuery(data).each(function() {
+					 sel.append(jQuery("<option>").attr('value',this.id).text(this.name));
+					});
+				
+                
+              
+                for(var k in data){
+                  var html = '<tr id="morsel_keyword-'+data[k].id+'" class="post-'+data[k].id+' type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">';
+                	html +='<td class="post-title page-title column-title"><strong>'+data[k].id+'</strong></td>';            
+					html +='<td class="categories column-categories" id="keyword-name-'+data[k].id+'">'+data[k].name+'</td>';
+                                    
+					html +='<td class="date column-date"><abbr title="">'+data[k].created_at.slice(0,10)+'</abbr><br />Created</td>';
+					html +='<td class="edit-btn column-categories"><button onclick="updateKeywords('+"'"+data[k].id+"'"+',1,'+"'"+data[k].name+"'"+')">Edit</button></td>';
+		           html +='</tr>';
+                jQuery("#morsel-keyword-list_data").append(html);
+                }
+            } else {            	
+			    var html = '<tr><td></td><td><b>NO RESULT FOUND</b></td><td></td><td></td></tr>';
+			    jQuery("#morsel-keyword-list_data").prepend(html);
+            }
+		},error:function(){
+			alert('Error in getting morsel keywords of user');
+		    var html = '<tr><td></td><td><b>NO RESULT FOUND</b></td><td></td><td></td></tr>';
+		    jQuery("#morsel-keyword-list_data").append(html);
+		},complete:function(){
+			console.log('Getting morsel keywords is complete');
+		}
+    });
+    return true;
+}
+function updateKeywords(keyData, Update, keyName){
+	jQuery("#keyword_id").val(keyData);
+	jQuery("#updated_keywords").val("1");
+	jQuery("#keyword_name").val(keyName);
+}
+</script>
+
+<!-- Edit Form -->
+<!-- <form method="post" action="" id="morsel-host-keywords-form"> 	        -->  	
    	<table class="form-table">
   		<tr valign="top">  			
   			<td scope="row">Keyword Name:</td>
 			<td>
-				<input type="hidden" name="api_key" id="kwd-morsel-key" value="<?php echo $options['userid'].':'.$options['key'] ?>"/>
-				<input type="hidden" name="keyword[user_id]" id="kwd-morsel-userid" value="<?php echo $options['userid'] ?>"/>
-				<input type="hidden" name="updated_keywords" id="updated_keywords" value=""/>
+				<input type="hidden" name="post_keyword_id" id="post_keyword_id" value=""/> 	
+				<input type="hidden" name="updated_keywords" id="updated_keywords" value="0"/>
 				<input type="hidden" name="keyword_id" id="keyword_id" value=""/>
 				<input type="text" style="width:50%" name="keyword[name]" id="keyword_name" value=""/>
 			</td>
   		</tr>  		
 		<tr valign="top">
   			<td scope="row">&nbsp;</td>
-			<td><?php submit_button("Save","primary","morsel-keywords-form",null,array('id'=>'morsel-keywords-submit')); ?></td>
+			<td><input id="morsel-keywords-submitKey" class="button button-primary" type="button" value="Save" name="morsel-keywords-form"></td>
   		</tr>
 	</table>
-</form>
+<!-- </form> -->
+<!-- Edit Form -->
+
+
 <table class="wp-list-table widefat posts">
 	<thead>
 		<tr>
 			<th scope='col' id='keyword-id' class='manage-column column-categories'  style=""><span>Keyword ID</span></th>
 			<th scope='col' id='keyword-name' class='manage-column column-title sortable desc'  style=""><span>Keyword Name</span></th>
-			Description</th>
+			<!-- Description</th> -->
 			<th scope='col' id='date' class='manage-column column-date sortable asc'  style=""><span>Date</span></th>
 			<th scope='col' class='manage-column column-date sortable asc' style="">Actions</th>
 	  	</tr>
@@ -77,56 +102,28 @@ if( get_option('morsel_host_details') ){
 		</tr>
 	</tfoot>
 
-	<tbody id="morsel-keyword-list">
-		<?php if($options["morsel_keywords"]!="blank") {
-			 
-			foreach(json_decode($options["morsel_keywords"]) as $row){ ?>
-		<tr id="morsel_keyword-<?php echo $row->id;?>" class="post-<?php echo $k;?> type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">		    
-			<td class="post-title page-title column-title">
-			    <strong><?php echo $row->id?></strong>
-			</td>            
-			<td class="categories column-categories" id="keyword-name-<?php echo $row->id;?>"><?php echo $row->name;?></td>
-			<td class="date column-date">
-			    <abbr title="<?php echo date("d/m/Y", strtotime($row->created_at));?>"><?php echo date("m/d/Y", strtotime($row->created_at));?></abbr><br />Created
-			</td>
-			<td class="edit-btn column-categories">
-			  <button class="edit-keyword-btn" id="<?php echo $row->id;?>">Edit</button>
-			</td>
-		</tr>
-		<?php }
-		}else{
-
-			?>
-			<tr>
-				<td></td>
-				<td><b>NO RESULT FOUND</b></td>
-				<td></td>
-				<td></td>
-			</tr>
-
-		<?php } ?>
+	<tbody id="morsel-keyword-list_data">
+		
 	</tbody>
 </table>
 <div class="clear"><br></div>
 
 <script type="text/javascript">
 	(function($){
-		$("#morsel-keywords-submit").click(function(event){
-			event.preventDefault();
+		$("#morsel-keywords-submitKey").click(function(){
+
 			if($("#keyword_name").val() != ""){
-
 				var keywords_name = $("#keyword_name").val();
-				
-				var regex = /[^\w\s]/gi;
-
-				if(regex.test(keywords_name) == true) {
-				    alert('Your keyword string contains illegal characters.');
-				    return;
-				}
-				
 				$("#morsel-keywords-submit").val('Please wait!');
-				
 				if($("#keyword_id").val() != ""){ //for edit keyword
+					var keywords_name = $("#keyword_name").val();
+				
+					var regex = /[^\w\s]/gi;
+
+					if(regex.test(keywords_name) == true) {
+					    alert('Your keyword string contains illegal characters.');
+					    return;
+					}
 					
 					$.ajax({
 						url:  "<?php echo MORSEL_API_URL;?>"+"keywords/edit_morsel_keyword",
@@ -136,12 +133,14 @@ if( get_option('morsel_host_details') ){
 		    					id:$("#keyword_id").val(),
 		    					name:keywords_name
 		    					},
-		    				api_key:$("#kwd-morsel-key").val()
+		    				api_key:"<?php echo $options['userid'].':'.$options['key'] ?>"
 		  				},
 						success: function(response) {
-							//console.log("Response in edit keywords : ",response.data);
-							$("#morsel-host-keywords-form").submit();
-							
+							alert("Keyword Updated succssfully.");
+							jQuery("#morsel-keyword-list_data").html("");
+							getKeywordsData("<?php echo $options['userid'] ?>","<?php echo $options['userid'].':'.$options['key'] ?>");
+							$("#keyword_id").val("");//keywords_name
+							$("#keyword_name").val("");
 							
 						},error:function(){
 							console.log('Error in edit morsel keywords');
@@ -151,32 +150,33 @@ if( get_option('morsel_host_details') ){
 						}
 		        	});
 				} else { //for add keyword
+					
+				
+					var regex = /[^\w\s]/gi;
+
+					if(regex.test(keywords_name) == true) {
+					    alert('Your keyword string contains illegal characters.');
+					    return;
+					}
+
+
+
 
 					$.ajax({
 						url:  "<?php echo MORSEL_API_URL;?>"+"keywords/add_morsel_keyword",
 						type: "POST",
 						data: {
-		    				keyword:{user_id:$("#kwd-morsel-userid").val(),
+		    				keyword:{user_id:<?php echo $options['userid'] ?>,
 		    				name:keywords_name
 		    			    },
 		    				api_key:$("#kwd-morsel-key").val()
 		  				},	  				
 						success: function(response) {
-
-		  					
-		  					var keywords = [];
-							<?php if(get_option("morsel_settings")["morsel_keywords"]!="blank")
-							{
-							 ?>
-							 	keywords = JSON.parse('<?php echo get_option("morsel_settings")["morsel_keywords"]?>');
-							<?php } ?>
-							
-					    	keywords.push(response.data);
-							
-							$("#updated_keywords").val(JSON.stringify(keywords));
-							$("#morsel-host-keywords-form").submit();
-							
-							$('#keyword_name').val('');
+					    	alert("Keyword saved succssfully.")
+					    	jQuery("#morsel-keyword-list_data").html("");
+							getKeywordsData("<?php echo $options['userid'] ?>","<?php echo $options['userid'].':'.$options['key'] ?>");
+     						$("#keyword_id").val("");
+							$("#keyword_name").val("");
 						},error:function(){
 							console.log('Error in add morsel keywords');
 						},complete:function(){
@@ -184,23 +184,13 @@ if( get_option('morsel_host_details') ){
 							console.log('Add morsel keywords is complete');
 						}
 		        	});	
-				}
-
-							
+				}							
 			} else {
 				alert("Please fill the keyword text");
 				$("#keyword_name").focus()
 			}
 		});
 
-		$(".edit-keyword-btn").click(function(){
-			var keyword_id = $(this).attr("id");
-			$("#keyword_id").val(keyword_id);
-			var keyword_name = $("#keyword-name-"+keyword_id).html();
-			//console.log("keyword name for update : ",keyword_name);
-			$("#keyword_name").val(keyword_name);			
-			$("#keyword_name").focus();
-		});
 	}(jQuery));
 </script>
  <? } else { ?>

@@ -1,5 +1,5 @@
-<?php   
-if( get_option('morsel_host_details') ){
+<?php
+if(isset($hostCompany) && $hostCompany != ""){
    if(isset(get_option( 'morsel_settings')['morsel_keywords']))
    {
    	   $old_option = get_option( 'morsel_settings');
@@ -35,15 +35,7 @@ if( get_option('morsel_host_details') ){
    	$post_selected = $morsel_post_settings['posts_id'];
    else
    	$post_selected = array();
-
-
-
-
-
-
-
-
-?>
+   ?>
 
 <?php 
 // get all updated keyword on post tab
@@ -86,24 +78,28 @@ if(isset($_POST["morsel_settings_Preview"])){
 }
 
 ?>
-<?php if(count($json->data)>0){?>   
- <form method="post" action="" id="morsel-form-preview-text">
+<?php if(count($json->data)>0){?>  
+<span class="postTab postJsonData"> 
+    <div style="float:left; width:80%">
+     <form method="post" action="" id="morsel-form-preview-text">
       <?php settings_fields( 'morsel_settings_Preview' ); ?>
           <?php do_settings_sections( 'morsel_settings_Preview' ); ?>
     <input type="hidden" style="width:50%" name="morsel_host_details[profile_id]" id="profile_id_Text" value="<?php echo get_option('morsel_host_details')['profile_id'] ?>"/>
-      <table class="form-table">
+      <table class="form-table" style="margin:0;">
   		<tr valign="top">
   			<td scope="row">Preview Text:</td>
 			<td>
 				<input style="width:200px;" type="text" name="morsel_settings_Preview" id="preview_text" value="<?php echo (get_option('morsel_settings_Preview'))? get_option('morsel_settings_Preview') : 'You have subscribed for Morsel.' ?>"/>
 			    <?php submit_button("Save","primary","save",null,array( 'id' => 'morsel_preview_Text_submit' ) ); ?>
-		  		    
-			</td>
+		  	</td>
 			<!-- <td><input type="submit" value="Update Preview" id="morsel_preview_Text_submit"></td> -->
   		</tr>
       </table>
-</form>
-
+      </form>
+    </div>
+    <form method="post" action="" id="morsel-loadNew">
+      <div style="float:right; padding:15px 0px;"><input id="getNewMorsel" class="button" type="submit" name="loadNewMorsel" value="Get New Morsels"></div>  
+    </form> 
 	
 	<table class="wp-list-table widefat posts fixed">
 	<thead>
@@ -158,10 +154,7 @@ if(isset($_POST["morsel_settings_Preview"])){
    
 	<tbody id="the-list">
 
-	 <?php foreach ($json->data as $row) {     
-     
-
-	 	?>
+	 <?php foreach ($json->data as $row) {?>
       
 	    <tr id="morsel_post-<?php echo $row->id;?>" class="post-<?php echo $k;?> type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">
 		   <!--  <th scope="row" class="check-column">
@@ -208,17 +201,15 @@ if(isset($_POST["morsel_settings_Preview"])){
 			</td>
 			<td class="code-keyword categories column-categories">
 
-			   <?php
-
-			   foreach ($row->morsel_keywords as $tag_keyword) 
-			   	{
-			     ?>
+			   <?php foreach ($row->morsel_keywords as $tag_keyword){?>
+			   
 				<code style = "line-height: 2;"><?php echo $tag_keyword->name ?></code><br>
 
 				<?php } ?>
 				
 			</td>
-			<td>	
+			<td>
+			    <!-- <p><a href="javascript:void(0);" onclick="editMorsel('<?php echo $row->id;?>','<?php echo $row->title;?>','<?php echo $row->summary;?>','<?php echo $row->description;?>','<?php echo $row->photos->_800x600;?>')">Edit</p>	 -->
 			    <?php if($row->is_submit || count($row->morsel_keywords) == 0) { ?>
 			   		<?php add_thickbox(); ?>
 					<a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_keyowrd_id button">Pick Keywords</a>
@@ -227,11 +218,7 @@ if(isset($_POST["morsel_settings_Preview"])){
 				 <?php if($row->is_submit) { ?>
 					<a morsel-id = "<?php echo $row->id ?>" class="all_unpublish_morsel_id button">Publish Morsel</a>
 				<?php } ?>
-				 
-		
-				
-			</td>
-			
+			</td>			
 		</tr>
 	  <?php } ?>	
 	</tbody>
@@ -267,7 +254,7 @@ if(isset($_POST["morsel_settings_Preview"])){
 </form>
 
 <?php } else { ?>
-  <p><h3>Oops! You don't have any post on your site.</h3></p>
+  <p><h3>Oops! You don't have any morsel on your site.</h3></p>
 <?php } ?>
 
 <script type="text/javascript">
@@ -370,7 +357,7 @@ if(isset($_POST["morsel_settings_Preview"])){
         				
 							}
 							else{
-							var all_keywords =JSON.parse('<?php echo get_option("morsel_settings")["morsel_keywords"]; ?>');
+							var all_keywords =JSON.parse(jQuery('#post_keyword_id').val());
 							var saved_keywords = response.data;
 							 //console.log('keyword response',response);
 							 // console.log('keyword all keyword',all_keywords);
@@ -508,6 +495,98 @@ if(isset($_POST["morsel_settings_Preview"])){
 			});
 		}); 
 
+</script>
+</span>
+<script type="text/javascript">
+	function editMorsel(morselid,morselTitle,morselSummary,morselDescription,morselImage){
+      console.log("morsel-------------------",morselid);
+      console.log("morselTitle-------------------",morselTitle);
+      console.log("morselSummery-------------------",morselSummary);
+      console.log("morselDescription-------------------",morselDescription);
+      jQuery("#morselId").val(morselid);
+      jQuery("#post_title").val(morselTitle);
+      jQuery("#post_summary").val(morselSummary);
+      jQuery("#post_description").val(morselDescription);//morsel_image
+      jQuery("#morsel_image").attr("src", morselImage);
+      jQuery(".postJsonData").css("display","none");
+      jQuery(".editMorsels").css("display","table-row");
+	}
+</script>
+<span class="editMorsels" style="display:none;">
+	<div  style="background: none repeat scroll 0 0 #fff;
+    padding: 10px;">
+	    <h3>Edit Morsel</h3>
+		<div style="float:left; width:50%">
+			<table class="form-table">
+		  		<tr valign="top">  			
+		  			<td scope="row">Title:</td>
+					<td>
+						<input type="text" style="width:50%" name="morselId" id="morselId" value=""/>
+						<input type="text" style="width:50%" name="post_title" id="post_title" value=""/>
+					</td>
+		  		</tr>  	
+		  		<tr valign="top">  			
+		  			<td scope="row">Summary:</td>
+					<td>
+						<input type="text" style="width:50%" name="summary" id="post_summary" value=""/>
+					</td>
+		  		</tr>
+		  		<tr valign="top">  			
+		  			<td scope="row">Description:</td>
+					<td>
+						<textarea style="width:50%" name="post_description" id="post_description"></textarea>
+					</td>
+		  		</tr>  	
+		  		<tr valign="top">  			
+		  			<td scope="row">Image:</td>
+					<td>
+					<img src="" width="100"  id="morsel_image"/><br>
+						<input type="text" style="width:50%" name="post_image" id="post_image" value=""/>
+					</td>
+		  		</tr>  		
+				<tr valign="top">
+		  			<td scope="row">&nbsp;</td>
+					<td><input id="morsel_update_key" class="button button-primary" type="button" value="Save" name="morsel_update_form">&nbsp;&nbsp;<input id="" class="button button-primary" type="button" value="Back To Morsel" name="morsel_update_form" onclick="morsel_back_key()"></td>
+		  		</tr>
+	        </table>
+		</div>
+		<div style="float:left; width:50%" class="addItemClass">
+		<h3><span>Add Item </span><span id="add_ItemMorsel" onclick="addItemMorsel()"><img src='<?=MORSEL_PLUGIN_IMG_PATH."/plus.png"?>' width="30" /></span></h3>
+			<table class="form-table">
+		  		<tr class="add_item">  			
+		  			<td scope="row" style="vertical-align:top !important;"> 
+		  			    <p>Image</p>
+						<input type="text" style="width:50%" name="addItem[image]" id="" value=""/>
+					</td>
+					<td scope="row" style="vertical-align:top !important;">
+					    <p>Description</p>
+					    <textarea style="width:100%" name="addItem[description]" id=""></textarea>
+					</td>
+		  		</tr>  		
+				<tr>
+		  			<td scope="row"><!-- <img class="add_ItemMorsel" src='<?=MORSEL_PLUGIN_IMG_PATH."/minus.png"?>' width="30" /> --></td>
+					<td><input id="edit-morsel-item-btn" class="button button-primary" type="button" value="Save" name="morsel-keywords-form"></td>
+		  		</tr>
+	        </table>
+	        
+		</div>
+	</div>
+</span>
+<script>
+	function addItemMorsel(){
+		//alert("addItem");
+		var k = "<table class='form-table'><tr valign='top' class='add_item'><td scope='row' style='vertical-align:top !important;'><p>Image</p><input type='text' style='width:50%' name='addItem[image]'/></td><td scope='row' style='vertical-align:top !important;'><p>Description</p><textarea style='width:100%' name='addItem[description]'></textarea></td></tr><tr valign='top'><td scope='row'><img class='add_ItemMorsel' src='<?=MORSEL_PLUGIN_IMG_PATH?>/minus.png' width='30' /></td><td><input class='button button-primary' type='button' value='Save' name='morsel-keywords-form'></td></tr></table>";
+        //alert(k);
+		jQuery(".addItemClass").append(k);
+	}
+	function morsel_back_key(){
+	  jQuery(".postJsonData").css("display","block");
+      jQuery(".editMorsels").css("display","none");
+	}
+	jQuery(".add_ItemMorsel").click(function(event) {
+    //event.preventDefault();
+        jQuery(this).parents('.form-table').remove();
+    });
 </script>
  <? } else { ?>
 Please Enter Host Details First.

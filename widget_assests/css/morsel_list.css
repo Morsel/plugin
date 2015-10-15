@@ -968,7 +968,7 @@ textarea#clipboard-text {
 }
 
 .common-comment-empty {
-  background-position: 0 -96px;
+  background-position: 0 -120px;
   height: 24px;
   width: 24px;
 }
@@ -990,6 +990,8 @@ textarea#clipboard-text {
 .item-comments a.dark-link {
   line-height: 1;
   font-size: 14px;
+  text-decoration: none;
+  border-bottom: none !important;
 }
 .morsel-loader {
 	background: url("../images/morsel-loader.gif") no-repeat scroll center center rgba(0, 0, 0, 0);
@@ -1099,3 +1101,9 @@ ul#comment-list li {
 	font-family: "Lato","Helvetica Neue Light","Helvetica Neue","Arial",sans-serif;
 }
 /*End for like and share stick to bottom area*/
+
+/*Add Comment*/
+.addComment {
+	color: #ee8872 !important;
+}
+/*Add Comment*/

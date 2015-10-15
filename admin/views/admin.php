@@ -12,22 +12,23 @@
  * @copyright 2014 Nishant
  */
 ?>
-   
+
 <div class="wrap">
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 	<div id="tab-container" class='tab-container'>
 	 <ul class='etabs'>
 	   <li class='tab'><a href="#tabs1-settings">Settings</a></li>
 	   <li class='tab'><a href="#associated_user">Associated User</a></li>
-	   <li class='tab'><a href="#tabs1-js">Post</a></li>
+	   <li class='tab'><a href="#tabs1-js">Morsel</a></li>
 	   <li class='tab'><a href="#morsel_keywords_panel">Manage Keywords</a></li>
 	   <!-- <li class='tab'><a href="#host_details">Host Details</a></li> -->
 	   <li class='tab'><a href="#tabs1-shortcode">Display</a></li>
 	   <li class='tab'><a href="#tabs1-morsel_advanced_tab">Advanced</a></li>
 	 </ul>
 	 <div class='panel-container'>
-		<div id="tabs1-settings">
 
+		<div id="tabs1-settings">
+        
      	<?php 
 	     	$options =array('apikey'=>'','email'=>'','password'=>'','page'=>10); 	     	
 	     	if(get_option('morsel_settings'))
@@ -77,8 +78,10 @@
 				if(isset($ms_options['userid']) && $ms_options['userid'] > 0) {
 				  $api_key = $ms_options['userid'] . ':' .$ms_options['key'];      
 			      $jsonurl = MORSEL_API_USER_URL."/me.json?api_key=".$api_key;    
-			      $json = get_json($jsonurl);	      
-			      if(isset($json->data->profile)){	      	
+			      $json = get_json($jsonurl);	
+			           
+			      if(isset($json->data->profile)){	
+                    $hostCompany = $json->data->profile->company_name;
 			      	$options = array_merge($options,array(
 			      					'profile_id'=>$json->data->profile->id,
 			      					// 'host_address'=>$json->data->profile->address,
@@ -220,7 +223,8 @@
            Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
 	    <?php } ?>
 	 </div>	
-	 <div id="morsel_keywords_panel">	 	
+	 <div id="morsel_keywords_panel">	
+	 
         <?php if($options['key']){?>
           <?php include_once("morsel-keywords-tab.php");?>
 	    <?php } else {?>
@@ -247,37 +251,37 @@
     });
 </script>
 <script>
-function getKeywords(userid,auth_key){
-	//console.log(userid+" "+auth_key)
-	jQuery.ajax({
-		url:  "<?php echo MORSEL_API_URL;?>"+"keywords/show_morsel_keyword",
-		type: "POST",
-		data: {
-				keyword:{user_id:userid},
-				api_key:auth_key
-			},
-		success: function(response) {
-			console.log(response.data);
-			if(response.data!="blank")
-			{
-				jQuery("#morsel-keywords").val(JSON.stringify(response.data));
+// function getKeywords(userid,auth_key){
+// 	//console.log(userid+" "+auth_key)
+// 	jQuery.ajax({
+// 		url:  "<?php echo MORSEL_API_URL;?>"+"keywords/show_morsel_keyword",
+// 		type: "POST",
+// 		data: {
+// 				keyword:{user_id:userid},
+// 				api_key:auth_key
+// 			},
+// 		success: function(response) {
+// 			console.log(response.data);
+// 			if(response.data!="blank")
+// 			{
+// 				jQuery("#morsel-keywords").val(JSON.stringify(response.data));
 
-			}
-			else
-			{
-				jQuery("#morsel-keywords").val(response.data);
-			}
-			addprofile(userid,auth_key);			 	
+// 			}
+// 			else
+// 			{
+// 				jQuery("#morsel-keywords").val(response.data);
+// 			}
+// 			addprofile(userid,auth_key);			 	
 						
-			//jQuery("#morsel-form").submit();
-		},error:function(){
-			alert('Error in getting morsel keywords of user');
-		},complete:function(){
-			console.log('Getting morsel keywords is complete');
-		}
-    });
-    return true;
-}
+// 			//jQuery("#morsel-form").submit();
+// 		},error:function(){
+// 			alert('Error in getting morsel keywords of user');
+// 		},complete:function(){
+// 			console.log('Getting morsel keywords is complete');
+// 		}
+//     });
+//     return true;
+// }
 
 function addprofile(userid,auth_key){
 	
@@ -343,7 +347,7 @@ window.onload =function(){
 				 	//get morsel keywords of user
 				 	var auth_key = response.data.id+":"+response.data.auth_token;
 				 	//console.log("response type",auth_key);
-				 	getKeywords(response.data.id,auth_key);	
+				 	addprofile(response.data.id,auth_key);	
 				 	
 				 	
 				} else {
