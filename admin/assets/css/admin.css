@@ -125,4 +125,4 @@
     #circle-green { width: 12px; height: 12px; background: green; -moz-border-radius: 50px; -webkit-border-radius: 50px; border-radius: 50px; }
 
 /*Footer position set*/
- #wpfooter { position: unset !important; }
+ #wpfooter { position: static !important; }

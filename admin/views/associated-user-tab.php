@@ -1,5 +1,5 @@
 <?php 
- if( get_option('morsel_host_details') ){			
+ if(isset($hostCompany) && $hostCompany != ""){			
 			$api_key = $options['userid'] . ':' .$options['key'];
 		  
 		  	$jsonurl = MORSEL_API_URL."users/".$options['userid']."/association_requests.json?api_key=$api_key";
@@ -47,6 +47,7 @@
 			<th scope='col' id='keyword-name' class='manage-column column-title sortable desc'  style=""><span>User Name</span></th>
 			<th scope='col' id='date' class='manage-column column-date sortable asc'  style=""><span>Email</span></th>
 			<th scope='col' class='manage-column column-date sortable asc' style="">Accepted</th>
+			<th scope='col' class='manage-column column-date sortable asc' style="">Action</th>
 	  	</tr>
 	</thead>
 	<tfoot>
@@ -54,7 +55,8 @@
 			<th scope='col' id='keyword-id' class='manage-column column-categories'  style="">User ID</th>
 			<th scope='col' id='keyword-name' class='manage-column column-title sortable desc'  style=""><span>User Name</span></th>
 			<th scope='col' class='manage-column column-date sortable asc' style=""><span>Email</span></th>
-			<th scope='col' class='manage-column column-date sortable asc' style="">Accepted</th>	
+			<th scope='col' class='manage-column column-date sortable asc' style="">Accepted</th>
+			<th scope='col' class='manage-column column-date sortable asc' style="">Action</th>	
 		</tr>
 	</tfoot>
 
@@ -62,7 +64,7 @@
 		<?php if(get_option( 'morsel_settings')["morsel_associated_user"]!="") {
 			 
 		   foreach(json_decode(get_option( 'morsel_settings')["morsel_associated_user"]) as $row){ ?>
-				<tr class="type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">		    
+				<tr id="delete<?=$row->associated_user->id;?>" class="type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0 deleteUser">		    
 					<td class="post-title page-title column-title">
 					    <strong><?php echo $row->associated_user->id?></strong>
 					</td>            
@@ -82,6 +84,7 @@
 					   <?php } ?>
 
 					</td>
+					<td><a href="javascript:void(0);" onclick="deleteUser('<?=$row->associated_user->id;?>')">Delete</td>
 				</tr>
 		<?php }
 		}else{
@@ -100,8 +103,30 @@
  <input id= "previous" type="hidden" value = ""/>
  <div class="clear"><br></div>
 <script type="text/javascript">
-	(function($){
-		
+		function deleteUser(userId){
+			// alert("user_id"+userId);
+			var user_id = jQuery("#admin-user-userid").val();
+			jQuery.ajax({
+					   url:  "<?php echo MORSEL_API_URL;?>"+"users/"+user_id+"/delete_association_request.json",
+						type: "DELETE",
+						data: {
+		    				association_request_params:{associated_user_id:userId},
+		    			    api_key:jQuery("#admin-user-key").val()
+		  				},	  				
+						success: function(response) {
+						  console.log("response------------------",response);
+						  	jQuery( "#delete"+userId ).remove();
+						},error:function(error){						
+						  console.log("error response------------------",error);
+						},complete:function(){
+						  if(jQuery("#morsel-keyword-list .deleteUser").length == 0){
+						  	jQuery( "#morsel-keyword-list" ).append( "<tr><td></td><td><b>NO RESULT FOUND</b></td><td></td><td></td></tr>" )
+                          } 
+						  // window.location.href=window.location.href;
+						}
+		        	});	
+		}
+	(function($){		
 		$("#associated-user-submit").click(function(event){
 			event.preventDefault();
 			if($("#associated_user_name").val() != ""){
@@ -119,17 +144,10 @@
 		    			    api_key:$("#admin-user-key").val()
 		  				},	  				
 						success: function(response) {
-
 							//jQuery.grep(associated_username, function(e){ return e.id == response.data.id ; }).length > 0
-
-
 							if(response.data != "Invalid user")
 							{
-					
-
-											  
-								  
-									<?php 
+					                <?php 
 									if(get_option("morsel_settings")["morsel_associated_user"]!=""  )
 									{
 								 	?>
@@ -137,25 +155,17 @@
 									<?php 
 									} 
 									?>
-								  
-
-						
 								if ($('#previous').val()== response.data.id)
 								{
 									alert("You have already sent Request to this user");
 									$('#associated_user_name').val('');
 									$("#associated-user-submit").val('Request');
-									
 								}
 								else
 								{	
-
-										//$("#associated-host-user-form").submit();
-
-
-
+									//$("#associated-host-user-form").submit();
 									var requests = response.data;
-								    var html = '<tr class="type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">';		    
+								    var html = '<tr id=delete'+requests.associated_user.id+' class="type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0 deleteUser">';		    
 									html+='<td class="post-title page-title column-title">';
 					    			html+='<strong>'+requests.associated_user.id+'</strong>';
 									html+='</td>';            
@@ -163,10 +173,11 @@
 									html+='<td class="date column-date">'+requests.associated_user.email+'</td>';
 							    	html+='<td class="edit-btn column-categories">';
 		   					   			if(requests.is_approved!="false"){
-		   					   				html+='<div id="circle-green"></div></td></tr>';
+		   					   				html+='<div id="circle-green"></div></td>';
 		   					   			}else{
-		   					   				html+='<div id="circle-red"></div></td></tr>';
-		   					   			}	
+		   					   				html+='<div id="circle-red"></div></td>';
+		   					   			}
+		   					   		html+='<td ><a href="javascript:void(0);" onclick="deleteUser('+requests.associated_user.id+')">Delete</td></tr>';		
 		   					   		$('#morsel-keyword-list tr:last').after(html);
 		   					    	var	is_no_record_tr = $('#morsel-keyword-list tr:first').text().trim();
 
@@ -175,9 +186,7 @@
 		   					    		$('#morsel-keyword-list tr:first').remove();
 
 		   					    	}
-
 		   					    	$('#previous').val(response.data.id);
-						    		
 						        }
 								$("#associated-user-submit").val('Request');												
 								$('#associated_user_name').val('');
@@ -187,29 +196,20 @@
 								alert("Opps You entered wrong username/email!"); 
 								$("#associated-user-submit").val('Request');
 							}
-							
-		  					  					
 						},error:function(){
 							$("#associated-user-submit").val('Request');
 							console.log('Error in add morsel Request');
 						},complete:function(){
-							
 							console.log('Add morsel Request is complete');
 						}
 		        	});	
-				
-
-							
 			} else {
 				alert("Please fill username or email!");
 				$("#associated_user_name").focus()
 			}
-		});
-		
+		});		
 	}(jQuery));
 </script>
-
-
- <? } else { ?>
+<? } else { ?>
 Please Enter Host Details First.
 <? } ?>

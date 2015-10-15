@@ -1,5 +1,5 @@
 <?php 
-if( get_option('morsel_host_details') ){
+if(isset($hostCompany) && $hostCompany != ""){
 // get all updated keyword on post tab
   if(isset($_POST["keyword"]["name"])){
     if($_POST["keyword_id"] != ""){

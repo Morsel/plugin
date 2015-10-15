@@ -1,34 +1,6 @@
 <?php 
-if( get_option('morsel_host_details') ){
-// get all updated keyword on post tab
-  if(isset($_POST["keyword"]["name"])){
-    if($_POST["keyword_id"] != ""){
-            
-      $new_settings = get_option("morsel_settings"); 
-        $allKeywords = json_decode($new_settings['morsel_keywords']);
+if(isset($hostCompany) && $hostCompany != ""){
 
-        foreach($allKeywords as $kwd){
-          if($kwd->id == $_POST["keyword_id"]){
-            $kwd->name = $_POST["keyword"]["name"];
-          }
-        }
-
-        $new_settings['morsel_keywords'] = json_encode($allKeywords);
-        update_option("morsel_settings",$new_settings);
-        
-        if(isset($options["morsel_keywords"])) {
-          $options["morsel_keywords"] = $new_settings['morsel_keywords'];
-        }         
-    } else {
-      $new_keyword = stripslashes($_POST["updated_keywords"]);
-        $new_settings = get_option("morsel_settings"); 
-        $new_settings['morsel_keywords'] = ($new_keyword);
-        update_option("morsel_settings",$new_settings);
-        if(isset($options["morsel_keywords"])) {
-          $options["morsel_keywords"] = ($new_keyword);
-        } 
-    }
-  }
 ?>
 <div id="morsel_post_display-details" class="shorcode-summry">	
 	<!-- <h4>[morsel_post_display]</h4>
@@ -65,21 +37,17 @@ if( get_option('morsel_host_details') ){
 				</td>
 	  		</tr>
 	  		<!-- Use Default Value End -->
-
-	  		<?php if($options["morsel_keywords"]!="blank") { ?>
+  		
 	  		<tr valign="top">
 	  			<td class="wid-15" scope="row">Pick Keyword:</td>
 				<td>
 				<select id="shortcode_keyword">
 					<option id ="none" value = "0">- Please select keyword -</option>
-					<?php foreach(json_decode($options["morsel_keywords"]) as $row){ ?>
-					<option value="<?php echo $row->id;?>" ><?php echo $row->name;?></option>
-					<?php } ?>
 				</select>
 				<span class="attr-info">Select which morsels will display by choosing keywords. Every morsel associated to a keyword will display on the page automatically.</span>
 				</td>
 	  		</tr>
-	  		<?php } ?>
+	  		
 	  		<tr valign="top" style="display:none;">
 	  			<td class="wid-15" scope="row">Center Block : </td>
 				<td><input type="checkbox" name="morsel_shortcode_center" id="morsel_shortcode_center" value="1"/>

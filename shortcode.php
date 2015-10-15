@@ -289,7 +289,7 @@ function morsel_post_des(){
                       <span id="comment-count-<?php echo $row_item->id;?>"><?php echo $row_item->comment_count;?><?php echo ($row_item->comment_count > 1)?' comments':' comment';?></span>
               <?php } else { ?>
                       <i class="common-comment-empty"></i>
-                      <span id="comment-count-<?php echo $row_item->id;?>">Add comment</span>
+                      <span id="comment-count-<?php echo $row_item->id;?>" class="addComment" >Add comment</span>
               <?php } ?>                
               </a>
             </div>          
@@ -454,7 +454,7 @@ function morsel_post_des(){
                         <button id="mrsl-signup-submit-btn" class="btn btn-primary btn-lg" type="submit">Sign Up</button>
                       </span>
                     </div>                    
-                    <div>By continuing you indicate that you have read and agree to our <a target="_blank" href="http://dev.eatmorsel.com/terms">Terms of Service</a></div>
+                    <div>By continuing you indicate that you have read and agree to our <a target="_blank" href="http://eatmorsel.com/terms">Terms of Service</a></div>
                   </div>
                 </div>                
               </form>
@@ -488,7 +488,7 @@ function morsel_post_des(){
                             </span>
                           </div>
                           <div class="text-center"><a class="open-site-link" data-toggle="modal" data-src="https://www.eatmorsel.com/auth/password-reset" data-height=500 data-width=100% data-target="#forgetPasswordModal" >Forgot your password?</a></div>
-                          <div class="have-an-account text-center">Don't have an account? <a target="_blank" href="#">Sign up here.</a></div>
+                          <div class="have-an-account text-center"><span id="dontHaveAccount">Don't have an account?</span><span id="notMyAccount" style="display:none;">That is not my username and email.</span> <a target="_blank" href="#">Sign up here.</a></div>
                         </div>                    
                       </div> <!-- End row class -->                      
                       <input type="hidden" name="pagename" value="morsel_user_login">
@@ -603,6 +603,14 @@ function morsel_post_des(){
   
   <script type="text/javascript">  
   jQuery(function ($) {
+    jQuery( "#open-morsel-login1" ).click(function() {
+        jQuery('#notMyAccount').hide();
+        jQuery('#dontHaveAccount').show();
+    });
+    jQuery( "#show-mrsl-login-btn" ).click(function() {
+        jQuery('#notMyAccount').hide();
+        jQuery('#dontHaveAccount').show();
+    });
     /*add subscription for other morsel like this*/
     $("#morsel-subscribe").click(function(event){
       event.preventDefault();
@@ -647,7 +655,7 @@ function morsel_post_des(){
             console.log("status :: ",status);
             
             if(status == 'success'){
-              alert("you have been subscribed successfully");               
+              alert("You have been subscribed successfully.");               
             } else {                  
               alert("Opps Something wrong happend!"); 
             }
@@ -971,7 +979,24 @@ function morsel_post_des(){
               }
             },
             error:function(response){
-                console.log("response :: ",response);                
+                console.log("Error response :: ",response);
+                console.log("Error response for Email:: ",response.responseJSON.errors.email[0]);         //       
+                if( response.responseJSON.errors.email[0] === "has already been taken"){
+                  var signUpEmail = jQuery( "#mrsl_user_email" ).val();
+                  alert("Looks like you already have an account, please log in.");
+                  jQuery("#show-mrsl-login-btn").text('SignUp');
+                  jQuery('#mrsl-signup-form')[0].reset();
+                  jQuery('#mrsl-signup-section').hide();
+                  jQuery( "#mrsl-login" ).val(signUpEmail);
+                  jQuery('#dontHaveAccount').hide();
+                  jQuery('#notMyAccount').show();
+                  jQuery('#mrsl-login-section').show(); 
+                  //dontHaveAccount//notMyAccount
+                  //mrsl-signup-section
+                  //mrsl-login-section
+                  // mrsl-login
+                } else {               
+ 
                 var err = response.responseJSON.errors;
                 
                 if(err.first_name){                    
@@ -1003,6 +1028,7 @@ function morsel_post_des(){
                     jQuery("#mrsl_user_email").parent(".form-group").append('<label for="mrsl_user_email" class="error" style="display: inline-block;">Email '+err.email[0]+'</label>');
                     jQuery("#mrsl_user_email").parent(".form-group").addClass("has-error");
                   }
+                }
               }
           });
       });
