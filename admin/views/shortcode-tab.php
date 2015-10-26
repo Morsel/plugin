@@ -56,12 +56,12 @@ if(isset($hostCompany) && $hostCompany != ""){
 				<span class="attr-info"></span>
 				</td>
 	  		</tr>
-	  		<tr valign="top">
+	  		<!-- <tr valign="top">
 	  			<td class="wid-15" scope="row">Topic : </td>
 				<td><input type="text" name="morsel_topic_name" id="morsel_topic_name" value=""/>
 					<span class="attr-info"></span>
 				</td>
-	  		</tr>
+	  		</tr> -->
 	  		
 	  		<tr valign="top" style="display:none;">
 	  			<td class="wid-15" scope="row">Center Block : </td>
@@ -85,7 +85,7 @@ if(isset($hostCompany) && $hostCompany != ""){
 		      required: true,
 		      number: true,
 		      max:50,
-		      min:20
+		      min:1
 		    },
 		    morsel_shortcode_gap: {
 		      required: true,
@@ -128,9 +128,11 @@ if(isset($hostCompany) && $hostCompany != ""){
 		    var keyword_id = $("#shortcode_keyword").val();
 		    var code = "";		    
 		    if($("#morsel_wrapper_width").val() != ""){
-		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#morsel_topic_name").val()+"']";//
+		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"]";//
+		      	// code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#morsel_topic_name").val()+"']";//
 		    } else {
-		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#morsel_topic_name").val()+"']";
+		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"]";
+ 	            // code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#morsel_topic_name").val()+"']";
 		    }
 
 		    $("#short-code-preview").html("<h3>Here is your shortcode : \n\n"+code+"</h3>");			

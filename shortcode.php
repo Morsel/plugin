@@ -54,7 +54,7 @@ function grid($row_sht,$morsel_page_id) {
   $api_key = $options['userid'] . ':' .$options['key'];
   $morselCount = ($atts['count'] > 0)?$atts['count'] : MORSEL_API_COUNT;
   $keywordID = ($atts['keyword_id'] > 0) ? "&keyword_id=".$atts['keyword_id'] : "";
-  $userID = (isset($atts['associated_user']))? $atts['associated_user']:$options['userid'];
+  $userID = (isset($atts['associated_user']) && $atts['associated_user'] != "0" && $atts['associated_user'] != "")? $atts['associated_user']:$options['userid'];
   $atts['associated_user'];
   // if($atts['keyword_id'] > 0) {
   //   $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count']."&keyword_id=".$atts['keyword_id'];  
