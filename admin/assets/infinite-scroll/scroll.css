@@ -1,0 +1,12 @@
+	#ajaxLoader{
+		display: none;
+		text-align: center;
+	}
+    #no-more{
+		background: none repeat scroll 0 0 #EEEEEE;
+	    border: 1px solid #CFCFCF;
+	    color: #000000;
+	    display: none;
+	    font-weight: bold;
+	    padding: 5px;
+    }

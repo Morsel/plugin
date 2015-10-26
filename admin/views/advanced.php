@@ -1,21 +1,18 @@
 <?php 
 if(isset($hostCompany) && $hostCompany != ""){
 // get all updated keyword on post tab
-  if(isset($_POST["keyword"]["name"])){
-    if($_POST["keyword_id"] != ""){
-            
-      $new_settings = get_option("morsel_settings"); 
-        $allKeywords = json_decode($new_settings['morsel_keywords']);
+    if(isset($_POST["keyword"]["name"])){
+        if($_POST["keyword_id"] != ""){            
+            $new_settings = get_option("morsel_settings"); 
+            $allKeywords = json_decode($new_settings['morsel_keywords']);
 
         foreach($allKeywords as $kwd){
           if($kwd->id == $_POST["keyword_id"]){
             $kwd->name = $_POST["keyword"]["name"];
           }
         }
-
         $new_settings['morsel_keywords'] = json_encode($allKeywords);
         update_option("morsel_settings",$new_settings);
-        
         if(isset($options["morsel_keywords"])) {
           $options["morsel_keywords"] = $new_settings['morsel_keywords'];
         }         
@@ -139,9 +136,7 @@ if(isset($hostCompany) && $hostCompany != ""){
 			        error.insertAfter($(element).next($('span.attr-info')));
 			    }
 		  },
-		  submitHandler: function(form) {
-
-		   
+		  submitHandler: function(form) {		   
 		    var is_center = $("#morsel_shortcode_center_advanced").prop('checked') ? 1 : 0;
 		    var keyword_id = $("#shortcode_keyword").val();
 		    var code = "";		    
@@ -150,11 +145,9 @@ if(isset($hostCompany) && $hostCompany != ""){
 		    } else {
 		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit_advanced").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"']";
 		    }
-
 		    $("#short-code-preview_advanced").html("<h3>Here is your shortcode : \n\n"+code+"</h3>");			
 		  }
 		});
-
 		/*$('#morsel_shortcode_submit').click(function(event){
 			event.preventDefault();
 			$("#morsel-shortcode-form_advanced").validate();

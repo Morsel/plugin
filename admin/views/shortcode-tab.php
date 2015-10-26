@@ -1,6 +1,6 @@
 <?php 
 if(isset($hostCompany) && $hostCompany != ""){
-
+// print_r($new_associated);
 ?>
 <div id="morsel_post_display-details" class="shorcode-summry">	
 	<!-- <h4>[morsel_post_display]</h4>
@@ -47,6 +47,21 @@ if(isset($hostCompany) && $hostCompany != ""){
 				<span class="attr-info">Select which morsels will display by choosing keywords. Every morsel associated to a keyword will display on the page automatically.</span>
 				</td>
 	  		</tr>
+            <tr valign="top">
+	  			<td class="wid-15" scope="row">Choose Associated User:</td>
+				<td>
+				<select name="morsel_shortcode_user" id="morsel_shortcode_user">
+					<option value = "0">- Please select User -</option>
+				</select>
+				<span class="attr-info"></span>
+				</td>
+	  		</tr>
+	  		<tr valign="top">
+	  			<td class="wid-15" scope="row">Topic : </td>
+				<td><input type="text" name="morsel_topic_name" id="morsel_topic_name" value=""/>
+					<span class="attr-info"></span>
+				</td>
+	  		</tr>
 	  		
 	  		<tr valign="top" style="display:none;">
 	  			<td class="wid-15" scope="row">Center Block : </td>
@@ -69,8 +84,8 @@ if(isset($hostCompany) && $hostCompany != ""){
 		    morsel_shortcode_count: {
 		      required: true,
 		      number: true,
-		      max:20,
-		      min:0
+		      max:50,
+		      min:20
 		    },
 		    morsel_shortcode_gap: {
 		      required: true,
@@ -84,7 +99,7 @@ if(isset($hostCompany) && $hostCompany != ""){
 		  },
 		  messages: {
 		  	morsel_shortcode_count: {
-		      required: "Please enter no of latest morsel you want.",
+		      required: "Please enter number of latest morsel you want.",
 		      number: "Please enter only numaric value in the count.",
 		      max:"Please enter value less than 20 .",
 		      min:"Please enter positive value ."
@@ -113,9 +128,9 @@ if(isset($hostCompany) && $hostCompany != ""){
 		    var keyword_id = $("#shortcode_keyword").val();
 		    var code = "";		    
 		    if($("#morsel_wrapper_width").val() != ""){
-		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"']";
+		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#morsel_topic_name").val()+"']";//
 		    } else {
-		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"']";
+		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#morsel_topic_name").val()+"']";
 		    }
 
 		    $("#short-code-preview").html("<h3>Here is your shortcode : \n\n"+code+"</h3>");			
@@ -130,6 +145,6 @@ if(isset($hostCompany) && $hostCompany != ""){
 		})*/
 	}(jQuery))
 </script>
- <? } else { ?>
+<? } else { ?>
 Please Enter Host Details First.
 <? } ?>

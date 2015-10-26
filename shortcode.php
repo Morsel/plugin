@@ -11,8 +11,14 @@ function grid($row_sht,$morsel_page_id) {
               </h1>              
               <div class="morsel-info-bottom">
                   <h3  class="h6 morsel-block-place ">
+                  <? //print_r($row_sht->creator);?>
                       <!-- <a class="white-link overflow-ellipsis" href="<?php echo $morsel_url; ?>"><?php echo $row_sht->title;?></a> -->
-                      <a class="white-link overflow-ellipsis" href="<?php echo $morsel_url; ?>"><?php echo $row_sht->creator->first_name.' '.$row_sht->creator->last_name;?></a>
+                       <?php if($row_sht->creator->photos != ""){ //_144x144?>
+                        <img class="morselUserImage" src="<?=$row_sht->creator->photos->_144x144?>"/>
+                      <? }?>
+                      <a class="white-link overflow-ellipsis" href="<?php echo $morsel_url; ?>">
+                        <? echo $row_sht->creator->first_name.' '.$row_sht->creator->last_name;?>
+                      </a>
                   </h3>
               </div>
           </div>
@@ -39,33 +45,32 @@ function grid($row_sht,$morsel_page_id) {
       'gap_in_morsel' => NULL,
       'center_block' => 0,
       'wrapper_width' => "",
-      'keyword_id'=>NULL
+      'keyword_id'=>NULL,
+      'associated_user'=>""
     ), $atts, 'morsel_post_display' );
 
   $morsel_page_id = get_option( 'morsel_plugin_page_id');
   $options = get_option( 'morsel_settings');
   $api_key = $options['userid'] . ':' .$options['key'];
-  if($atts['keyword_id'] > 0)
-  {
-    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count']."&keyword_id=".$atts['keyword_id'];  
-  }
-   elseif($atts['count'] > 0   ){
-
-    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count'];
-  } else {
-    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT;  
-  }
-  
-
+  $morselCount = ($atts['count'] > 0)?$atts['count'] : MORSEL_API_COUNT;
+  $keywordID = ($atts['keyword_id'] > 0) ? "&keyword_id=".$atts['keyword_id'] : "";
+  $userID = (isset($atts['associated_user']))? $atts['associated_user']:$options['userid'];
+  $atts['associated_user'];
+  // if($atts['keyword_id'] > 0) {
+  //   $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count']."&keyword_id=".$atts['keyword_id'];  
+  // } elseif($atts['count'] > 0) {
+  //   $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count'];
+  // } else {
+  //   $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT;  
+  // }
+    $jsonurl = MORSEL_API_URL."users/".$userID."/morsels.json?api_key=$api_key&count=".$morselCount.$keywordID;  
     $json = json_decode(file_get_contents($jsonurl));
 
     if(count($json->data)==0){
         $json = json_decode(wp_remote_fopen($jsonurl));
-
     }
 
   $morsel_post_sht =  $json->data;
-
   $count_morsel = count($morsel_post_sht);
 
   if(get_option( 'morsel_post_settings')) {
@@ -154,7 +159,7 @@ function grid($row_sht,$morsel_page_id) {
           ?>
     <?php
       } else { //end if
-         echo "You have no morsel!";
+         //echo "You have no morsel!";
       } ?> 
 
   <?php  
@@ -441,7 +446,7 @@ function morsel_post_des(){
                     </div>
                     <div class="form-group">
                       <div class="checkbox">
-                        <label for="user[professional]" class="control-label">
+                        <label for="user[professional]" class="control-label" style="width:100%">
                           <input type="checkbox" value="true" name="user[professional]" id="mrsl_user_professional" class="">I am a professional chef, sommelier, mixologist, etc.</label>
                       </div>
                       <p class="help-block"></p>
