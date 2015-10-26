@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * 
  * Nishant widget class
  *
  * @since 2.8.0
