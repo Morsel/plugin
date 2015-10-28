@@ -1,5 +1,5 @@
 <?php
-if(isset($hostCompany) && $hostCompany != ""){
+// if(isset($hostCompany) && $hostCompany != ""){
 ?>
 <script type="text/javascript">
 	jQuery( document ).ready(function() {
@@ -21,12 +21,13 @@ if(isset($hostCompany) && $hostCompany != ""){
 		            jQuery('#post_keyword_id').val(JSON.stringify(data));
 
 					/*create option for shortcode tab*/ 
-		  			var sel = jQuery('#shortcode_keyword');
-					jQuery(data).each(function() {
-					    sel.append(jQuery("<option>").attr('value',this.id).text(this.name));
-					});		          
+		  	// 		jQuery(data).each(function() {
+					//     jQuery('#shortcode_keyword').append(jQuery("<option>").attr('value',this.id).text(this.name));
+					// });		          
 		            for(var k in data){
-		                var html = '<tr id="morsel_keyword-'+data[k].id+'" class="post-'+data[k].id+' type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">';
+		                jQuery('#shortcode_keyword').append(jQuery("<option>").attr('value',data[k].id).text(data[k].name));
+
+					    var html = '<tr id="morsel_keyword-'+data[k].id+'" class="post-'+data[k].id+' type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">';
 		            	html +='<td class="post-title page-title column-title"><strong>'+data[k].id+'</strong></td>';            
 						html +='<td class="categories column-categories" id="keyword-name-'+data[k].id+'">'+data[k].name+'</td>';
 		                html +='<td class="date column-date"><abbr title="">'+data[k].created_at.slice(0,10)+'</abbr><br />Created</td>';
@@ -190,6 +191,6 @@ function deleteKeywords(keywordID){
 		});
 	}(jQuery));
 </script>
-<? } else { ?>
+<? //} else { ?>
 Please Enter Host Details First.
-<? } ?>
+<? //} ?>

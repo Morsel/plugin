@@ -32,6 +32,7 @@ define('MORSEL_PLUGIN_URL_PATH', plugin_dir_path( __FILE__ ) );
 define('MORSEL_PLUGIN_IMG_PATH', plugin_dir_url( __FILE__ ).'img/' );
 define('MORSEL_PLUGIN_PATH', plugin_dir_url( __FILE__ ));
 define('MORSEL_PLUGIN_WIDGET_ASSEST', plugin_dir_url( __FILE__ ).'widget_assests/' );
+define('MORSEL_PLUGIN_ADMIN_ASSEST', plugin_dir_url( __FILE__ ).'admin/assets/' );
 
 @ini_set('display_errors', 0);
 

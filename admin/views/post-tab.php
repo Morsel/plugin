@@ -1,5 +1,5 @@
 <?php
-if(isset($hostCompany) && $hostCompany != ""){
+//if(isset($hostCompany) && $hostCompany != ""){
 ?>
 <?php
    if(isset($morselSettings['morsel_keywords'])) {
@@ -10,6 +10,7 @@ if(isset($hostCompany) && $hostCompany != ""){
    $options = get_option('morsel_settings');
    $api_key = $options['userid'] . ':' .$options['key'];
    $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT."&submit=true";
+   // $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=1&submit=true";   
    $json = json_decode(file_get_contents($jsonurl));
 
     if(count($json->data)==0){
@@ -69,6 +70,52 @@ if(count($json->data)>0){?>
 <!-- scroll css-->
 
 <span class="postTab postJsonData" id="morselTableList">  
+<!-- edit Morsel Start -->
+<span class="editMorsels" style="display:none;">
+	<div  style="background: none repeat scroll 0 0 #fff;padding: 10px;">
+	    <h3>Edit Morsel</h3>
+		<div style="width:100%">
+			<table class="form-table MorselEdit">
+		  		<tr valign="top">  			
+		  			<td width="20%">
+		  			    <p><b>Title:</b></p>
+		  			    <p>					
+						  <input type="hidden" style="width:100%" name="morselId" id="morselId" value=""/>
+						  <input type="text" style="width:100%" name="morselTitle" id="morselTitle" value=""/>
+						  <br>
+						  <a id="post_title_savebtn" class="button button-primary morselSave" onclick="saveMorsel('morselTitle','title')">Save</a>
+					    </p>
+					    <p><b>Summary:</b></p>
+					    <p><textarea rows="5" id="morsel_description_text"></textarea><br></p>
+					</td>
+					<td width="80%">
+					    <p><b>Items:</b></p>
+					    <p>
+					    <div class="addItemClass">
+					    	<a style=" margin-bottom: 5px;" class="button" onclick="addItemMorsel();">Add Item</a><img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderAddItem" style="display:none;"/>
+					        <table class="wp-list-table widefat posts addItemTable">
+								<thead>
+									<tr>
+										<th style="" class="manage-column column-date" scope="col">Item Image</th>
+										<th style="" class="manage-column item-description sortable desc" scope="col">Item Description</th>
+										<th style="" class="manage-column column-title sortable asc" scope="col">Action</th>
+								  	</tr>
+								</thead>
+								<tbody id = "items-body"></tbody>
+							</table>
+                          </div>
+					    </p>
+					</td>
+		  		</tr>  	
+		  		<tr valign="top">
+		  			<td scope="row">&nbsp;</td>
+					<td><input id="" class="button button-primary" type="button" value="Cancel" name="morsel_update_form" onclick="morsel_back_key()"></td>
+		  		</tr>
+	        </table>
+		</div>
+	</div>
+</span>
+<!-- edit Morsel End -->
     <div style="float:left; width:80%">
     <form method="post" action="" id="morsel-form-preview-text">
       <?php settings_fields( 'morsel_settings_Preview' ); ?>
@@ -115,8 +162,7 @@ if(count($json->data)>0){?>
 	   
 		<tbody id="the-list">
 
-		 <?php foreach ($json->data as $row) {?>
-	      
+		 <?php foreach ($json->data as $row) { ?>	      
 		    <tr id="morsel_post-<?php echo $row->id;?>" class="post-<?php echo $k;?> type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">
 			    <td class="post-title page-title column-title">
 				    <strong>
@@ -154,6 +200,8 @@ if(count($json->data)>0){?>
 					<?php } ?>
 				</td>
 				<td>
+				<!-- <p><img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoader<?php echo $row->id;?>" style="display:none;"/><a href="javascript:void(0);" onclick="editMorsel(<?php echo $row->id;?>)">Edit</p> -->
+
 				    <?php if($row->is_submit || count($row->morsel_keywords) == 0) { ?>
 				   		<?php add_thickbox(); ?>
 						<a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_keyowrd_id button">Pick Keywords</a>
@@ -179,12 +227,12 @@ if(count($json->data)>0){?>
 			</select>
 		    <br><br>
 		    <a id = "morsel_keyword_button" class="button button-primary "> Pick </a>&nbsp;&nbsp;
-		    <a id = "morsel_keyword_close" class="button">Close</a>		
+		    <a id = "morsel_keyword_close" class="button">Close</a>	
 		</form>
     </div>
     <div class="clear"><br></div>
     <div>
-        <div id='no-more'>No More Morsels</div>
+        <div id="no-more">No More Morsels</div>
 	    <div id="ajaxLoader" >
 	        <span><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajax-loader.gif"></span>
 	    </div>
@@ -222,7 +270,7 @@ if(count($json->data)>0){?>
 		jQuery( "#TB_closeWindowButton" ).trigger( "click" )
 	});
 
-    jQuery('#the-list ').on('click', '.all_unpublish_morsel_id', function() {
+    jQuery('#the-list').on('click', '.all_unpublish_morsel_id', function() {
 		var all_unpublish_morsel_id = jQuery(this); 
         all_unpublish_morsel_id.removeClass('button').text('Your morsel is publishing...');
 		var morsel_id = jQuery(this).attr("morsel-id");    
@@ -231,7 +279,9 @@ if(count($json->data)>0){?>
 				type:"POST",
 				data:{
 	   				userId:<?php echo $options['userid']; ?>,
-	   				api_key:"<?php echo $api_key ?>"
+	   				api_key:"<?php echo $api_key ?>",
+	   				post_to_facebook : true,
+	   				post_to_twitter : true
 	  			},
 				success: function(response) {
 				    if(response.data =="NOT"){
@@ -370,97 +420,188 @@ if(count($json->data)>0){?>
 </script>
 </span>
 <script type="text/javascript">
-	function editMorsel(morselid,morselTitle,morselSummary,morselDescription,morselImage){
+    var morselGlobal;
+	function editMorsel(morselid){
+      console.log("editMorsel---------------",morselid);
+      morselGlobal = morselid;
       jQuery("#morselId").val(morselid);
-      jQuery("#post_title").val(morselTitle);
-      jQuery("#post_summary").val(morselSummary);
-      jQuery("#post_description").val(morselDescription);//morsel_image
-      jQuery("#morsel_image").attr("src", morselImage);
-      jQuery(".postJsonData").css("display","none");
-      jQuery(".editMorsels").css("display","table-row");
+      jQuery("#smallAjaxLoader"+morselid).css("display","block");
+      jQuery.ajax({
+				url:"<?php echo MORSEL_API_URL;?>"+"morsels/"+morselid,
+				type:"GET",
+				data:{
+	    			api_key:"<?php echo $api_key;?>"
+	  			},
+				success: function(response) {
+					console.log("morsel_response------------",response);
+					var data = response.data;
+					var items = data.items;
+					//title
+					jQuery("#morselTitle").val(data.title);
+					jQuery("#morsel_description_text").val(data.summary);
+					jQuery("#items-body").html("");
+					for(var i in items){
+		                var html = '<tr class="itemMorsel'+items[i].id+'"><td class="column-date">';
+		                if(items[i].photos != null && items[i].photos._100x100 != undefined && items[i].photos._100x100 != null && items[i].photos._100x100 != ''){
+  		                  html += '<img src = "'+items[i].photos._100x100+'"/>';
+		                } else { 
+		                  html += '&nbsp;';
+		                } 
+		                  // var des = items[i].description;
+		                  var des = (items[i].description == null)?'Null':items[i].description; 
+		                  var desText = (items[i].description == null)?'':items[i].description; 
+
+		                  html += '</td><td class="item-description"><span id="span'+items[i].id+'">'+des+'</span><textarea id="textareaItem'+items[i].id+'" style="width:100%; display:none;">'+desText+'</textarea></td><td class="column-title"><a class="button" id="saveButton'+items[i].id+'" style="display:none;" onClick = "saveItemDes('+items[i].id+')">Save</a><a class="button" onClick = "editMorselItem('+items[i].id+')"  id="editButton'+items[i].id+'">Edit Item</a>&nbsp;&nbsp;<a onClick = "deleteMorselItem('+items[i].id+')" class ="button button-primary" >Delete Item</a></td></tr>';
+		                jQuery("#items-body").append(html);
+		            }			
+					jQuery("#smallAjaxLoader"+morselid).css("display","none");
+					jQuery(".editMorsels").css("display","block");	
+				},error:function(){},
+				complete:function(){}
+	    });
 	}
 </script>
-<style type="text/css">
-	.editMorselsInnerDiv{
-		background: none repeat scroll 0 0 #fff;
-		padding: 10px;
-	}
-	.editMorselLeftDiv{
-		float:left; 
-		width:50%;
-	}
-</style>
-<span class="editMorsels" style="display:none;">
-	<div class="editMorselsInnerDiv">
-	    <h3>Edit Morsel</h3>
-		<div class="editMorselLeftDiv">
-			<table class="form-table">
-		  		<tr valign="top">  			
-		  			<td scope="row">Title:</td>
-					<td>
-						<input type="text" style="width:50%" name="morselId" id="morselId" value=""/>
-						<input type="text" style="width:50%" name="post_title" id="post_title" value=""/>
-					</td>
-		  		</tr>  	
-		  		<tr valign="top">  			
-		  			<td scope="row">Summary:</td>
-					<td>
-						<input type="text" style="width:50%" name="summary" id="post_summary" value=""/>
-					</td>
-		  		</tr>
-		  		<tr valign="top">  			
-		  			<td scope="row">Description:</td>
-					<td>
-						<textarea style="width:50%" name="post_description" id="post_description"></textarea>
-					</td>
-		  		</tr>  	
-		  		<tr valign="top">  			
-		  			<td scope="row">Image:</td>
-					<td>
-					<img width="100"  id="morsel_image"/><br>
-						<input type="text" style="width:50%" name="post_image" id="post_image" value=""/>
-					</td>
-		  		</tr>  		
-				<tr valign="top">
-		  			<td scope="row">&nbsp;</td>
-					<td><input id="morsel_update_key" class="button button-primary" type="button" value="Save" name="morsel_update_form">&nbsp;&nbsp;<input id="" class="button button-primary" type="button" value="Back To Morsel" name="morsel_update_form" onclick="morsel_back_key()"></td>
-		  		</tr>
-	        </table>
-		</div>
-		<div class="addItemClass editMorselLeftDiv">
-			<h3>
-			    <span>Add Item </span>
-			    <span id="add_ItemMorsel" onclick="addItemMorsel()">
-			        <img src='<?=MORSEL_PLUGIN_IMG_PATH."/plus.png"?>' width="30" />
-			    </span>
-			</h3>
-			<table class="form-table">
-		  		<tr class="add_item">  			
-		  			<td scope="row" style="vertical-align:top !important;"> 
-		  			    <p>Image</p>
-						<input type="text" style="width:50%" name="addItem[image]" id="" value=""/>
-					</td>
-					<td scope="row" style="vertical-align:top !important;">
-					    <p>Description</p>
-					    <textarea style="width:100%" name="addItem[description]" id=""></textarea>
-					</td>
-		  		</tr>  		
-				<tr>
-		  			<td scope="row"><!-- <img class="add_ItemMorsel" src='<?=MORSEL_PLUGIN_IMG_PATH."/minus.png"?>' width="30" /> --></td>
-					<td><input id="edit-morsel-item-btn" class="button button-primary" type="button" value="Save" name="morsel-keywords-form"></td>
-		  		</tr>
-	        </table>	        
-		</div>
-	</div>
-</span>
 <script>
+	// function addItemMorsel(){
+	// 	var html = "<tr><td class='column-date'><img width='50' src = 'https://www.eatmorsel.com/assets/images/utility/placeholders/morsel-placeholder_640x640.jpg' /></td><td class='item-description'>Describe items here...</td><td class='column-title'><a class='button' width='100' >Edit Item</a>&nbsp;&nbsp;<a class ='button button-primary'>Delete Item</a></td></tr>";
+	// 	jQuery("#item-body").append(html);
+	// }
+	function morsel_back_key(){
+	  jQuery(".postJsonData").css("display","block");
+	  jQuery(".editMorsels").css("display","none");
+	}
+	jQuery(".add_ItemMorsel").click(function(event) {
+		//event.preventDefault();
+		jQuery(this).parents('.form-table').remove();
+    });
+	jQuery("#post_title").click(function(event){
+		jQuery('#post_title_text').val(jQuery('#post_title').text());
+		jQuery('#post_title_div').show();
+		jQuery('#post_title').hide();	
+	});
+	jQuery("#post_summary").click(function(event){
+		jQuery('#post_description_text').val(jQuery('#post_summary').text());
+		jQuery('#post_description_div').show();
+		jQuery('#post_summary').hide();	
+	});
+	jQuery("#post_title_cancelbtn").click(function(event){
+		jQuery('#post_title_div').hide();
+		jQuery('#post_title').show();	
+	});
+	jQuery("#post_description_cancelbtn").click(function(event){
+		jQuery('#post_description_div').hide();
+		jQuery('#post_summary').show();	
+	});
+</script>
+<style type="text/css">
+	
+.form-table span {
+display: inline-block;
+width: 100%;
+}
+.morsel-title-hide{
+	display: none;
+}
+.morsel-title-show{
+	display: block;
+}
+#post_description_div > textarea{
+	width: 300px;
+	height:200px;
+	overflow: hidden;
+}
+.item-description{
+	width: 60%;
+}
+.MorselEdit td{
+  vertical-align: top;
+}
+.morselSave{
+  margin-top: 10px !important;	
+}
+.addItemTable th{
+	padding: 10px !important
+}
+</style>
+
+
+<script>
+
+	function saveMorsel(fieldId,fieldName){
+	   // var morselId = jQuery("#morselId").val();
+	   alert("morselId---------"+morselGlobal);	
+         if(fieldName == "summary"){
+            data = {
+    			"api_key" : "<?php echo $api_key;?>",    
+    			"summary" : jQuery("#"+fieldId).val()			
+  			}
+         } else {
+            data = {
+    			"api_key" : "<?php echo $api_key;?>",    
+    			"morsel" : { "title" : jQuery("#"+fieldId).val() }			
+  			}
+         }
+         jQuery.ajax({
+			url:"<?php echo MORSEL_API_URL;?>"+"morsels/"+morselGlobal,
+			type:"PUT",
+			data:data,
+			success: function(response) {
+				console.log("morsel_response add------------",response);
+			},error:function(){},
+			complete:function(){}
+        });
+	}
 	function addItemMorsel(){
-		var k = "<table class='form-table'><tr valign='top' class='add_item'><td scope='row' style='vertical-align:top !important;'><p>Image</p><input type='text' style='width:50%' name='addItem[image]'/></td><td scope='row' style='vertical-align:top !important;'><p>Description</p><textarea style='width:100%' name='addItem[description]'></textarea></td></tr><tr valign='top'><td scope='row'><img class='add_ItemMorsel' src='<?=MORSEL_PLUGIN_IMG_PATH?>/minus.png' width='30' /></td><td><input class='button button-primary' type='button' value='Save' name='morsel-keywords-form'></td></tr></table>";
-    	jQuery(".addItemClass").append(k);
+		jQuery("#smallAjaxLoaderAddItem").css("display","block");
+	    jQuery.ajax({
+			url:"<?php echo MORSEL_API_URL;?>"+"items.json",
+			type:"POST",
+			data:{ api_key : "<?php echo $api_key;?>" , "item":{"morsel_id": morselGlobal} },
+			success: function(response) {
+				editMorsel(morselGlobal);
+			},error:function(){},
+			complete:function(){
+				jQuery("#smallAjaxLoaderAddItem").css("display","none");
+			}
+        });
+	}
+	function saveItemDes(itemID){
+		jQuery("#smallAjaxLoaderAddItem").css("display","block");
+    	jQuery.ajax({
+			url:"<?php echo MORSEL_API_URL;?>items/"+itemID+".json",
+			type:"PUT",
+			data:{ api_key : "<?php echo $api_key;?>" , item : {"description": jQuery("#textareaItem"+itemID).val() } },
+			success: function(response) {
+				console.log("morsel_response Item Get------------",response);
+				editMorsel(morselGlobal);
+				jQuery("#smallAjaxLoaderAddItem").css("display","none");
+			},error:function(){},
+			complete:function(){}
+        });
+	}
+	function deleteMorselItem(itemID){
+		jQuery("#smallAjaxLoaderAddItem").css("display","block");
+        jQuery.ajax({
+			url:"<?php echo MORSEL_API_URL;?>items/"+itemID+".json",
+			type:"DELETE",
+			data:{ api_key : "<?php echo $api_key?>" },
+			success: function(response) {
+				console.log("morsel_response Item Get------------",response);
+				jQuery( ".itemMorsel"+itemID).remove();
+				jQuery("#smallAjaxLoaderAddItem").css("display","none");
+			},error:function(){},
+			complete:function(){}
+        });
+	}
+	function editMorselItem(itemID){
+		jQuery("#span"+itemID).css("display","none");
+		jQuery("#textareaItem"+itemID).css("display","block");
+		jQuery("#editButton"+itemID).css("display","none");
+		jQuery("#saveButton"+itemID).css("display","inline-block");
 	}
 	function morsel_back_key(){
 	    jQuery(".postJsonData").css("display","block");
-        jQuery(".editMorsels").css("display","none");
+        jQuery(".editMorsels").css("display","none");//ajaxLoaderSmall.gif
 	}
 	jQuery(".add_ItemMorsel").click(function(event) {
         jQuery(this).parents('.form-table').remove();
@@ -496,6 +637,6 @@ if(count($json->data)>0){?>
 		}
 	});
 </script>
-<? } else { ?>
+<? //} else { ?>
 Please Enter Host Details First.
-<? } ?>
+<? //} ?>

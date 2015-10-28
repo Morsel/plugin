@@ -46,7 +46,7 @@ function grid($row_sht,$morsel_page_id) {
       'center_block' => 0,
       'wrapper_width' => "",
       'keyword_id'=>NULL,
-      'associated_user'=>""
+      'associated_user'=>"0"
     ), $atts, 'morsel_post_display' );
 
   $morsel_page_id = get_option( 'morsel_plugin_page_id');
@@ -64,7 +64,7 @@ function grid($row_sht,$morsel_page_id) {
   //   $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT;  
   // }
     $jsonurl = MORSEL_API_URL."users/".$userID."/morsels.json?api_key=$api_key&count=".$morselCount.$keywordID;  
-    $json = json_decode(file_get_contents($jsonurl));
+    $json = json_decode(file_get_contents($jsonurl));//wp_remote_get
 
     if(count($json->data)==0){
         $json = json_decode(wp_remote_fopen($jsonurl));
@@ -143,7 +143,10 @@ function grid($row_sht,$morsel_page_id) {
                <!-- previous code
                   <button class="btn  btn-lg btn-block btn-info" type="button" id="load-morsel">Load more!</button>  -->
                 <?php if($atts['count'] == 0) { ?>  
-                 <button class="btn btn-primary morselbtn" type="button" id="load-morsel" morsel-count="<?php echo $atts['count'];?>" >View more morsels</button>
+                 <button style="display:none" class="btn btn-primary morselbtn" type="button" id="load-morsel" morsel-count="<?php echo $atts['count'];?>" >View more morsels</button>
+                 <div id="ajaxLoaderFront" style="display:none">
+                   <span><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajax-loader.gif"></span>
+                 </div>
                 <?php } ?> 
                </div>     
           </div>
