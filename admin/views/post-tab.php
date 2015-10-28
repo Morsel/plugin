@@ -1,5 +1,5 @@
 <?php
-//if(isset($hostCompany) && $hostCompany != ""){
+if(isset($hostCompany) && $hostCompany != ""){
 ?>
 <?php
    if(isset($morselSettings['morsel_keywords'])) {
@@ -576,7 +576,7 @@ width: 100%;
 
 	function saveMorsel(fieldId,fieldName){
 	   // var morselId = jQuery("#morselId").val();
-	   alert("morselId---------"+morselGlobal);	
+	   // alert("morselId---------"+morselGlobal);	
          if(fieldName == "summary"){
             data = {
     			"api_key" : "<?php echo $api_key;?>",    
@@ -684,6 +684,6 @@ width: 100%;
 		}
 	});
 </script>
-<? //} else { ?>
+<? } else { ?>
 Please Enter Host Details First.
-<? //} ?>
+<? } ?>

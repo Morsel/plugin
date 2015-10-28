@@ -147,6 +147,54 @@ function grid($row_sht,$morsel_page_id) {
                  <div id="ajaxLoaderFront" style="display:none">
                    <span><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajax-loader.gif"></span>
                  </div>
+                <script>
+                    jQuery(document).ready(function() {
+                      var topOfOthDiv = jQuery(".load-more-wrap").offset().top;
+                      jQuery(window).scroll(function() {
+                        if (((jQuery(window).scrollTop() + 450) > (topOfOthDiv - 100))) { //scrolled past the other div?
+                          loadMorsel();
+                        }
+                      });
+                    });
+                    var morselNoMore;
+                    function loadMorsel() {
+                      var morsePageCount = 1;
+                      var count = '20';
+
+                      if (jQuery(this).attr("morsel-count")) {
+                        count = jQuery(this).attr("morsel-count");
+                      }
+                      if (jQuery('#ajaxLoaderFront:visible').length == 0) {
+                        if (morselNoMore != true) {
+                          jQuery("#ajaxLoaderFront").css("display", "block");
+                          jQuery.ajax({
+                            url: "index.php?pagename=morsel_ajax&page_id=" + parseInt(++morsePageCount) + "&morsel-count=" + count,
+                            success: function(data) {
+                              if (data.trim().length > 1)
+                                jQuery("#morsel-posts-row").append(data);
+                              else {
+                                morsePageCount--;
+                                morselNoMore = true;
+                                alert("No more morsel.")
+                              }
+
+                              jQuery('[morsel-url]').click(function() {
+                                window.location.href = jQuery(this).attr('morsel-url');
+                              })
+                            },
+                            error: function() {
+                              morsePageCount--;
+                            },
+                            complete: function() {
+                              console.log("morselView load");
+                              jQuery("#ajaxLoaderFront").css("display", "none");
+                              // load.html('View more morsels');
+                            }
+                          });
+                        }
+                      }
+                    }
+                </script> 
                 <?php } ?> 
                </div>     
           </div>
