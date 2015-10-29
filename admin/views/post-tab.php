@@ -1,5 +1,5 @@
 <?php
-if(isset($hostCompany) && $hostCompany != ""){
+//if(isset($hostCompany) && $hostCompany != ""){
 ?>
 <?php
    if(isset($morselSettings['morsel_keywords'])) {
@@ -77,18 +77,7 @@ if(count($json->data)>0){?>
 		<div style="width:100%">
 			<table class="form-table MorselEdit">
 		  		<tr valign="top">  			
-		  			<!--<td width="20%">
-		  			     <p><b>Title:</b></p>
-		  			    <p>					
-						  <input type="hidden" style="width:100%" name="morselId" id="morselId" value=""/>
-						  <input type="text" style="width:100%" name="morselTitle" id="morselTitle" value=""/>
-						  <br>
-						  <a id="post_title_savebtn" class="button button-primary morselSave" onclick="saveMorsel('morselTitle','title')">Save</a>
-					    </p> -->
-					    <!-- <p><b>Summary:</b></p>
-					    <p><textarea rows="5" id="morsel_description_text"></textarea><br></p> 
-					</td>-->
-					<td width="100%">
+		  			<td width="100%">
 					<p><b>Title:</b>			
 						  <input type="hidden" style="width:50%" name="morselId" id="morselId" value=""/>
 						  <input type="text" style="width:50%" name="morselTitle" id="morselTitle" value=""/>
@@ -469,42 +458,60 @@ if(count($json->data)>0){?>
 				complete:function(){}
 	    });
 	}
+
+
+var acceptedExt = ["jpg","JPG","png","PNG","jpeg","JPEG","gif","GIF"];
+var l = "prateek.prateek.prateek.jpg";
+split = l.split(".");
+ext = split[split.length - 1];
+
+console.log(jQuery.inArray( ext, acceptedExt));
+
+
+
 function uploadMorselItemImage(itemID){
 	//alert("image Item");
     jQuery("#imageUpload"+itemID).click();
     jQuery("#imageUpload"+itemID).change(function(){
-         jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","block");
-         //submit the form here
-         console.log("event fire"+itemID);
-         
-         // event.preventDefault();
-		  console.log("photo file ", document.getElementById("imageUpload"+itemID).files[0]);
-		  var fd = new FormData();
-		  //fd.append("user[email]",jQuery( "#mrsl_user_email" ).val());
-		  if (document.getElementById("imageUpload"+itemID).files[0]) {
-		    fd.append("item[photo]", document.getElementById("imageUpload"+itemID).files[0]);
-		  }
-		  jQuery.ajax({
-		  	url:"<?php echo MORSEL_API_URL;?>"+"items/"+itemID+".json?api_key=<?php echo $api_key;?>&prepare_presigned_upload=true",
-		    data: fd,
-		    type: 'PUT',
-		    contentType: false,
-		    cache: false,
-		    processData: false,
-		    beforeSend: function(xhr) {},
-		    complete: function() {},
-		    success: function(response) {
-		      console.log('test response', response);
-		      //alert("image change");		      
-		      setTimeout(function() { editMorsel(morselGlobal); }, 5000);
-		    },
-		    error: function(response) {},
-		    complete: function(){
-		    	setTimeout(function() {
-		    		jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","none");
-		        },7000);
-		    }
-		  });
+    	 var fileObject = {};
+    	 fileObject = document.getElementById("imageUpload"+itemID).files[0];
+    	 var fileName = fileObject.name,
+    	     ext = fileName.split(".")[fileName.split(".").length - 1];
+    	if(jQuery.inArray(ext, acceptedExt) == 0){
+	      	 jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","block");
+	         //submit the form here
+	         
+	         // event.preventDefault();
+			  var fd = new FormData();
+			  //fd.append("user[email]",jQuery( "#mrsl_user_email" ).val());
+			  if (fileObject) {
+			    fd.append("item[photo]", fileObject);
+			  }
+			  jQuery.ajax({
+			  	url:"<?php echo MORSEL_API_URL;?>"+"items/"+itemID+".json?api_key=<?php echo $api_key;?>&prepare_presigned_upload=true",
+			    data: fd,
+			    type: 'PUT',
+			    contentType: false,
+			    cache: false,
+			    processData: false,
+			    beforeSend: function(xhr) {},
+			    complete: function() {},
+			    success: function(response) {
+			      console.log('test response', response);
+			      //alert("image change");		      
+			      setTimeout(function() { editMorsel(morselGlobal); }, 5000);
+			    },
+			    error: function(response) {},
+			    complete: function(){
+			    	setTimeout(function() {
+			    		jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","none");
+			        },7000);
+			    }
+			  });
+	    } else {
+	    	alert("Please upload valid Image");
+	    	return false;
+	    }
 	});
 }
 </script>
@@ -575,8 +582,6 @@ width: 100%;
 <script>
 
 	function saveMorsel(fieldId,fieldName){
-	   // var morselId = jQuery("#morselId").val();
-	   // alert("morselId---------"+morselGlobal);	
          if(fieldName == "summary"){
             data = {
     			"api_key" : "<?php echo $api_key;?>",    
@@ -684,6 +689,6 @@ width: 100%;
 		}
 	});
 </script>
-<? } else { ?>
+<? //} else { ?>
 Please Enter Host Details First.
-<? } ?>
+<? //} ?>
