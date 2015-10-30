@@ -314,6 +314,7 @@ function morsel_query_vars( $query_vars ){
         
       </td>
       <td>  
+          <p><img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoader<?php echo $row->id;?>" style="display:none;"/><a href="javascript:void(0);" onclick="editMorsel(<?php echo $row->id;?>)">Edit</p>
           <?php if($row->is_submit || count($row->morsel_keywords) == 0) { ?>
             <?php add_thickbox(); ?>
           <a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_keyowrd_id button">Pick Keywords</a>

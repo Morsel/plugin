@@ -1,5 +1,5 @@
 <?php
-//if(isset($hostCompany) && $hostCompany != ""){
+if(isset($hostCompany) && $hostCompany != ""){
 ?>
 <?php
    if(isset($morselSettings['morsel_keywords'])) {
@@ -689,6 +689,6 @@ width: 100%;
 		}
 	});
 </script>
-<? //} else { ?>
+<? } else { ?>
 Please Enter Host Details First.
-<? //} ?>
+<? } ?>
