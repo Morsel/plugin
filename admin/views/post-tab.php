@@ -87,8 +87,8 @@ if(count($json->data)>0){?>
 					    <div class="addItemClass">
 					    	<div style="float: left; width: 100px; margin: 10px 0 0 0;"><b>Items:</b></div>
 					    	<div style="float:right;">
-					    	   <img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderAddItem" style="display:none;"/>
-					    	   <a style=" margin-bottom: 5px;" class="button" onclick="addItemMorsel();">Add Item</a>
+					    	   <!-- <img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderAddItem" style="display:none;"/>
+					    	   <a style=" margin-bottom: 5px;" class="button" onclick="addItemMorsel();">Add Item</a> -->
 					    	</div>
 					        <table class="wp-list-table widefat posts addItemTable">
 								<thead>
@@ -102,12 +102,19 @@ if(count($json->data)>0){?>
 							</table>
                           </div>
 					    </p>
+					    <p>
+					    <div style="float:left;">
+	                       <input id="" class="button button-primary" type="button" value="Save" name="morsel_update_form" onclick="morsel_back_key()">&nbsp;&nbsp;
+			  			   <input id="" class="button button-primary" type="button" value="Cancel" name="morsel_update_form" onclick="morsel_back_key()">
+		  		    	</div>
+			  		    <div style="float:right;">
+						   <img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderAddItem" style="display:none;"/>
+						   <a style=" margin-bottom: 5px;" class="button" onclick="addItemMorsel();">Add Item</a>
+						</div>
+					    </p>
 					</td>
 		  		</tr>  	
-		  		<tr valign="top">
-		  			<td><input id="" class="button button-primary" type="button" value="Cancel" name="morsel_update_form" onclick="morsel_back_key()"></td>
-		  		</tr>
-	        </table>
+		  	</table>
 		</div>
 	</div>
 </span>
@@ -461,13 +468,6 @@ if(count($json->data)>0){?>
 
 
 var acceptedExt = ["jpg","JPG","png","PNG","jpeg","JPEG","gif","GIF"];
-var l = "prateek.prateek.prateek.jpg";
-split = l.split(".");
-ext = split[split.length - 1];
-
-console.log(jQuery.inArray( ext, acceptedExt));
-
-
 
 function uploadMorselItemImage(itemID){
 	//alert("image Item");
@@ -499,7 +499,7 @@ function uploadMorselItemImage(itemID){
 			    success: function(response) {
 			      console.log('test response', response);
 			      //alert("image change");		      
-			      setTimeout(function() { editMorsel(morselGlobal); }, 5000);
+			      setTimeout(function() { editMorsel(morselGlobal); }, 8000);
 			    },
 			    error: function(response) {},
 			    complete: function(){
@@ -604,7 +604,7 @@ width: 100%;
         });
 	}
 	function addItemMorsel(){
-		jQuery("#smallAjaxLoaderAddItem").css("display","block");
+		jQuery("#smallAjaxLoaderAddItem").css("display","inline-block");
 	    jQuery.ajax({
 			url:"<?php echo MORSEL_API_URL;?>"+"items.json",
 			type:"POST",
@@ -618,7 +618,7 @@ width: 100%;
         });
 	}
 	function saveItemDes(itemID){
-		jQuery("#smallAjaxLoaderAddItem").css("display","block");
+		jQuery("#smallAjaxLoaderAddItem").css("display","inline-block");
     	jQuery.ajax({
 			url:"<?php echo MORSEL_API_URL;?>items/"+itemID+".json",
 			type:"PUT",
@@ -632,7 +632,7 @@ width: 100%;
         });
 	}
 	function deleteMorselItem(itemID){
-		jQuery("#smallAjaxLoaderAddItem").css("display","block");
+		jQuery("#smallAjaxLoaderAddItem").css("display","inline-block");
         jQuery.ajax({
 			url:"<?php echo MORSEL_API_URL;?>items/"+itemID+".json",
 			type:"DELETE",
