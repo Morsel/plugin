@@ -84,7 +84,7 @@ if(isset($hostCompany) && $hostCompany != ""){
 		    morsel_shortcode_count: {
 		      required: true,
 		      number: true,
-		      max:50,
+		      //max:50,
 		      min:1
 		    },
 		    morsel_shortcode_gap: {
@@ -101,7 +101,7 @@ if(isset($hostCompany) && $hostCompany != ""){
 		  	morsel_shortcode_count: {
 		      required: "Please enter number of latest morsel you want.",
 		      number: "Please enter only numaric value in the count.",
-		      max:"Please enter value less than 20 .",
+		      //max:"Please enter value less than 20 .",
 		      min:"Please enter positive value ."
 		    },
 		    morsel_shortcode_gap: {
