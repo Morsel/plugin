@@ -1,0 +1,188 @@
+/*-- SHS Front Style
+-----------------------------------*/
+
+
+/*#shs_slider_cont{
+	position:relative;
+}
+#shs_slider_cont iframe{
+	margin:0;
+	padding:0;
+}
+
+#shs_slider_cont .shs_items{
+	position:relative;
+}
+
+#shs_slider_cont .shs-iframe-overlay{
+	width:100%;
+	height:100%;
+	position:absolute;
+	left:0;
+	top:0;
+	cursor:pointer;
+	background:#000\9; 
+	filter:alpha(opacity=5);
+}
+
+#shs_slider_cont .shs-fixed-overlay{
+	background: url('../images/overlay_bg.png');
+	height: 100%;
+	left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index:99999999999;
+	text-align:center;
+	display:none;
+}
+
+#shs_slider_cont .shs-fixed-overlay .shs-iframe-wrap{
+	position:relative;
+	top:50%;
+	border:10px solid #111;
+	margin:0 auto;
+}
+#shs_slider_cont .shs-fixed-overlay  a.shs-close-iframe{
+    background: url("../images/close.png") repeat scroll 0 0 transparent;
+    display: block;
+    height: 40px;
+    position: absolute;
+    right: -25px;
+    top: -30px;
+    width: 40px;
+	outline:none;
+	border:0;
+	text-decoration:none;
+}
+
+#shs_slider_cont a.shs_nav{
+	width:32px;
+	height:32px;
+	position:absolute;
+	top:50%;
+	margin-top:-16px;
+	z-index:9999999;
+	display:block;
+	padding:4px;
+	outline:none;
+	border:0;
+	text-decoration:none;
+}
+
+#shs_slider_cont #shs_prev{
+	left:0;
+	background:url('../images/prev.png') no-repeat center transparent;
+}
+
+#shs_slider_cont #shs_next{
+	right:0;
+	background:url('../images/next.png') no-repeat center transparent;
+}
+
+#shs_slider_cont .shs-fixed-overlay iframe{ opacity:0;filter:alpha(opacity=00);}*/
+
+
+/* jssor slider bullet navigator skin 05 css */
+
+
+/*
+        .jssorb05 div           (normal)
+        .jssorb05 div:hover     (normal mouseover)
+        .jssorb05 .av           (active)
+        .jssorb05 .av:hover     (active mouseover)
+        .jssorb05 .dn           (mousedown)
+        */
+
+.jssorb05 {
+  position: absolute;
+}
+
+.jssorb05 div,
+.jssorb05 div:hover,
+.jssorb05 .av {
+  position: absolute;
+  /* size of bullet elment */
+  width: 16px;
+  height: 16px;
+  background: url('../images/b05.png') no-repeat;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.jssorb05 div {
+  background-position: -7px -7px;
+}
+
+.jssorb05 div:hover,
+.jssorb05 .av:hover {
+  background-position: -37px -7px;
+}
+
+.jssorb05 .av {
+  background-position: -67px -7px;
+}
+
+.jssorb05 .dn,
+.jssorb05 .dn:hover {
+  background-position: -97px -7px;
+}
+
+
+/* jssor slider arrow navigator skin 22 css */
+
+
+/*
+        .jssora22l                  (normal)
+        .jssora22r                  (normal)
+        .jssora22l:hover            (normal mouseover)
+        .jssora22r:hover            (normal mouseover)
+        .jssora22l.jssora22ldn      (mousedown)
+        .jssora22r.jssora22rdn      (mousedown)
+        */
+
+.jssora22l,
+.jssora22r {
+  display: block;
+  position: absolute;
+  /* size of arrow element */
+  width: 40px;
+  height: 58px;
+  cursor: pointer;
+  background: url('../images/a22.png') center center no-repeat;
+  overflow: hidden;
+}
+
+.jssora22l {
+  background-position: -10px -31px;
+}
+
+.jssora22r {
+  background-position: -70px -31px;
+}
+
+.jssora22l:hover {
+  background-position: -130px -31px;
+}
+
+.jssora22r:hover {
+  background-position: -190px -31px;
+}
+
+.jssora22l.jssora22ldn {
+  background-position: -250px -31px;
+}
+
+.jssora22r.jssora22rdn {
+  background-position: -310px -31px;
+}
+
+.sliderAboveDiv {
+  position: absolute;
+  display: block;
+  background: url('../images/loading.gif') no-repeat center center;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}

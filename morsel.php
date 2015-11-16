@@ -16,7 +16,7 @@
  * Description:       Share eatmorsel's content
  * Version:           2.1
  * Author:            Nishant
- * Author URI:        
+ * Author URI:
  * Text Domain:       morsel
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
@@ -35,23 +35,24 @@ define('MORSEL_PLUGIN_WIDGET_ASSEST', plugin_dir_url( __FILE__ ).'widget_assests
 define('MORSEL_PLUGIN_ADMIN_ASSEST', plugin_dir_url( __FILE__ ).'admin/assets/' );
 
 @ini_set('display_errors', 0);
+// error_reporting(-1);
 
-//for switch to development env set this constant value "dev" 
+//for switch to development env set this constant value "dev"
 //and for local env set this constant value "local"
 
 define('MORSEL_PLUGIN_ENV','dev');
 
 if(MORSEL_PLUGIN_ENV == 'prod'){
-  define('MORSEL_API_URL', 'https://api.eatmorsel.com/');  
+  define('MORSEL_API_URL', 'https://api.eatmorsel.com/');
   define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-production/embed.js');
   define('MORSEL_SITE', 'https://www.eatmorsel.com/');
 } else if((MORSEL_PLUGIN_ENV == 'local') || (MORSEL_PLUGIN_ENV == 'dev')){
   if(MORSEL_PLUGIN_ENV == 'dev'){
-    define('MORSEL_API_URL', 'https://api-staging.eatmorsel.com/');    
+    define('MORSEL_API_URL', 'https://api-staging.eatmorsel.com/');
   } else {
-    define('MORSEL_API_URL', 'http://localhost:3000/');
-    //define('MORSEL_API_URL', 'http://301222d4.ngrok.com/');
-  }    
+     define('MORSEL_API_URL', 'http://localhost:3000/');
+    //define('MORSEL_API_URL', 'http://e510e9fa.ngrok.io/');
+  }
   define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-staging/embed.js');
   define('MORSEL_SITE', 'https://dev.eatmorsel.com/');
 }
@@ -66,7 +67,7 @@ define('MORSEL_API_COUNT', 20 );
 //session start
 session_start();
 
-// clear session 
+// clear session
 function clear_morsel_session() {
   if(isset($_SESSION['morsel_login_userid'])){
     unset($_SESSION['morsel_login_userid']);
@@ -81,6 +82,7 @@ add_action('wp_logout', 'clear_morsel_session');
   require_once(MORSEL_PLUGIN_URL_PATH. 'public/class-morsel.php' );
   //require_once(MORSEL_PLUGIN_URL_PATH. 'widgets.php'); //for widgets
   require_once(MORSEL_PLUGIN_URL_PATH. 'shortcode.php'); //for shortcode
+  require_once(MORSEL_PLUGIN_URL_PATH. 'slider_shortcode.php'); //for Slider Shortcode
   require_once(MORSEL_PLUGIN_URL_PATH. 'page/page_create.php'); //for page
 
 /*
@@ -98,9 +100,9 @@ function register_my_setting() {
   register_setting('morsel_host_details', 'morsel_host_details');
   register_setting('morsel_keywords', 'morsel_keywords');
   register_setting('morsel_associated_user', 'morsel_associated_user');
-	register_setting('morsel_advanced_tab', 'morsel_advanced_tab');	
-  register_setting('morsel_settings_Preview', 'morsel_settings_Preview'); 
-} 
+	register_setting('morsel_advanced_tab', 'morsel_advanced_tab');
+  register_setting('morsel_settings_Preview', 'morsel_settings_Preview');
+}
 
 // add_action( 'admin_menu', 'register_my_setting' );
 
@@ -130,10 +132,10 @@ function morsel_query_vars( $query_vars ){
 
       //gettind excluding id
       if(get_option( 'morsel_post_settings')) {
-        $morsel_post_settings = get_option( 'morsel_post_settings');  
+        $morsel_post_settings = get_option( 'morsel_post_settings');
       } else {
         $morsel_post_settings = array();
-      }      
+      }
 
       $morsel_page_id = get_option( 'morsel_plugin_page_id'); //gettting discription page id
 
@@ -143,19 +145,18 @@ function morsel_query_vars( $query_vars ){
         $post_selected = array();
 
         foreach ($json->data as $row_sht) {
-          if(in_array($row_sht->id, $post_selected))continue;                     
+          if(in_array($row_sht->id, $post_selected))continue;
           echo grid($row_sht,$morsel_page_id);
-        } 
+        }
     exit(0);
   }
 
-  
   if($_REQUEST['pagename']=='morsel_user_login'){
 
     unset($_POST['pagename']);
     //print_r($_POST);
     $postdata = http_build_query($_POST);
-    
+
     $opts = array('http' =>
         array(
             'method'  => 'POST',
@@ -166,50 +167,50 @@ function morsel_query_vars( $query_vars ){
 
     $context  = stream_context_create($opts);
     //echo MORSEL_API_URL.'users/sign_in.json';
-    
+
     $result = @file_get_contents(MORSEL_API_URL.'users/sign_in.json', false, $context);
-    
+
     $result = json_decode($result);
-    
-    
+
+
     if(empty($result)) { //result not found by eatmorsel
-      
-      $_SESSION['morsel_error'] = true;      
+
+      $_SESSION['morsel_error'] = true;
       header('Location:'.$_SERVER['HTTP_REFERER']);
       exit(0);
 
     }else{
-      
+
       //get user by email
       $userByEmail = get_user_by_email($result->data->email);
-      
+
       if($userByEmail){ //if found
-        
+
         $wpUser =  $userByEmail->data;
 
         if(is_user_logged_in()) { //if anyother user logged in logg them off
           $currentUserId = get_current_user_id( );
-          
+
           if($currentUserId != $wpUser->ID){ //current user and login user not matched
             wp_logout();
-            
-            // login user
-            if ( !is_wp_error($wpUser) ) {              
-              getUserLoggedIn($wpUser->ID);              
-            } else {
-              $_SESSION['host_morsel_errors'] = $wpUser->get_error_messages();
-            }
 
-          } 
-          
-        } else { // if no one is logged in
-            
             // login user
             if ( !is_wp_error($wpUser) ) {
               getUserLoggedIn($wpUser->ID);
             } else {
               $_SESSION['host_morsel_errors'] = $wpUser->get_error_messages();
-            }            
+            }
+
+          }
+
+        } else { // if no one is logged in
+
+            // login user
+            if ( !is_wp_error($wpUser) ) {
+              getUserLoggedIn($wpUser->ID);
+            } else {
+              $_SESSION['host_morsel_errors'] = $wpUser->get_error_messages();
+            }
         }
 
       } else { //not found create user
@@ -227,7 +228,7 @@ function morsel_query_vars( $query_vars ){
                         Your new account has been created successfully on ".get_site_url().".
                           your username is ".$newUserName." and password is ".$random_password."
                           Thank you.";
-                          
+
           //send email to new user
           //wp_mail($result->data->email,'New Registration',$message);
 
@@ -238,7 +239,7 @@ function morsel_query_vars( $query_vars ){
               wp_logout();
             }
             getUserLoggedIn($newWpUserID);
-          } else { //if error 
+          } else { //if error
             $_SESSION['host_morsel_errors'] = $newWpUserID->get_error_messages();
           }
       }
@@ -247,17 +248,17 @@ function morsel_query_vars( $query_vars ){
         $_SESSION['morsel_login_userid'] = $result->data->id;
         $_SESSION['morsel_user_obj'] = $result->data;
       }
-      
-      header('Location:'.$_SERVER['HTTP_REFERER']); 
+
+      header('Location:'.$_SERVER['HTTP_REFERER']);
       exit(0);
     }
    }
 
-   //logout user 
+   //logout user
    if($_REQUEST['pagename']=='morsel_logout') {
       wp_logout();
       unset($_SESSION['morsel_login_userid']);
-      header('Location:'.$_SERVER['HTTP_REFERER']); 
+      header('Location:'.$_SERVER['HTTP_REFERER']);
       exit(0);
    }
 
@@ -274,16 +275,37 @@ function morsel_query_vars( $query_vars ){
         $post_selected = array();
 
       $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&page=".$_REQUEST['page_id']."&count=".MORSEL_API_COUNT."&submit=true";
-      
+
       $json = get_json($jsonurl); //getting whole data
 
+      if($_REQUEST["view"] == "slider"){
+          foreach ($jsonPost->data as $row) { ?>
+              <tr>
+                 <td><a href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?></a></td>
+                 <td>
+                    <?php
+                      $imageUrl = "";
+                      if($row->photos->_800x600 != ''){
+                        $imageUrl = $row->photos->_800x600;
+                      } else if($row->primary_item_photos->_320x320 != ''){
+                        $imageUrl = $row->primary_item_photos->_320x320;
+                      }
+                    ?>
+                    <a href="<?php echo $imageUrl;?>" target="_blank" >
+                      <img src="<?php echo $imageUrl;?>" height="100" width="100">
+                    <a>
+                  </td>
+                  <td><input type="checkbox" name="cnt[]" value="<?=$imageUrl?>@:@<?=$row->id;?>"></td>
+              </tr>
+          <? }
+      } else {
       foreach ($json->data as $row) {
         $morsel_url = add_query_arg( array('morselid' => $row->id), get_permalink($morsel_page_id));?>
         ?>
-    
+
 
       <tr id="morsel_post-<?php echo $row->id;?>" class="post-<?php echo $k;?> type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">
-       
+
       <td class="post-title page-title column-title">
 
           <strong><a href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?></strong>
@@ -291,12 +313,12 @@ function morsel_query_vars( $query_vars ){
             <td class="author column-author">
               <?php if($row->photos->_800x600 != ''){?>
                 <img src="<?php echo $row->photos->_800x600;?>" height="100" width="100">
-              <?php } else { 
+              <?php } else {
                  echo "No Image Found";
               } ?>
             </td>
       <td class="categories column-categories">
-        <?php echo substr($row->summary,0,150); echo (strlen($row->summary) > 150 ? "..." :"");?>  
+        <?php echo substr($row->summary,0,150); echo (strlen($row->summary) > 150 ? "..." :"");?>
       </td>
       <td class="date column-date">
           <abbr title="<?php echo date("d/m/Y", strtotime($row->published_at));?>"><?php echo date("d/m/Y", strtotime($row->published_at));?></abbr><br />Published
@@ -305,29 +327,40 @@ function morsel_query_vars( $query_vars ){
 
          <?php
 
-         foreach ($row->morsel_keywords as $tag_keyword) 
+         foreach ($row->morsel_keywords as $tag_keyword)
           {
            ?>
         <code style = "line-height: 2;"><?php echo $tag_keyword->name ?></code><br>
 
         <?php } ?>
-        
+
       </td>
-      <td>  
+      <td>
           <?php if($row->is_submit || count($row->morsel_keywords) == 0) { ?>
             <?php add_thickbox(); ?>
           <a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_keyowrd_id button">Pick Keywords</a>
-            <?php } ?>
+            <?php }else { ?>
+            <?php add_thickbox(); ?>
+            <a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_keyowrd_id button">Update Keyword</a>
+          <?php } ?>
+          <?php if($row->is_submit || count($row->morsel_topics) == 0) { ?>
+              <?php add_thickbox(); ?>
+            <a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_TopicId button">Pick Topics</a>
+          <?php } else { ?>
+            <?php add_thickbox(); ?>
+            <a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_TopicId button">Update Topics</a>
+          <?php } ?>
           <br>
          <?php if($row->is_submit) { ?>
           <a morsel-id = "<?php echo $row->id ?>" class="all_unpublish_morsel_id button">Publish Morsel</a>
         <?php } ?>
-         
-    
-        
+
+
+
       </td>
     </tr>
-    <?php }       
+    <?php }
+    }
     exit(0);
   }
 
@@ -363,10 +396,10 @@ function getUniqueUsername($userName) {
 
 // This will enqueue the Media Uploader script
 function wp_morsel_manager_admin_scripts () {
-  wp_enqueue_script('jquery'); 
+  wp_enqueue_script('jquery');
   wp_enqueue_media();
 }
-  
+
 add_action('admin_print_styles', 'wp_morsel_manager_admin_scripts');
 
 
@@ -390,6 +423,12 @@ if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 
 	require_once( plugin_dir_path( __FILE__ ) . 'admin/class-morsel-admin.php' );
 	add_action( 'plugins_loaded', array( 'Morsel_Admin', 'get_instance' ) );
+}
+function my_custom_submenu_page_callback() {
+
+  echo '<div class="wrap"><div id="icon-tools" class="icon32"></div>';
+    echo '<h2>My Custom Submenu Page</h2>';
+  echo '</div>';
 
 }
 
@@ -397,22 +436,23 @@ if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 * Disable admin bar on the frontend of your website
 * for subscribers.
 */
-function themeblvd_disable_admin_bar() { 
+function themeblvd_disable_admin_bar() {
   if ( ! current_user_can('edit_posts') ) {
-    add_filter('show_admin_bar', '__return_false'); 
+    add_filter('show_admin_bar', '__return_false');
   }
 }
 add_action( 'after_setup_theme', 'themeblvd_disable_admin_bar' );
 /**
-* Redirect back to homepage and not allow access to 
+* Redirect back to homepage and not allow access to
 * WP admin for Subscribers.
 */
 function themeblvd_redirect_admin(){
   if ( ! defined('DOING_AJAX') && ! current_user_can('edit_posts') ) {
     wp_redirect( site_url() );
-    exit;   
+    exit;
   }
 }
 
 add_action( 'admin_init', 'themeblvd_redirect_admin' );
+
 

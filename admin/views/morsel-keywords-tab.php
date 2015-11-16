@@ -20,27 +20,27 @@ if(isset($hostCompany) && $hostCompany != ""){
 			        var data = response.data;
 		            jQuery('#post_keyword_id').val(JSON.stringify(data));
 
-					/*create option for shortcode tab*/ 
+					/*create option for shortcode tab*/
 		  	// 		jQuery(data).each(function() {
 					//     jQuery('#shortcode_keyword').append(jQuery("<option>").attr('value',this.id).text(this.name));
-					// });		          
+					// });
 		            for(var k in data){
 		                jQuery('#shortcode_keyword').append(jQuery("<option>").attr('value',data[k].id).text(data[k].name));
 
 					    var html = '<tr id="morsel_keyword-'+data[k].id+'" class="post-'+data[k].id+' type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">';
-		            	html +='<td class="post-title page-title column-title"><strong>'+data[k].id+'</strong></td>';            
+		            	html +='<td class="post-title page-title column-title"><strong>'+data[k].id+'</strong></td>';
 						html +='<td class="categories column-categories" id="keyword-name-'+data[k].id+'">'+data[k].name+'</td>';
 		                html +='<td class="date column-date"><abbr title="">'+data[k].created_at.slice(0,10)+'</abbr><br />Created</td>';
 						html +='<td class="edit-btn column-categories"><button onclick="updateKeywords('+"'"+data[k].id+"'"+',1,'+"'"+escape(data[k].name)+"'"+')">Edit</button> &nbsp;&nbsp; <button onclick="deleteKeywords('+"'"+data[k].id+"'"+')">Delete</button></td>';
 			            html +='</tr>';
 		                jQuery("#morsel-keyword-list_data").append(html);
 		            }
-		        } else {            	
+		        } else {
 				    var html = '<tr><td></td><td><b>NO RESULT FOUND</b></td><td></td><td></td></tr>';
 				    jQuery("#morsel-keyword-list_data").prepend(html);
 		        }
 			}, error:function(){
-				alert('Error in getting morsel keywords of user');
+				//alert('Error in getting morsel keywords of user');
 			    var html = '<tr><td></td><td><b>NO RESULT FOUND</b></td><td></td><td></td></tr>';
 			    jQuery("#morsel-keyword-list_data").append(html);
 			    jQuery("#ajaxLoaderPostForKeyword").css("display","none");
@@ -81,17 +81,17 @@ function deleteKeywords(keywordID){
 </script>
 
 <!-- Edit Form -->
-<!-- <form method="post" action="" id="morsel-host-keywords-form"> 	        -->  	
+<!-- <form method="post" action="" id="morsel-host-keywords-form"> 	        -->
    	<table class="form-table">
-  		<tr valign="top">  			
+  		<tr valign="top">
   			<td scope="row">Keyword Name:</td>
 			<td>
-				<input type="hidden" name="post_keyword_id" id="post_keyword_id" value=""/> 	
+				<input type="hidden" name="post_keyword_id" id="post_keyword_id" value=""/>
 				<input type="hidden" name="updated_keywords" id="updated_keywords" value="0"/>
 				<input type="hidden" name="keyword_id" id="keyword_id" value=""/>
 				<input type="text" style="width:50%" name="keyword[name]" id="keyword_name" value=""/>
 			</td>
-  		</tr>  		
+  		</tr>
 		<tr valign="top">
   			<td scope="row">&nbsp;</td>
 			<td><input id="morsel-keywords-submitKey" class="button button-primary" type="button" value="Save" name="morsel-keywords-form"></td>
@@ -112,11 +112,11 @@ function deleteKeywords(keywordID){
 	  	</tr>
 	</thead>
 	<tfoot>
-		<tr>			
+		<tr>
 			<th scope='col' id='keyword-id' class='manage-column column-categories'>Keyword ID</th>
 			<th scope='col' id='keyword-name' class='manage-column column-title sortable desc'><span>Keyword Name</span></th>
 			<th scope='col' class='manage-column column-date sortable asc'><span>Date</span></th>
-			<th scope='col' class='manage-column column-date sortable asc'>Actions</th>	
+			<th scope='col' class='manage-column column-date sortable asc'>Actions</th>
 		</tr>
 	</tfoot>
 	<tbody id="morsel-keyword-list_data"></tbody>
@@ -169,7 +169,7 @@ function deleteKeywords(keywordID){
 		    				    name:keywords_name
 		    			    },
 		    				api_key:$("#kwd-morsel-key").val()
-		  				},	  				
+		  				},
 						success: function(response) {
 					    	alert("Keyword saved succssfully.")
 					    	jQuery("#morsel-keyword-list_data").html("");
@@ -182,8 +182,8 @@ function deleteKeywords(keywordID){
 							$("#morsel-keywords-submit").val('Connect');
 							console.log('Add morsel keywords is complete');
 						}
-		        	});	
-				}							
+		        	});
+				}
 			} else {
 				alert("Please fill the keyword text");
 				$("#keyword_name").focus()

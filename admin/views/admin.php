@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Represents the view for the administration dashboard.
  *
@@ -25,9 +24,10 @@
 			<li class='tab'><a href="#associated_user">Associated User</a></li>
 			<li class='tab'><a href="#tabs1-js">Morsel</a></li>
 			<li class='tab'><a href="#morsel_keywords_panel">Manage Keywords</a></li>
-			<!-- <li class='tab'><a href="#host_details">Host Details</a></li> -->
+			<li class='tab'><a href="#morselTopic">Morsel Topic</a></li>
 			<li class='tab'><a href="#tabs1-shortcode">Display</a></li>
-			<li class='tab'><a href="#tabs1-morsel_advanced_tab">Advanced</a></li>
+			<!-- <li class='tab'><a href="#tabs1-morsel_advanced_tab">Advanced</a></li> -->
+            <li class='tab'><a href="#sliderTab">Morsel Slider</a></li>
 		</ul>
 	    <div class='panel-container'>
     		<div id="tabs1-settings">
@@ -191,38 +191,25 @@
 			
 	</div>
    	<div id="associated_user">        
-        <?php if($options['key']){?>
-          <?php include_once("associated-user-tab.php");?>
-	    <?php } else {?>
-           Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
-	    <?php } ?>
+        <?php include_once("associated-user-tab.php");?>
 	</div>
     <div id="tabs1-js">
-	 	<?php if($options['key']){?>
-          <?php include_once("post-tab.php");?>
-	    <?php } else {?>
-           Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
-	    <?php } ?> 
+        <?php include_once("post-tab.php");?>
 	</div>
-	<div id="host_details" style="display:none">        
-        <?php if($options['key']){?>
-            <?php //include_once("host-details-tab.php");?>
-	    <?php } else {?>
-           Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
-	    <?php } ?>
+	<div id="morselTopic" style="display:none">        
+        <?php include_once("morselTopic.php");?>
 	</div>	
 	<div id="morsel_keywords_panel">	
-	    <?php if($options['key']){?>
-           <?php include_once("morsel-keywords-tab.php");?>
-	    <?php } else {?>
-           Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
-	    <?php } ?>
+	    <?php include_once("morsel-keywords-tab.php");?>
 	</div>
 	<div id="tabs1-shortcode">        
         <?php include_once("shortcode-tab.php");?>	    
     </div>
-	<div id="tabs1-morsel_advanced_tab">        
+	<div id="tabs1-morsel_advanced_tab"  style="display:none;">        
         <?php include_once("advanced.php");?>	    
+    </div>
+    <div id="sliderTab">        
+        <?php include_once("slider.php");?>	    
     </div>
 	</div>
 </div>
@@ -394,4 +381,6 @@ window.onload =function(){
 	});
 }(jQuery))
 </script>
+<script type="text/javascript" src="<?php echo MORSEL_PLUGIN_ADMIN_ASSEST;?>editor/scripts/widgEditor.js"></script>
+
 </div>

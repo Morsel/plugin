@@ -1,6 +1,4 @@
-<?php 
-if(isset($hostCompany) && $hostCompany != ""){
-// get all updated keyword on post tab
+<?php // get all updated keyword on post tab
     if(isset($_POST["keyword"]["name"])){
         if($_POST["keyword_id"] != ""){            
             $new_settings = get_option("morsel_settings"); 
@@ -85,13 +83,18 @@ if(isset($hostCompany) && $hostCompany != ""){
 	  		</tr>
 			<tr valign="top">
 	  			<td scope="row">&nbsp;</td>
-				<td><?php submit_button("Get Shortcode","primary","save",null,array('id'=>'morsel_shortcode_submit_advanced')); ?></td>
+				<td><?php submit_button("Get Shortcode","primary","save",null,array('id'=>'morsel_shortcode_submit_advanced')); ?>&nbsp;&nbsp;<input type="button" value="Hide Advanced
+				" onclick="hideAdvancedTabFunction('hideAdvancedTab')" id="hideAdvancedTab" class="button button-primary"></td>
 	  		</tr>
 		</table>
 	</form>
 	<div class="clear"></div>
 </div>
 <script type="text/javascript">
+function hideAdvancedTabFunction(buttonId){
+  jQuery("#tabs1-morsel_advanced_tab").css("display","none");
+  jQuery("#showAdvancedTab").css("display","inline-block");
+}
 	(function($){
 		
 		$("#morsel-shortcode-form_advanced").validate({
@@ -156,6 +159,3 @@ if(isset($hostCompany) && $hostCompany != ""){
 		})*/
 	}(jQuery))
 </script>
- <? } else { ?>
-Please Enter Host Details First.
-<? } ?>

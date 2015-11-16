@@ -11,14 +11,13 @@ if(isset($hostCompany) && $hostCompany != ""){
 	<form method="post" action="" id="morsel-shortcode-form">
 	   <table class="form-table">
 	  		<tr valign="top">
-	  			<td class="wid-15" scope="row">Number to Display * : </td>
+	  			<td class="wid-15" scope="row" style="white-space:nowrap;">Number to Display * : </td>
 				<td><input type="text" name="morsel_shortcode_count" id="morsel_shortcode_count" value=""/>
 					<!-- <span class="attr-info">An integer value , define how much latest morsel you want to show.</span> -->
 					<span class="attr-info">How many morsels would you like to display on your page?<br>
 					For example, <a href="http://virtuecider.com/home/">please see this page where three morsels are displayed.</a> </span>
 				</td>
 	  		</tr>
-
 	  		<!-- Use Default Value -->
 	  		<tr valign="top" style="display:none">
 	  			<td class="wid-15" scope="row">Gap In Morsel * : </td>
@@ -39,7 +38,7 @@ if(isset($hostCompany) && $hostCompany != ""){
 	  		<!-- Use Default Value End -->
   		
 	  		<tr valign="top">
-	  			<td class="wid-15" scope="row">Pick Keyword:</td>
+	  			<td class="wid-15" scope="row" >Pick Keyword:</td>
 				<td>
 				<select id="shortcode_keyword">
 					<option id ="none" value = "0">- Please select keyword -</option>
@@ -56,13 +55,15 @@ if(isset($hostCompany) && $hostCompany != ""){
 				<span class="attr-info"></span>
 				</td>
 	  		</tr>
-	  		<!-- <tr valign="top">
+	  		<tr valign="top">
 	  			<td class="wid-15" scope="row">Topic : </td>
-				<td><input type="text" name="morsel_topic_name" id="morsel_topic_name" value=""/>
-					<span class="attr-info"></span>
+				<td>
+				<select id="shortcode_topic">
+					<option id ="none" value = "0">- Please select Topic -</option>
+				</select>
+				<span class="attr-info">Select which morsels will display by choosing topic. Every morsel associated to a topic will display on the page automatically.</span>
 				</td>
-	  		</tr> -->
-	  		
+	  		</tr>	  		
 	  		<tr valign="top" style="display:none;">
 	  			<td class="wid-15" scope="row">Center Block : </td>
 				<td><input type="checkbox" name="morsel_shortcode_center" id="morsel_shortcode_center" value="1"/>
@@ -71,20 +72,23 @@ if(isset($hostCompany) && $hostCompany != ""){
 	  		</tr>
 			<tr valign="top">
 	  			<td scope="row">&nbsp;</td>
-				<td><?php submit_button("Get Shortcode","primary","save",null,array('id'=>'morsel_shortcode_submit')); ?></td>
+				<td><?php submit_button("Get Shortcode","primary","save",null,array('id'=>'morsel_shortcode_submit')); ?>&nbsp; &nbsp;<input type="button" value="Show Advanced" onclick="checkAdvancedTab('showAdvancedTab')" id="showAdvancedTab" class="button button-primary"></td>
 	  		</tr>
 		</table>
 	</form>
 </div>
 <script type="text/javascript">
-	(function($){
-		
+function checkAdvancedTab(buttonID){
+  jQuery("#"+buttonID).css("display","none");
+  jQuery("#tabs1-morsel_advanced_tab").css("display","inline-block");
+}
+	(function($){		
 		$("#morsel-shortcode-form").validate({
 		  rules: {
 		    morsel_shortcode_count: {
 		      required: true,
 		      number: true,
-		      max:50,
+		      // max:50,
 		      min:1
 		    },
 		    morsel_shortcode_gap: {
@@ -101,7 +105,7 @@ if(isset($hostCompany) && $hostCompany != ""){
 		  	morsel_shortcode_count: {
 		      required: "Please enter number of latest morsel you want.",
 		      number: "Please enter only numaric value in the count.",
-		      max:"Please enter value less than 20 .",
+		      // max:"Please enter value less than 20 .",
 		      min:"Please enter positive value ."
 		    },
 		    morsel_shortcode_gap: {
@@ -122,20 +126,17 @@ if(isset($hostCompany) && $hostCompany != ""){
 			    }
 		  },
 		  submitHandler: function(form) {
-
-		   
 		    var is_center = $("#morsel_shortcode_center").prop('checked') ? 1 : 0;
 		    var keyword_id = $("#shortcode_keyword").val();
 		    var code = "";		    
 		    if($("#morsel_wrapper_width").val() != ""){
-		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"']";//
-		      	// code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#morsel_topic_name").val()+"']";//
+		    	//code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"']";//
+		      	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#shortcode_topic").val()+"']";//
 		    } else {
-		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"']";
- 	            // code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#morsel_topic_name").val()+"']";
+		    	//code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"']";
+ 	            code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#shortcode_topic").val()+"']";
 		    }
-
-		    $("#short-code-preview").html("<h3>Here is your shortcode : \n\n"+code+"</h3>");			
+		    $("#short-code-preview").html("<h3>Here is your shortcode &nbsp;: \n\n"+code+"</h3>");			
 		  }
 		});
 

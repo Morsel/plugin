@@ -1,0 +1,23 @@
+<link rel="stylesheet" type="text/css" href="http://picssel.com/demos/demos.css" />
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" />
+<style type="text/css">
+span {font-weight: bold; display: block;}
+p {padding-bottom: 0 !important;}
+</style>
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+<script>
+function closeFancybox(href){
+  jQuery.fancybox.close();
+  window.location.href=href;
+}
+
+jQuery(document).ready(function ($) {
+    $(".fancybox").fancybox({
+        afterShow : function () {
+            $(".fancybox-iframe").contents().find("a").attr("onclick", "parent.closeFancybox(this.href)");
+        }
+    })
+}); // ready
+</script>
+<a class="fancybox fancybox.iframe" href="https://www.eatmorsel.com/">Open fancybox iframe with links</a>

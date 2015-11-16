@@ -180,7 +180,7 @@ class Morsel_Admin {
 		// 	array( $this, 'display_plugin_admin_page' )
 		// );
 
-			$this->plugin_screen_hook_suffix = add_menu_page(
+		$this->plugin_screen_hook_suffix = add_menu_page(
 			__( 'Morsel Settings', $this->plugin_slug ),
 			__( 'Morsel', $this->plugin_slug ),
 			'manage_options',
@@ -189,16 +189,6 @@ class Morsel_Admin {
 			plugins_url( 'morsel/img/morsel-m_20.png' ),
 			"6"
 		);
-
-        /* this code for add plugin under settings menu */
-		// $this->plugin_screen_hook_suffix = add_options_page(
-		// 	__( 'Morsel Settings', $this->plugin_slug ),
-		// 	__( 'Morsel', $this->plugin_slug ),
-		// 	'manage_options',
-		// 	$this->plugin_slug,
-		// 	array( $this, 'display_plugin_admin_page' )
-		// );
-
 	}
 
 	/**
