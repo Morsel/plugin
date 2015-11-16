@@ -1,8 +1,8 @@
-<?php 
+<?php
 if(isset($hostCompany) && $hostCompany != ""){
 // print_r($new_associated);
 ?>
-<div id="morsel_post_display-details" class="shorcode-summry">	
+<div id="morsel_post_display-details" class="shorcode-summry">
 	<!-- <h4>[morsel_post_display]</h4>
 	<p>Shortcode [morsel_post_display] display your top 20 morsels</p>
 	<p>In the shortcode [morsel_post_display] add attribute to it to show no of latest morsel, made them central align, gap between morsel, wrapper_width,pick keyword [morsel_post_display count=4 center_block=1 gap_in_morsel=5px wrapper_width=80 keyword_id = 10 ] like this</p> -->
@@ -36,7 +36,7 @@ if(isset($hostCompany) && $hostCompany != ""){
 				</td>
 	  		</tr>
 	  		<!-- Use Default Value End -->
-  		
+
 	  		<tr valign="top">
 	  			<td class="wid-15" scope="row" >Pick Keyword:</td>
 				<td>
@@ -63,7 +63,7 @@ if(isset($hostCompany) && $hostCompany != ""){
 				</select>
 				<span class="attr-info">Select which morsels will display by choosing topic. Every morsel associated to a topic will display on the page automatically.</span>
 				</td>
-	  		</tr>	  		
+	  		</tr>
 	  		<tr valign="top" style="display:none;">
 	  			<td class="wid-15" scope="row">Center Block : </td>
 				<td><input type="checkbox" name="morsel_shortcode_center" id="morsel_shortcode_center" value="1"/>
@@ -82,19 +82,18 @@ function checkAdvancedTab(buttonID){
   jQuery("#"+buttonID).css("display","none");
   jQuery("#tabs1-morsel_advanced_tab").css("display","inline-block");
 }
-	(function($){		
+	(function($){
 		$("#morsel-shortcode-form").validate({
 		  rules: {
 		    morsel_shortcode_count: {
 		      required: true,
 		      number: true,
-		      // max:50,
 		      min:1
 		    },
 		    morsel_shortcode_gap: {
 		      required: true,
 		      number: true
-		    },		    
+		    },
 		    morsel_wrapper_width: {
 		      number: true,
 		      max: 100,
@@ -105,7 +104,6 @@ function checkAdvancedTab(buttonID){
 		  	morsel_shortcode_count: {
 		      required: "Please enter number of latest morsel you want.",
 		      number: "Please enter only numaric value in the count.",
-		      // max:"Please enter value less than 20 .",
 		      min:"Please enter positive value ."
 		    },
 		    morsel_shortcode_gap: {
@@ -128,7 +126,7 @@ function checkAdvancedTab(buttonID){
 		  submitHandler: function(form) {
 		    var is_center = $("#morsel_shortcode_center").prop('checked') ? 1 : 0;
 		    var keyword_id = $("#shortcode_keyword").val();
-		    var code = "";		    
+		    var code = "";
 		    if($("#morsel_wrapper_width").val() != ""){
 		    	//code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"']";//
 		      	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#shortcode_topic").val()+"']";//
@@ -136,7 +134,7 @@ function checkAdvancedTab(buttonID){
 		    	//code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"']";
  	            code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#shortcode_topic").val()+"']";
 		    }
-		    $("#short-code-preview").html("<h3>Here is your shortcode &nbsp;: \n\n"+code+"</h3>");			
+		    $("#short-code-preview").html("<h3>Here is your shortcode &nbsp;: \n\n"+code+"</h3>");
 		  }
 		});
 

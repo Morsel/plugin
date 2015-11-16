@@ -114,7 +114,9 @@ if(count($jsonPost->data)>0){?>
 						</div>
 					    </p>
 					</td>
+
 		  		</tr>
+
 		  	</table>
 		</div>
 	</div>
@@ -621,7 +623,6 @@ function uploadMorselItemImage(itemID){
 			    complete: function() {},
 			    success: function(response) {
 			      console.log('test response', response);
-			      //alert("image change");
 			      setTimeout(function() { editMorsel(morselGlobal); }, 8000);
 			    },
 			    error: function(response) {},
