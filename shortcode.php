@@ -288,7 +288,7 @@ function morsel_post_des(){
                     <!-- Iframe Code -->
                      <!--  <a class="btn btn-danger btn-xs fancybox fancybox.iframe" href="https://www.eatmorsel.com/">Open fancybox iframe with links</a>
                       -->
-                      <a class="btn btn-danger btn-xs fancybox fancybox.iframe" href="http://localhost:5000/add-morsel">Create Morsel</a>
+                      <a class="btn btn-danger btn-xs fancybox fancybox.iframe" href="<?php echo MORSEL_PLUGIN_IFRAME_PATH ?>">Create Morsel</a>
 
                       <link rel="stylesheet" type="text/css" href="http://picssel.com/demos/demos.css" />
                       <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" />

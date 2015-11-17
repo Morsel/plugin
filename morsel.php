@@ -46,12 +46,15 @@ if(MORSEL_PLUGIN_ENV == 'prod'){
   define('MORSEL_API_URL', 'https://api.eatmorsel.com/');
   define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-production/embed.js');
   define('MORSEL_SITE', 'https://www.eatmorsel.com/');
+  define('MORSEL_PLUGIN_IFRAME_PATH','https://www.eatmorsel.com/addnewmorsel');
 } else if((MORSEL_PLUGIN_ENV == 'local') || (MORSEL_PLUGIN_ENV == 'dev')){
   if(MORSEL_PLUGIN_ENV == 'dev'){
     define('MORSEL_API_URL', 'https://api-staging.eatmorsel.com/');
+    define('MORSEL_PLUGIN_IFRAME_PATH','http://dev.eatmorsel.com/addnewmorsel');
   } else {
      define('MORSEL_API_URL', 'http://localhost:3000/');
     //define('MORSEL_API_URL', 'http://e510e9fa.ngrok.io/');
+     define('MORSEL_PLUGIN_IFRAME_PATH','http://localhost:5000/addnewmorsel');
   }
   define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-staging/embed.js');
   define('MORSEL_SITE', 'https://dev.eatmorsel.com/');
