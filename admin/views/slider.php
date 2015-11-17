@@ -1,19 +1,19 @@
-<?
+<?php
     if(get_option("morselSliderSettings") == ""){
 		//add slider option by Default
 	   	$morselSliderSettings['pause_time']=7000;
-		$morselSliderSettings['trans_time']=1000;
-		$morselSliderSettings['width']="250px";
-		$morselSliderSettings['height']="200px";
-		$morselSliderSettings['direction']="Up";
-		$morselSliderSettings['pause_on_hover']="Yes";
-		$morselSliderSettings['show_navigation']="Yes";
-		add_option("morselSliderSettings", $morselSliderSettings);
+			$morselSliderSettings['trans_time']=1000;
+			$morselSliderSettings['width']="250px";
+			$morselSliderSettings['height']="200px";
+			$morselSliderSettings['direction']="Up";
+			$morselSliderSettings['pause_on_hover']="Yes";
+			$morselSliderSettings['show_navigation']="Yes";
+			add_option("morselSliderSettings", $morselSliderSettings);
     }
 
 
 	echo '<div class="wrap">';
-	echo '<div class="icon32" id="icon-options-general"><br></div><h2>Morsel Image Slider </h2>';
+	echo '<div class="icon32" id="icon-options-general"><br></div><h2>Morsel Image Slider</h2>';
     if(isset($_POST['jsetsub']))
 	{
 		$pause_time=$_POST['pause_time'];
@@ -71,7 +71,6 @@
 			echo "</table>";
 			echo "</form>";
 			echo '</div></div></div>';
-
 	?>
 	<?php
 	echo '</div>'; // .wrap
@@ -103,9 +102,7 @@ function sliderCheckForSelected($option,$check){
     <?php
 	}
     $contents = get_option('shs_slider_contents');
-    //print_r($contents);
-
-	?>
+  ?>
 	<div id="poststuff" style="position:relative;">
 		<form name="qord" method="post">
 			<div class="postbox shs_admin_wrapper">
@@ -138,17 +135,13 @@ function sliderCheckForSelected($option,$check){
 					    		<td><a href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?></a></td>
 					    		<td>
 					    			<?php
-					    			$imageUrl = "";
-
-                                     if($row->primary_item_photos->_992x992 != ''){
-                                      $imageUrl = str_replace("_992x992_", "", $row->primary_item_photos->_992x992);
-                                      $imageUrlAdmin = $row->primary_item_photos->_100x100;
+					    				$imageUrl = "";
+                     	if($row->primary_item_photos->_992x992 != ''){
+                      	$imageUrl = str_replace("_992x992_", "", $row->primary_item_photos->_992x992);
+                      	$imageUrlAdmin = $row->primary_item_photos->_100x100;
 							      ?>
-							      <a href="<?php echo $imageUrl;?>" target="_blank" >
-	                				<img src="<?php echo $imageUrlAdmin;?>" height="100" width="100">
-	                			  <a>
+							      <a href="<?php echo $imageUrl;?>" target="_blank" ><img src="<?php echo $imageUrlAdmin;?>" height="100" width="100"><a>
 					    		</td>
-
 					    		<td>
 					    			<input type="checkbox" <? if(array_key_exists($row->id, $contents)){?>checked<? } ?> name="cnt[<?=$row->id;?>]" value="<?=$imageUrl?>">
 					    		</td>
@@ -156,17 +149,17 @@ function sliderCheckForSelected($option,$check){
 					    		</td>
 					    		<td></td>
 					    		<? } ?>
-
 					    	</tr>
-
 					    <? } } ?>
 					    </tbody>
 				  </table>
-
-				  <div id="no-moreSlider" style="display:none;">No More Morsels</div>
-					  <div id="ajaxLoaderSlider"  style="display:none;">
-					        <span><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajax-loader.gif"></span>
+				  <div class="clear"><br></div>
+				  <div>
+				  	<div id="no-moreSlider" class="no-more" style="display:none;">No More Morsels</div>
+					  <div id="ajaxLoaderSlider" class="ajaxLoader">
+					    <span><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajax-loader.gif"></span>
 					  </div>
+					</div>
 						<!-- <input type="submit" name="joptsv" class="button-primary" style="margin-left: 13px;" value="SAVE SLIDES" /> -->
 				</div>
 			</div>
@@ -176,34 +169,37 @@ function sliderCheckForSelected($option,$check){
 
 
 <script type="text/javascript">
-	// var noMoreMorsel;
-	// jQuery(window).scroll(function() {
-	// 	if(jQuery('#joptions').css('display') != 'none'){
-	// 	    if(noMoreMorsel != true){
-	// 	    	if (jQuery(window).scrollTop() + jQuery(window).height() == jQuery(document).height()) {
-	// 			    jQuery('#no-moreSlider').hide();
-	// 			    var morsePageCount = 1;
-	// 			    jQuery("#ajaxLoaderSlider").css("display", "block");
-	// 			    jQuery.ajax({
-	// 			        url: "<?php echo site_url()?>" + "/index.php?pagename=morsel_ajax_admin&view=slider&page_id=" + parseInt(++morsePageCount),
-	// 			        success: function(data) {
-	// 						if (data.trim().length > 1) {
-	// 							jQuery('#joptions li:last').after(data);
-	// 						} else {
-	// 							morsePageCount--;
-	// 							noMoreMorsel = true;
-	// 							jQuery('#no-moreSlider').show();
-	// 						}
-	// 			        }, error: function() {
-	// 				        morsePageCount--;
-	// 				    }, complete: function() {
-	// 				        jQuery("#ajaxLoaderSlider").css("display", "none");
-	// 				    }
-	// 			    });
-	// 		    }
-	// 	    }
-	// 	}
-	// });
+var noMoreMorsel;
+var sliderMorsePageCount = 1;
+jQuery(window).scroll(function() {
+	//if(jQuery('#joptions').css('display') != 'none'){
+		if(jQuery('#sliderTab').css('display') != 'none'){
+	    if(noMoreMorsel != true){
+	    	if (jQuery(window).scrollTop() + jQuery(window).height() == jQuery(document).height()) {
+			    jQuery('#no-moreSlider').hide();
+			    jQuery("#ajaxLoaderSlider").css("display", "block");
+			    jQuery.ajax({
+		        url: "<?php echo site_url()?>" + "/index.php?pagename=morsel_ajax_admin&view=slider&page_id=" + parseInt(++sliderMorsePageCount),
+		        success: function(data) {
+							if (data.trim().length > 1) {
+								jQuery('#joptions tr:last').after(data);
+							} else {
+								sliderMorsePageCount--;
+								noMoreMorsel = true;
+								jQuery('#no-moreSlider').show();
+							}
+		        },
+		        error: function() {
+			        sliderMorsePageCount--;
+			    	},
+			    	complete: function() {
+			        jQuery("#ajaxLoaderSlider").css("display", "none");
+			    	}
+			    });
+		    }
+	    }
+		}
+});
 
 //for check and uncheck
 jQuery(".checkAllCheckbox").change(function () {

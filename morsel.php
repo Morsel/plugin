@@ -269,6 +269,8 @@ function morsel_query_vars( $query_vars ){
       $api_key = $options['userid'] . ':' .$options['key'];
       $morsel_post_settings = get_option('morsel_post_settings');//getting excluding id
 
+      $contents = get_option('shs_slider_contents');
+
       if(array_key_exists('posts_id', $morsel_post_settings))
         $post_selected = $morsel_post_settings['posts_id'];
       else
@@ -277,25 +279,27 @@ function morsel_query_vars( $query_vars ){
       $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&page=".$_REQUEST['page_id']."&count=".MORSEL_API_COUNT."&submit=true";
 
       $json = get_json($jsonurl); //getting whole data
-
+      //prepare data for morsel slider
       if($_REQUEST["view"] == "slider"){
-          foreach ($jsonPost->data as $row) { ?>
+          foreach ($json->data as $row) {?>
               <tr>
                  <td><a href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?></a></td>
                  <td>
                     <?php
                       $imageUrl = "";
-                      if($row->photos->_800x600 != ''){
+                      if($row->photos->_992x992 != ''){
+                        $imageUrl = $row->photos->_992x992;
+                      } else if($row->photos->_800x600 != ''){
                         $imageUrl = $row->photos->_800x600;
                       } else if($row->primary_item_photos->_320x320 != ''){
                         $imageUrl = $row->primary_item_photos->_320x320;
-                      }
-                    ?>
+                      } ?>
                     <a href="<?php echo $imageUrl;?>" target="_blank" >
                       <img src="<?php echo $imageUrl;?>" height="100" width="100">
                     <a>
                   </td>
-                  <td><input type="checkbox" name="cnt[]" value="<?=$imageUrl?>@:@<?=$row->id;?>"></td>
+                  <!-- <td><input type="checkbox" name="cnt[]" value="<?=$imageUrl?>@:@<?=$row->id;?>"></td> -->
+                  <td><input type="checkbox" <? if(array_key_exists($row->id, $contents)){?>checked<? } ?> name="cnt[<?=$row->id;?>]" value="<?=$imageUrl?>"></td>
               </tr>
           <? }
       } else {
@@ -337,8 +341,7 @@ function morsel_query_vars( $query_vars ){
       </td>
 
       <td>
-          <p><img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoader<?php echo $row->id;?>" style="display:none;"/><a href="javascript:void(0);" onclick="editMorsel(<?php echo $row->id;?>)">Edit</p>
-
+          <p><img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoader<?php echo $row->id;?>" style="display:none;"/><a class="button" href="javascript:void(0);" onclick="editMorsel(<?php echo $row->id;?>)">Edit</a></p>
           <?php if($row->is_submit || count($row->morsel_keywords) == 0) { ?>
             <?php add_thickbox(); ?>
           <a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_keyowrd_id button">Pick Keywords</a>

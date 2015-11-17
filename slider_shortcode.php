@@ -58,7 +58,7 @@ function morselDisplaySlider()
         jQuery(document).ready(function ($) {
 
             var jssor_1_options = {
-              $AutoPlay: <?=$autoplay;?>,
+              $AutoPlay: "<?=$autoplay;?>",
               $SlideDuration: <?=$slider_duration;?>,
               $SlideEasing: $Jease$.$OutQuint,
               $ArrowNavigatorOptions: {
