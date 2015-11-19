@@ -66,13 +66,13 @@ if(isset($hostCompany) && $hostCompany != ""){
 	  		</tr>
 	  		<tr valign="top" style="display:none;">
 	  			<td class="wid-15" scope="row">Center Block : </td>
-				<td><input type="checkbox" name="morsel_shortcode_center" id="morsel_shortcode_center" value="1"/>
-					<span class="attr-info">It should be 1 or 0, this is for center the blocks of morsel For enable it please check the checkbox</span>
-				</td>
+					<td><input type="checkbox" name="morsel_shortcode_center" id="morsel_shortcode_center" value="1"/>
+						<span class="attr-info">It should be 1 or 0, this is for center the blocks of morsel For enable it please check the checkbox</span>
+					</td>
 	  		</tr>
-			<tr valign="top">
+				<tr valign="top">
 	  			<td scope="row">&nbsp;</td>
-				<td><?php submit_button("Get Shortcode","primary","save",null,array('id'=>'morsel_shortcode_submit')); ?>&nbsp; &nbsp;<input type="button" value="Show Advanced" onclick="checkAdvancedTab('showAdvancedTab')" id="showAdvancedTab" class="button button-primary"></td>
+					<td><?php submit_button("Get Shortcode","primary","save",null,array('id'=>'morsel_shortcode_submit')); ?>&nbsp; &nbsp;<input type="button" value="Show Advanced" onclick="checkAdvancedTab('showAdvancedTab')" id="showAdvancedTab" class="button button-primary"></td>
 	  		</tr>
 		</table>
 	</form>
@@ -129,7 +129,7 @@ function checkAdvancedTab(buttonID){
 		    var code = "";
 		    if($("#morsel_wrapper_width").val() != ""){
 		    	//code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"']";//
-		      	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#shortcode_topic").val()+"']";//
+		      	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#shortcode_topic").val()+"' ]";//
 		    } else {
 		    	//code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"']";
  	            code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#shortcode_topic").val()+"']";

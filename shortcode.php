@@ -1,9 +1,9 @@
 <?php
-function grid($row_sht,$morsel_page_id) {
+function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
   $morsel_url = add_query_arg( array('morselid' => $row_sht->id), get_permalink($morsel_page_id));
-  ?>
-    <div class="col-sm-4 col-md-4 ">
-
+  $class_morsel_block = array('1' =>'col-sm-12 col-md-12','2' =>'col-sm-6 col-md-6','3' =>'col-sm-4 col-md-4', '4' =>'col-sm-3 col-md-3', '6'=>'col-sm-2 col-md-2');
+?>
+    <div class="<?php echo $class_morsel_block[$morsel_in_row];?> shortcode-msl-block">
       <div  class="morsel-block morsel-bg" morsel-url="<?php echo $morsel_url; ?>" >
           <div class="morsel-info">
               <h1 class="h2 morsel-block-title">
@@ -47,7 +47,8 @@ function grid($row_sht,$morsel_page_id) {
       'wrapper_width' => "",
       'keyword_id'=>NULL,
       'associated_user'=>"0",
-      'topic_name'=>NuLL
+      'topic_name'=>NULL,
+      'morsel_in_row'=>'3'
     ), $atts, 'morsel_post_display' );
 
   $morsel_page_id = get_option( 'morsel_plugin_page_id');
@@ -101,18 +102,21 @@ function grid($row_sht,$morsel_page_id) {
                     font-size: 0;
                     text-align: center;
                   }
-                  #morsel-posts-row .col-sm-4.col-md-4 {
+                  /*#morsel-posts-row .col-sm-4.col-md-4 {*/
+                  #morsel-posts-row .shortcode-msl-block {
                     display: inline-block;
                     float: none;
                   }
                   @media screen and (max-width: 767px) {
-                      #morsel-posts-row .col-sm-4.col-md-4 {
+                    /*#morsel-posts-row .col-sm-4.col-md-4 {*/
+                    #morsel-posts-row .shortcode-msl-block{
 	                    display: block;
-	                  }
+                    }
                   }
           <?php } ?>
           <?php if(isset($atts['gap_in_morsel'])){ ?>
-                  #morsel-posts-row .col-sm-4.col-md-4 {
+                  /*#morsel-posts-row .col-sm-4.col-md-4 {*/
+                  #morsel-posts-row .shortcode-msl-block {
                     padding: 0 <?php echo $atts['gap_in_morsel'];?>!important;
                   }
           <?php } ?>
@@ -138,7 +142,7 @@ function grid($row_sht,$morsel_page_id) {
 
                                   if(in_array($row_sht->id, $post_selected))
                                     continue;
-                                 echo grid($row_sht,$morsel_page_id);
+                                 echo grid($row_sht,$morsel_page_id,$atts['morsel_in_row']);
 
                                } ?>
                               </div>

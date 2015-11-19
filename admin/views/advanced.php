@@ -1,7 +1,7 @@
 <?php // get all updated keyword on post tab
     if(isset($_POST["keyword"]["name"])){
-        if($_POST["keyword_id"] != ""){            
-            $new_settings = get_option("morsel_settings"); 
+        if($_POST["keyword_id"] != ""){
+            $new_settings = get_option("morsel_settings");
             $allKeywords = json_decode($new_settings['morsel_keywords']);
 
         foreach($allKeywords as $kwd){
@@ -13,19 +13,19 @@
         update_option("morsel_settings",$new_settings);
         if(isset($options["morsel_keywords"])) {
           $options["morsel_keywords"] = $new_settings['morsel_keywords'];
-        }         
+        }
     } else {
       $new_keyword = stripslashes($_POST["updated_keywords"]);
-        $new_settings = get_option("morsel_settings"); 
+        $new_settings = get_option("morsel_settings");
         $new_settings['morsel_keywords'] = ($new_keyword);
         update_option("morsel_settings",$new_settings);
         if(isset($options["morsel_keywords"])) {
           $options["morsel_keywords"] = ($new_keyword);
-        } 
+        }
     }
   }
 ?>
-<div id="morsel_post_display-details" class="shorcode-summry">	
+<div id="morsel_post_display-details" class="shorcode-summry">
 	<!-- <h4>[morsel_post_display]</h4>
 	<p>Shortcode [morsel_post_display] display your top 20 morsels</p>
 	<p>In the shortcode [morsel_post_display] add attribute to it to show no of latest morsel, made them central align, gap between morsel, wrapper_width,pick keyword [morsel_post_display count=4 center_block=1 gap_in_morsel=5px wrapper_width=80 keyword_id = 10 ] like this</p> -->
@@ -60,7 +60,7 @@
 				</td>
 	  		</tr>
 	  		<!-- Use Default Value End -->
-<!-- 
+<!--
 	  		<?php if($options["morsel_keywords"]!="blank") { ?>
 	  		<tr valign="top">
 	  			<td class="wid-15" scope="row">Pick Keyword:</td>
@@ -81,6 +81,20 @@
 					<span class="attr-info">It should be 1 or 0, this is for center the blocks of morsel For enable it please check the checkbox</span>
 				</td>
 	  		</tr>
+	  		<!--Select No of morsel in a row, if you want a morsel in a row, select 1 it append class col-md-12 means a morsel -->
+	  		<tr valign="top">
+	  			<td class="wid-15" scope="row">Morsel In A Row: </td>
+					<td>
+						<select id="morsel-in-row">
+							<option> Select no of morsel shown in a row</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="4">4</option>
+							<option value="6">6</option>
+						</select>
+						<span class="attr-info">Here we can select how much morsel in a row will be shown by shortcode. 3 is a default value.</span>
+					</td>
+	  		</tr>
 			<tr valign="top">
 	  			<td scope="row">&nbsp;</td>
 				<td><?php submit_button("Get Shortcode","primary","save",null,array('id'=>'morsel_shortcode_submit_advanced')); ?>&nbsp;&nbsp;<input type="button" value="Hide Advanced
@@ -96,7 +110,7 @@ function hideAdvancedTabFunction(buttonId){
   jQuery("#showAdvancedTab").css("display","inline-block");
 }
 	(function($){
-		
+
 		$("#morsel-shortcode-form_advanced").validate({
 		  rules: {
 		    // morsel_shortcode_count: {
@@ -108,7 +122,7 @@ function hideAdvancedTabFunction(buttonId){
 		    morsel_shortcode_gap_advanced: {
 		      required: true,
 		      number: true
-		    },		    
+		    },
 		    morsel_wrapper_width_advanced: {
 		      number: true,
 		      max: 100,
@@ -139,16 +153,16 @@ function hideAdvancedTabFunction(buttonId){
 			        error.insertAfter($(element).next($('span.attr-info')));
 			    }
 		  },
-		  submitHandler: function(form) {		   
+		  submitHandler: function(form) {
 		    var is_center = $("#morsel_shortcode_center_advanced").prop('checked') ? 1 : 0;
 		    var keyword_id = $("#shortcode_keyword").val();
-		    var code = "";		    
+		    var code = "";
 		    if($("#morsel_wrapper_width_advanced").val() != ""){
-		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap_advanced").val()+$("#morsel_shortcode_gap_unit_advanced").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width_advanced").val()+"' keyword_id = '"+keyword_id+"']";
+		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap_advanced").val()+$("#morsel_shortcode_gap_unit_advanced").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width_advanced").val()+"' keyword_id = '"+keyword_id+"' morsel_in_row='"+$("#morsel-in-row").val()+"']";
 		    } else {
-		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit_advanced").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"']";
+		    	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit_advanced").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' morsel_in_row='"+$("#morsel-in-row").val()+"']";
 		    }
-		    $("#short-code-preview_advanced").html("<h3>Here is your shortcode : \n\n"+code+"</h3>");			
+		    $("#short-code-preview_advanced").html("<h3>Here is your shortcode : \n\n"+code+"</h3>");
 		  }
 		});
 		/*$('#morsel_shortcode_submit').click(function(event){

@@ -74,44 +74,46 @@ if(count($jsonPost->data)>0){?>
 <!-- edit Morsel Start -->
 <span class="editMorsels" style="display:none;">
 	<div  style="background: none repeat scroll 0 0 #fff;padding: 10px;">
-	    <h3>Edit Morsel</h3>
+	  <h3>Edit Morsel</h3>
 		<div style="width:100%">
 			<table class="form-table MorselEdit">
 		  		<tr valign="top">
 		  			<td width="100%">
-					<p><b>Title:</b>
-						  <input type="hidden" style="width:50%" name="morselId" id="morselId" value=""/>
-						  <input type="text" style="width:50%" name="morselTitle" id="morselTitle" value=""/>
-						  <a id="post_title_savebtn" class="button button-primary morselSave" onclick="saveMorsel('morselTitle','title')">Save</a>
+							<p>
+								<b>Title:</b>
+							  <input type="hidden" style="width:50%" name="morselId" id="morselId" value=""/>
+							  <input type="text" style="width:50%" name="morselTitle" id="morselTitle" value=""/>
+							  <a id="post_title_savebtn" class="button button-primary morselSave" onclick="saveMorsel('morselTitle','title',this)">Save</a>
+							  <img style="display:none;" class="smallAjaxLoader" src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif">
 					    </p>
 					    <p>
-					    <div class="addItemClass">
-					    	<div style="float: left; width: 100px; margin: 10px 0 0 0;"><b>Items:</b></div>
-					    	<div style="float:right;">
-					    	   <!-- <img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderAddItem" style="display:none;"/>
-					    	   <a style=" margin-bottom: 5px;" class="button" onclick="addItemMorsel();">Add Item</a> -->
-					    	</div>
+						    <div class="addItemClass">
+						    	<div style="float: left; width: 100px; margin: 10px 0 0 0;"><b>Items:</b></div>
+						    	<div style="float:right;">
+						    	   <!-- <img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderAddItem" style="display:none;"/>
+						    	   <a style=" margin-bottom: 5px;" class="button" onclick="addItemMorsel();">Add Item</a> -->
+						    	</div>
 					        <table class="wp-list-table widefat posts addItemTable">
-								<thead>
-									<tr>
-										<th style="" class="manage-column column-date" scope="col">Item Image</th>
-										<th style="" class="manage-column item-description sortable desc" scope="col">Item Description</th>
-										<th style="" class="manage-column column-title sortable asc" scope="col">Action</th>
-								  	</tr>
-								</thead>
-								<tbody id = "items-body"></tbody>
-							</table>
-                          </div>
+										<thead>
+											<tr>
+												<th style="" class="manage-column column-date" scope="col">Item Image</th>
+												<th style="" class="manage-column item-description sortable desc" scope="col">Item Description</th>
+												<th style="" class="manage-column column-title sortable asc" scope="col">Action</th>
+										  </tr>
+										</thead>
+										<tbody id = "items-body"></tbody>
+									</table>
+	              </div>
 					    </p>
 					    <p>
-					    <div style="float:left;">
-	                       <input id="" class="button button-primary" type="button" value="Save" name="morsel_update_form" onclick="morsel_back_key()">&nbsp;&nbsp;
-			  			   <input id="" class="button button-primary" type="button" value="Cancel" name="morsel_update_form" onclick="morsel_back_key()">
-		  		    	</div>
-			  		    <div style="float:right;">
-						   <img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderAddItem" style="display:none;"/>
-						   <a style=" margin-bottom: 5px;" class="button" onclick="addItemMorsel();">Add Item</a>
-						</div>
+						    <div style="float:left;">
+		              <input id="" class="button button-primary" type="button" value="Save" name="morsel_update_form" onclick="morsel_back_key()">&nbsp;&nbsp;
+				  			  <input id="" class="button button-primary" type="button" value="Cancel" name="morsel_update_form" onclick="morsel_back_key()">
+			  		    </div>
+				  		  <div style="float:right;">
+							   <img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderAddItem" style="display:none;"/>
+							   <a style=" margin-bottom: 5px;" class="button" onclick="addItemMorsel();">Add Item</a>
+								</div>
 					    </p>
 					</td>
 
@@ -206,7 +208,7 @@ if(count($jsonPost->data)>0){?>
 					<?php } ?>
 				</td>
 				<td>
-				<p><img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoader<?php echo $row->id;?>" style="display:none;"/><a href="javascript:void(0);" onclick="editMorsel(<?php echo $row->id;?>)">Edit</p>
+				<p><img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoader<?php echo $row->id;?>" style="display:none;"/><a href="javascript:void(0);" onclick="editMorsel(<?php echo $row->id;?>)" class="button">Edit</a></p>
 				    <?php if($row->is_submit || count($row->morsel_keywords) == 0) { ?>
 				   		<?php add_thickbox(); ?>
 						<a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_morsel_keyowrd_id button">Pick Keyword</a>
@@ -603,10 +605,9 @@ function uploadMorselItemImage(itemID){
     	 var fileName = fileObject.name,
     	     ext = fileName.split(".")[fileName.split(".").length - 1];
     	if(jQuery.inArray(ext, acceptedExt) == 0){
-	      	 jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","block");
-	         //submit the form here
-
-	         // event.preventDefault();
+     	  jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","block");
+	      //submit the form here
+	      //event.preventDefault();
 			  var fd = new FormData();
 			  //fd.append("user[email]",jQuery( "#mrsl_user_email" ).val());
 			  if (fileObject) {
@@ -623,7 +624,11 @@ function uploadMorselItemImage(itemID){
 			    complete: function() {},
 			    success: function(response) {
 			      console.log('test response', response);
-			      setTimeout(function() { editMorsel(morselGlobal); }, 8000);
+			      setTimeout(function() {
+			      	//called the click of save button for perticular item
+			      	jQuery("#saveButton"+itemID).click();
+			      	//editMorsel(morselGlobal);
+			      }, 8000);
 			    },
 			    error: function(response) {},
 			    complete: function(){
@@ -701,31 +706,35 @@ width: 100%;
 	padding: 10px !important
 }
 </style>
-
-
 <script>
-
-	function saveMorsel(fieldId,fieldName){
-         if(fieldName == "summary"){
-            data = {
-    			"api_key" : "<?php echo $api_key;?>",
-    			"summary" : jQuery("#"+fieldId).val()
-  			}
-         } else {
-            data = {
-    			"api_key" : "<?php echo $api_key;?>",
-    			"morsel" : { "title" : jQuery("#"+fieldId).val() }
-  			}
-         }
-         jQuery.ajax({
+	function saveMorsel(fieldId,fieldName,element){
+		console.log("this element",element);
+   	if(fieldName == "summary"){
+      data = {
+    		"api_key" : "<?php echo $api_key;?>",
+    		"summary" : jQuery("#"+fieldId).val()
+  		}
+   	} else {
+      data = {
+				"api_key" : "<?php echo $api_key;?>",
+				"morsel" : { "title" : jQuery("#"+fieldId).val() }
+			}
+   	}
+    jQuery.ajax({
 			url:"<?php echo MORSEL_API_URL;?>"+"morsels/"+morselGlobal,
 			type:"PUT",
 			data:data,
+			beforeSend: function(response) {
+				jQuery("#"+element.id).next("img.smallAjaxLoader").show();
+			},
 			success: function(response) {
 				console.log("morsel_response add------------",response);
-			},error:function(){},
-			complete:function(){}
-        });
+			},error:function(){
+				jQuery("#"+element.id).next("img.smallAjaxLoader").hide();
+			},complete:function(){
+				jQuery("#"+element.id).next("img.smallAjaxLoader").hide();
+			}
+    });
 	}
 	function addItemMorsel(){
 		jQuery("#smallAjaxLoaderAddItem").css("display","inline-block");
