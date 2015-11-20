@@ -95,7 +95,7 @@ function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
      <?php if($count_morsel>0){?>
         <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> -->
         <link rel="stylesheet" href="<?php echo MORSEL_PLUGIN_WIDGET_ASSEST.'css/bootstrap.min.css';?>">
-        <link rel="stylesheet" type="text/css" href=<?php echo MORSEL_PLUGIN_WIDGET_ASSEST.'css/morsel_list.css'?>>
+        <link rel="stylesheet" type="text/css" href="<?php echo MORSEL_PLUGIN_WIDGET_ASSEST.'css/morsel_list.css'?>">
         <style type="text/css">
           <?php if($atts['center_block'] == 1){ ?>
                  #morsel-posts-row {
