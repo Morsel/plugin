@@ -40,7 +40,7 @@ define('MORSEL_PLUGIN_ADMIN_ASSEST', plugin_dir_url( __FILE__ ).'admin/assets/' 
 //for switch to development env set this constant value "dev"
 //and for local env set this constant value "local"
 
-define('MORSEL_PLUGIN_ENV','dev');
+define('MORSEL_PLUGIN_ENV','prod');
 
 if(MORSEL_PLUGIN_ENV == 'prod'){
   define('MORSEL_API_URL', 'https://api.eatmorsel.com/');
