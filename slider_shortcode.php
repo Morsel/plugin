@@ -18,7 +18,7 @@ function morselDisplaySlider()
   // $height=$shs_settings['height'];
   // $direction=$shs_settings['direction'];
   $autoplay=$shs_settings['show_navigation'];
-
+  $slug = get_post(get_option("morsel_plugin_page_id"))->post_name;
   ?>
   <div style="width:<?=$width;?> ; margin:0 auto;">
     <div id="jssor_1" style="position: relative; margin: 0 auto; top: 0px; left: 0px; width: 1300px; height: 500px; overflow: hidden; visibility: hidden;">
@@ -29,15 +29,10 @@ function morselDisplaySlider()
             <div class="sliderAboveDiv"></div>
         </div>
         <div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 0px; width: 1300px; height: 500px; overflow: hidden;">
-            <?
-
-            $contents = get_option('shs_slider_contents');
-
-            foreach ($contents as $key => $value) {
-
-            ?>
+        <?php $contents = get_option('shs_slider_contents');
+          foreach ($contents as $key => $value) { ?>
             <div data-p="225.00" style="display: none;">
-                <img data-u="image" src="<?=$value?>" />
+              <a class="morsel-slider-img" target="blank" href="<?php echo site_url(),"/",$slug,"/?morselid=",$key;?>"><img data-u="image" src="<?=$value?>" /></a>
             </div>
             <? } ?>
         </div>

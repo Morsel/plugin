@@ -172,13 +172,13 @@ class Morsel_Admin {
 		 * - Change 'manage_options' to the capability you see fit
 		 *   For reference: http://codex.wordpress.org/Roles_and_Capabilities
 		 */
-		// $this->plugin_screen_hook_suffix = add_menu_page(
-		// 	__( 'Morsel Settings', $this->plugin_slug ),
-		// 	__( 'Morsel', $this->plugin_slug ),
-		// 	'manage_options',
-		// 	$this->plugin_slug,
-		// 	array( $this, 'display_plugin_admin_page' )
-		// );
+		/*$this->plugin_screen_hook_suffix = add_menu_page(
+			__( 'Morsel Settings', $this->plugin_slug ),
+			__( 'Morsel', $this->plugin_slug ),
+			'manage_options',
+			$this->plugin_slug,
+			array( $this, 'display_plugin_admin_page' )
+		);*/
 
 		$this->plugin_screen_hook_suffix = add_menu_page(
 			__( 'Morsel Settings', $this->plugin_slug ),

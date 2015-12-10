@@ -31,6 +31,7 @@ if ( ! defined( 'WPINC' ) ) {
 define('MORSEL_PLUGIN_URL_PATH', plugin_dir_path( __FILE__ ) );
 define('MORSEL_PLUGIN_IMG_PATH', plugin_dir_url( __FILE__ ).'img/' );
 define('MORSEL_PLUGIN_PATH', plugin_dir_url( __FILE__ ));
+//define('MORSEL_PLUGIN_CKEDITOR_PATH', plugin_dir_url( __FILE__ ).'ckeditor/');
 define('MORSEL_PLUGIN_WIDGET_ASSEST', plugin_dir_url( __FILE__ ).'widget_assests/' );
 define('MORSEL_PLUGIN_ADMIN_ASSEST', plugin_dir_url( __FILE__ ).'admin/assets/' );
 
@@ -52,12 +53,12 @@ if(MORSEL_PLUGIN_ENV == 'prod'){
     define('MORSEL_API_URL', 'https://api-staging.eatmorsel.com/');
     define('MORSEL_PLUGIN_IFRAME_PATH','http://dev.eatmorsel.com/addnewmorsel');
   } else {
-     define('MORSEL_API_URL', 'http://localhost:3000/');
+    define('MORSEL_API_URL', 'http://localhost:3000/');
     //define('MORSEL_API_URL', 'http://e510e9fa.ngrok.io/');
-     define('MORSEL_PLUGIN_IFRAME_PATH','http://localhost:5000/addnewmorsel');
+    define('MORSEL_PLUGIN_IFRAME_PATH','http://localhost:5000/addnewmorsel');
   }
   define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-staging/embed.js');
-  define('MORSEL_SITE', 'https://dev.eatmorsel.com/');
+  define('MORSEL_SITE', 'http://dev.eatmorsel.com/');
 }
 
 define('MORSEL_API_USER_URL', MORSEL_API_URL.'users/');
@@ -82,11 +83,13 @@ function clear_morsel_session() {
 }
 add_action('wp_logout', 'clear_morsel_session');
 
-  require_once(MORSEL_PLUGIN_URL_PATH. 'public/class-morsel.php' );
-  //require_once(MORSEL_PLUGIN_URL_PATH. 'widgets.php'); //for widgets
-  require_once(MORSEL_PLUGIN_URL_PATH. 'shortcode.php'); //for shortcode
-  require_once(MORSEL_PLUGIN_URL_PATH. 'slider_shortcode.php'); //for Slider Shortcode
-  require_once(MORSEL_PLUGIN_URL_PATH. 'page/page_create.php'); //for page
+require_once(MORSEL_PLUGIN_URL_PATH. 'public/class-morsel.php' );
+require_once(MORSEL_PLUGIN_URL_PATH. 'public/morsel-utility-functions.php' );
+//require_once(MORSEL_PLUGIN_URL_PATH. 'widgets.php'); //for widgets
+require_once(MORSEL_PLUGIN_URL_PATH. 'shortcode.php'); //for shortcode
+require_once(MORSEL_PLUGIN_URL_PATH. 'slider_shortcode.php'); //for Slider Shortcode
+require_once(MORSEL_PLUGIN_URL_PATH. 'includes/create_morsel_shortcode.php');//Create Morsel
+require_once(MORSEL_PLUGIN_URL_PATH. 'page/page_create.php'); //for page
 
 /*
  * Register hooks that are fired when the plugin is activated or deactivated.
@@ -157,7 +160,7 @@ function morsel_query_vars( $query_vars ){
   if($_REQUEST['pagename']=='morsel_user_login'){
 
     unset($_POST['pagename']);
-    //print_r($_POST);
+
     $postdata = http_build_query($_POST);
 
     $opts = array('http' =>
@@ -203,9 +206,7 @@ function morsel_query_vars( $query_vars ){
             } else {
               $_SESSION['host_morsel_errors'] = $wpUser->get_error_messages();
             }
-
           }
-
         } else { // if no one is logged in
 
             // login user
@@ -250,6 +251,7 @@ function morsel_query_vars( $query_vars ){
       if(!isset($_SESSION['host_morsel_errors'])){ //if no error set morsel session
         $_SESSION['morsel_login_userid'] = $result->data->id;
         $_SESSION['morsel_user_obj'] = $result->data;
+        $_SESSION['current_morsel_user_psd'] = base64_encode($_POST['user']['password']);
       }
 
       header('Location:'.$_SERVER['HTTP_REFERER']);
@@ -261,8 +263,17 @@ function morsel_query_vars( $query_vars ){
    if($_REQUEST['pagename']=='morsel_logout') {
       wp_logout();
       unset($_SESSION['morsel_login_userid']);
+      unset($_SESSION['current_morsel_user_psd']);
       header('Location:'.$_SERVER['HTTP_REFERER']);
       exit(0);
+   }
+   // get all users whome are associate with host admin
+   if($_REQUEST['pagename']=='morsel_get_associated_user'){
+     $options = get_option( 'morsel_settings');
+     $jsonurl = MORSEL_API_USER_URL.$options['userid']."/association_requests.json?api_key=".$options['userid'].':'.$options['key'];
+     $result = @file_get_contents($jsonurl);
+     echo $result;
+     exit(0);
    }
 
    if($_REQUEST['pagename']=='morsel_ajax_admin')
@@ -463,5 +474,3 @@ function themeblvd_redirect_admin(){
 }
 
 add_action( 'admin_init', 'themeblvd_redirect_admin' );
-
-

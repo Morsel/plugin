@@ -4,9 +4,9 @@ if(isset($hostCompany) && $hostCompany != ""){
 <link rel="stylesheet" type="text/css" href=<?php echo MORSEL_PLUGIN_ADMIN_ASSEST.'editor/css/widgEditor.css'?>>
 <?php
    if(isset($morselSettings['morsel_keywords'])) {
-   	   $old_option = get_option('morsel_settings');
-	   $old_option['morsel_keywords'] = str_replace("'","",$old_option['morsel_keywords']);
-	   update_option("morsel_settings",$old_option);
+   	  $old_option = get_option('morsel_settings');
+	    $old_option['morsel_keywords'] = str_replace("'","",$old_option['morsel_keywords']);
+	    update_option("morsel_settings",$old_option);
    }
    $options = get_option('morsel_settings');
    $api_key = $options['userid'] . ':' .$options['key'];
@@ -59,10 +59,10 @@ if(isset($hostCompany) && $hostCompany != ""){
 	}
 
 //save preview Text
-	if(isset($_POST["morsel_settings_Preview"])){
-		$new_settings = $_POST["morsel_settings_Preview"];
-	   	update_option("morsel_settings_Preview",$new_settings);
-	}
+if(isset($_POST["morsel_settings_Preview"])){
+	$new_settings = $_POST["morsel_settings_Preview"];
+  update_option("morsel_settings_Preview",$new_settings);
+}
 
 
 if(count($jsonPost->data)>0){?>
@@ -116,9 +116,7 @@ if(count($jsonPost->data)>0){?>
 								</div>
 					    </p>
 					</td>
-
 		  		</tr>
-
 		  	</table>
 		</div>
 	</div>
@@ -243,7 +241,7 @@ if(count($jsonPost->data)>0){?>
 			    <option value="blank">Select keyword for morsel :</option>
 			</select>
 		    <br><br>
-		    <a id = "morsel_keyword_button" class="button button-primary "> Pick </a>&nbsp;&nbsp;
+		    <a id="morsel_keyword_button" class="button button-primary"> Pick </a>&nbsp;&nbsp;
 		    <a class="morselClosePopup button">Close</a>
 		</form>
     </div>
@@ -381,16 +379,16 @@ if(count($jsonPost->data)>0){?>
         }
         var selected_keywords = jQuery('#select_keyword_id').val();
         // selected_keywords = selected_keywords.splice( !jQuery.inArray('blank', selected_keywords));
-
-        var morsel_id = jQuery('#eatmorsel_id').val();
+        var morsel_id = jQuery(this).parent("form").children("input#eatmorsel_id").val();
+        console.log("morselId : ",morsel_id);
 
  		jQuery.ajax({
 			url: "<?php echo MORSEL_API_URL.'morsels/update_keyword.json';?>",
 		    type:'post',
 		    data: {
 				morsel:{morsel_keyword_ids:selected_keywords},
-				morsel_id:jQuery('#eatmorsel_id').val(),
-				user_id:<?php echo $options['userid']; ?>,
+				morsel_id:morsel_id,
+				user_id:"<?php echo $options['userid']; ?>",
 				api_key:"<?php echo $api_key ?>"
 			},
 			success: function(response){
@@ -407,12 +405,12 @@ if(count($jsonPost->data)>0){?>
 					tb_remove();
 				} else {
 					alert("Wrong credential");
-				  	return false;
+				  return false;
 				}
-	        }, error:function(response){
-			   	alert("You have entered wrong Username or Password!");
+	    }, error:function(response){
+			 	alert("Opps some issue occured in adding keyword to morsel, please try again.");
 			}, complete:function(){
-			   	jQuery('#morsel_keyword_button').val('please wait!');
+			 	jQuery('#morsel_keyword_button').val('please wait!');
 			}
 		});
 	});
@@ -626,15 +624,16 @@ function uploadMorselItemImage(itemID){
 			      console.log('test response', response);
 			      setTimeout(function() {
 			      	//called the click of save button for perticular item
-			      	jQuery("#saveButton"+itemID).click();
+			      	//jQuery("#saveButton"+itemID).click();
+			      	checkItemPhoto(itemID);
 			      	//editMorsel(morselGlobal);
 			      }, 8000);
 			    },
 			    error: function(response) {},
 			    complete: function(){
-			    	setTimeout(function() {
+			    	/*setTimeout(function() {
 			    		jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","none");
-			        },7000);
+			        },7000);*/
 			    }
 			  });
 	    } else {
@@ -642,6 +641,34 @@ function uploadMorselItemImage(itemID){
 	    	return false;
 	    }
 	});
+
+	// Regular function with arguments
+  function checkItemPhoto(itemID) {
+    //call after 2 second
+    setTimeout(function() {
+      jQuery.ajax({
+        url : "<?php echo MORSEL_API_ITEMS_URL;?>"+itemID+'.json',
+        type:"GET",
+        async: false,
+        data:{
+          api_key : "<?php echo $api_key;?>",
+        },
+        success: function(response) {
+          console.log("checkItemPhoto function Item Get------------",response);
+          if(response.meta.status == "200" && response.meta.message == "OK"){
+            if(response.data.photos == null || response.data.photos._100x100 == undefined ||response.data.photos._100x100 == ''){
+              checkItemPhoto(itemID);
+            } else {
+              console.log("Get item photo");
+              jQuery("#item-thumb-"+itemID).attr("src",response.data.photos._100x100);
+              jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","none");
+            }
+          }
+        },error:function(){console.log("Error occure in checkItemPhoto function");},
+        complete:function(){}
+      });
+    },2000);
+  }
 }
 </script>
 <script>
