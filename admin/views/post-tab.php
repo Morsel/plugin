@@ -565,10 +565,10 @@ if(count($jsonPost->data)>0){?>
 					for(var i in items){
 		                var html = '<tr class="itemMorsel'+items[i].id+'"><td class="column-date">';
 		                if(items[i].photos != null && items[i].photos._100x100 != undefined && items[i].photos._100x100 != null && items[i].photos._100x100 != ''){
-  		                  html += '<img onClick="uploadMorselItemImage('+items[i].id+')" src = "'+items[i].photos._100x100+'"/>';
+  		                  html += '<img id="item-thumb-'+items[i].id+'" onClick="uploadMorselItemImage('+items[i].id+')" src = "'+items[i].photos._100x100+'"/>';
 		                } else {
 		                	//noImageMorsel.png
-		                  html += '<img onClick="uploadMorselItemImage('+items[i].id+')" src = "<?=MORSEL_PLUGIN_IMG_PATH;?>noImageMorsel.png" width="100"/>';
+		                  html += '<img id="item-thumb-'+items[i].id+'" onClick="uploadMorselItemImage('+items[i].id+')" src = "<?=MORSEL_PLUGIN_IMG_PATH;?>noImageMorsel.png" width="100"/>';
 		                }
 		                  html += '<input type="file" id="imageUpload'+items[i].id+'" style="display:none;"><img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderItemImage'+items[i].id+'" style="display:none;"/>';
 		                  // var des = items[i].description;
@@ -602,7 +602,8 @@ function uploadMorselItemImage(itemID){
     	 fileObject = document.getElementById("imageUpload"+itemID).files[0];
     	 var fileName = fileObject.name,
     	     ext = fileName.split(".")[fileName.split(".").length - 1];
-    	if(jQuery.inArray(ext, acceptedExt) == 0){
+
+    	if(jQuery.inArray(ext, acceptedExt) >= 0){
      	  jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","block");
 	      //submit the form here
 	      //event.preventDefault();
@@ -637,7 +638,7 @@ function uploadMorselItemImage(itemID){
 			    }
 			  });
 	    } else {
-	    	alert("Please upload valid Image");
+	    	alert("Please upload valid image, image extension must be jpg, JPG, png, PNG, jpeg,JPEG, gif, GIF");
 	    	return false;
 	    }
 	});

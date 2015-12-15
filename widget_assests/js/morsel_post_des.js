@@ -169,9 +169,20 @@ function showDialog(page){
            .dialog({
                autoOpen: false,
                modal: true,
-               width: "40%",
+               width: "90%",
                height : 500,
-               title: "Eatmorsel"
+               title: "Connect to social",
+               open: function(event, ui) {
+                jQuery(this).closest('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
+               },
+               buttons: [
+                {
+                  text: "Close",
+                  click: function() {
+                    jQuery( this ).dialog( "close" );
+                  }
+                }
+              ]
            });
   jQuerydialog.dialog('open');
 }
