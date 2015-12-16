@@ -54,12 +54,12 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
     $api_key = $user_id.':'.$token;
 ?>
     <div class='row'>
-      <div class="col-md-4">
+      <div class="col-sm-12 text-center">
       <h3>New Morsel</h3>
       </div>
-      <div class="col-md-8">
-        <a href="<?php echo site_url()?>/index.php?pagename=morsel_logout" class="label label-danger pull-right">Logout</a>
-        <span class="pull-right" style="margin-right: 5px;">Logged in with : <b><?php echo $full_name ?></b></span>
+      <div class="col-sm-12" style="text-align:right;">
+        <span>Logged in with : <b><?php echo $full_name ?></b></span>
+        <a href="<?php echo site_url()?>/index.php?pagename=morsel_logout" class="label label-danger">Logout</a>
       </div>
         <div class="form-table MorselEdit col-md-12 col-sm-12">
           <div class='row'>
@@ -88,15 +88,34 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
                 <a id="submit-mrsl-btn" class="btn btn-success" onclick="submitMorsel()" disabled="">Submit Morsel</a>
                 <a id="create-mrsl-btn" class="btn btn-default" style="display:none;" onclick="createNewMorsel()">Create New Morsel</a>
                 <img class="center-block" src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderAddItem" style="display:none;"/>
-                <a class="btn btn-default pull-right" onclick="addItemMorsel();"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Add Item</a>
-                <a class="btn btn-info pull-right" style="margin-right:5px;" onclick="openDialog();"><i class="glyphicon glyphicon-share"></i>&nbsp;Connect to social</a>
+                <a class="btn btn-default" onclick="addItemMorsel();"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Add Item</a>
+                <a class="btn btn-info" style="margin-right:5px;" onclick="openDialog();"><i class="glyphicon glyphicon-share"></i>&nbsp;Connect to social</a>
               </div>
         </div> <!-- End div.row -->
       </div> <!-- End div.form-table MorselEdit -->
     </div>
    </div> <!-- End div.container-fluid -->
+  <div class="modal fade" id="morselSocialId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+     <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Connect to social</h4>
+        </div>
+        <div class="modal-body">
+          <iframe  src="" width="100%" height="100%" style="border: 0px;"></iframe>
+        </div>
+       <!--  <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div> -->
+      </div>
 
+    </div>
+  </div>
 </div> <!-- End editMorsels morsel-iso bootstrap-iso -->
+
+
 <script type="text/javascript">
   var morselGlobal= jQuery('#new_mrsl_id').val();
   /**
@@ -209,7 +228,11 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
   function openDialog()
   {
     var frameSrc = 'http://dev.eatmorsel.com/auth/loginifrm?id=<?php echo $user_id ?>&token=<?php echo $token ?>';
-    showDialog(frameSrc);
+    jQuery("#morselSocialId").find('iframe').attr('src',frameSrc);
+    jQuery('#morselSocialId').find('.modal-body').css('height','450px');
+    jQuery("#morselSocialId").modal('show');
+
+    //showDialog(frameSrc);
   }
 
 
@@ -413,7 +436,8 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
           processData: false,
           beforeSend: function(xhr) {
             jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","block");
-             jQuery('#item-thumb-'+itemID).css("display",'none');
+            jQuery('#item-thumb-'+itemID).css("display",'none');
+            jQuery("#item-thumb-"+itemID).attr("src","");
           },
           complete: function() {},
           success: function(response) {
@@ -458,9 +482,9 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
               checkItemPhoto(itemID);
             } else {
               console.log("Get item photo");
-              jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","none");
               jQuery("#item-thumb-"+itemID).attr("src",response.data.photos._100x100);
               jQuery('#item-thumb-'+itemID).css("display",'block');
+              jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","none");
 
             }
           }
@@ -552,7 +576,8 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
       url:"<?php echo MORSEL_API_URL;?>"+"items.json",
       type:"POST",
       beforeSend: function(response) {
-         jQuery("#smallAjaxLoaderAddItem").css("display","block");
+         //jQuery("#smallAjaxLoaderAddItem").css("display","block");
+         waitingDialog.show('Please wait while loading...');
       },
       data:userData,
       success: function(response) {
@@ -580,7 +605,8 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
         console.log("Error: some error appears in add item")
       },
       complete:function(){
-        jQuery("#smallAjaxLoaderAddItem").css("display","none");
+        //jQuery("#smallAjaxLoaderAddItem").css("display","none");
+        waitingDialog.hide();
       }
     });
     return new_item;
@@ -611,7 +637,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
 
   // function that save item description
   function saveItemDes(itemID) {
-    jQuery("#smallAjaxLoaderAddItem").css("display","inline-block");
+    // jQuery("#smallAjaxLoaderAddItem").css("display","inline-block");
     old_value = jQuery('#span'+itemID).text();
     new_value = jQuery("#textareaItem"+itemID).val();
     new_value = jQuery(new_value).text();
@@ -633,6 +659,9 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
         api_key : "<?php echo $api_key;?>",
         item : {"description": jQuery("#textareaItem"+itemID).val() }
       },
+      beforeSend:function(){
+        waitingDialog.show('Please wait while loading...');
+      },
       success: function(response) {
         console.log("morsel_response Item Get------------",response);
         jQuery("#span"+itemID).html(jQuery("#textareaItem"+itemID).val());
@@ -641,24 +670,31 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
         jQuery("#editButton"+itemID).css("display","inline-block");
         destroyEditor("textareaItem"+itemID);
         //editMorsel(morselGlobal);
-        jQuery("#smallAjaxLoaderAddItem").css("display","none");
+        // jQuery("#smallAjaxLoaderAddItem").css("display","none");
       },error:function(){},
-      complete:function(){}
+      complete:function(){
+        waitingDialog.hide();
+      }
     });
   }
 
   function deleteMorselItem(itemID){
-    jQuery("#smallAjaxLoaderAddItem").css("display","inline-block");
+    //jQuery("#smallAjaxLoaderAddItem").css("display","inline-block");
     jQuery.ajax({
       url:"<?php echo MORSEL_API_URL;?>items/"+itemID+".json",
       type:"DELETE",
       data:{ api_key : "<?php echo $api_key?>" },
+      beforeSend:function(){
+        waitingDialog.show('Please wait while loading...');
+      },
       success: function(response) {
         console.log("morsel_response Item Get------------",response);
         jQuery( ".itemMorsel"+itemID).remove();
         jQuery("#smallAjaxLoaderAddItem").css("display","none");
       },error:function(){},
-      complete:function(){}
+      complete:function(){
+         waitingDialog.hide();
+      }
     });
   }
 

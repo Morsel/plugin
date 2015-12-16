@@ -160,6 +160,64 @@ var waitingDialog = (function ($) {
 
 })(jQuery);
 
+var iframeDialog = (function ($) {
+
+    // Creating modal dialog's DOM
+  var $dialog = $(
+    '<div id="morselIframeModal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
+    '<div class="modal-dialog modal-m">' +
+    '<div class="modal-content">' +
+      '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h3 style="margin:0;"></h3></div>' +
+      '<div class="modal-body">' +
+        '<iframe id = "socialLinkId"></iframe>' +
+      '</div>' +
+    '</div></div></div>');
+
+  return {
+    /**
+     * Opens our dialog
+     * @param message Custom message
+     * @param options Custom options:
+     *          options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
+     *          options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
+     */
+    show: function (message, options) {
+      //add modal to bootstrap-iso class div because we use bootstrap with parent .bootstrap-iso class
+      $('div.bootstrap-iso').append($dialog);
+      // Assigning defaults
+      var settings = $.extend({
+        dialogSize: 'm',
+        progressType: ''
+      }, options);
+      if (typeof message === 'undefined') {
+        message = 'Loading';
+      }
+      if (typeof options === 'undefined') {
+        options = {};
+      }
+      // Configuring dialog
+      $dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
+      $dialog.find('.progress-bar').attr('class', 'progress-bar');
+      if (settings.progressType) {
+        $dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
+      }
+      $dialog.find('h3').text(message);
+      // Opening dialog
+      $dialog.modal();
+    },
+    /**
+     * Closes dialog
+     */
+    hide: function () {
+      $dialog.modal('hide');
+    }
+  }
+
+})(jQuery);
+
+
+
+
 function showDialog(page){
   //close main popup
   jQuery("#morsel-login-content").dialog("close");
@@ -169,17 +227,17 @@ function showDialog(page){
            .dialog({
                autoOpen: false,
                modal: true,
-               width: "90%",
-               height : 500,
+               bgiframe:true,
+               height : 480,
                title: "Connect to social",
                open: function(event, ui) {
                 jQuery(this).closest('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
                },
-               buttons: [
+               button: [
                 {
                   text: "Close",
                   click: function() {
-                    jQuery( this ).dialog( "close" );
+                  jQuery( this ).dialog( "close" );
                   }
                 }
               ]
