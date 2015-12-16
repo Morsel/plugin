@@ -208,7 +208,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
 
   function openDialog()
   {
-    var frameSrc = 'http://localhost:5000/auth/loginifrm?id=<?php echo $user_id ?>&token=<?php echo $token ?>';
+    var frameSrc = 'http://dev.eatmorsel.com/auth/loginifrm?id=<?php echo $user_id ?>&token=<?php echo $token ?>';
     showDialog(frameSrc);
   }
 
