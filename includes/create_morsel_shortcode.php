@@ -38,7 +38,7 @@ function create_morsel() {
 if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_obj']))){
     ?>
     <div class='row'>
-      <div class='col-md-6'>You must be sign/login before create a morsel, click here for <a data-toggle='modal' data-target='#morselLoginModal' id='open-morsel-login1' class='btn btn-danger btn-xs clickeventon'>SignUp/Login</a></div>
+      <div class='col-md-6'>You must be sign/login before create a morsel, click here for <a id='open-morsel-login1' class='open-morsel-login btn btn-danger btn-xs clickeventon'>SignUp/Login</a></div>
     </div>
 <?php
     } else { //user is logged in
@@ -84,12 +84,12 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
                   <div id="items-body" class="container-fluid"></div>
                 </div>
               </div> <!-- End div.morsel-item-list-area col-md-12 col-sm-12 -->
-              <div class="col-md-12 col-sm-12 mrsl-top-border">
+              <div class="morsel-action-btn-area col-md-12 col-sm-12 mrsl-top-border">
                 <a id="submit-mrsl-btn" class="btn btn-success" onclick="submitMorsel()" disabled="">Submit Morsel</a>
                 <a id="create-mrsl-btn" class="btn btn-default" style="display:none;" onclick="createNewMorsel()">Create New Morsel</a>
-                <img class="center-block" src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderAddItem" style="display:none;"/>
                 <a class="btn btn-default" onclick="addItemMorsel();"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Add Item</a>
                 <a class="btn btn-info" style="margin-right:5px;" onclick="openDialog();"><i class="glyphicon glyphicon-share"></i>&nbsp;Connect to social</a>
+                <img class="center-block clearfix" src="<?php echo MORSEL_PLUGIN_WIDGET_ASSEST;?>/images/loader.gif" id="smallAjaxLoaderAddItem" style="display:none;"/>
               </div>
         </div> <!-- End div.row -->
       </div> <!-- End div.form-table MorselEdit -->
@@ -110,7 +110,6 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div> -->
       </div>
-
     </div>
   </div>
 </div> <!-- End editMorsels morsel-iso bootstrap-iso -->
@@ -139,6 +138,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
           template_id : "1"
         },
         beforeSend: function(xhr) {
+          console.log("mrsl_call_pre_api start");
           waitingDialog.show('Please wait while loading...');
         },
         success: function(response) {
@@ -152,8 +152,9 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
             new_born_item = new addItemMorsel("1",true);
             console.log("new_born_item: ",new_born_item);
           }
-        },error:function(){waitingDialog.hide();},
+        },error:function(){/*waitingDialog.hide();*/},
         complete:function(){
+          //console.log("mrsl_call_pre_api complete");
           waitingDialog.hide();
         }
     });
@@ -169,6 +170,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
           api_key : "<?php echo $api_key;?>"
         },
         beforeSend: function(xhr) {
+          console.log("mrsl_call_get_api start");
           waitingDialog.show('Please wait while loading...');
         },
         success: function(response) {
@@ -211,8 +213,9 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
             });
 
           }
-        },error:function(){waitingDialog.hide();},
+        },error:function(){/*waitingDialog.hide();*/},
         complete:function(){
+          console.log("mrsl_call_get_api complete");
           waitingDialog.hide();
         }
     });
@@ -271,6 +274,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
           url : "<?php echo MORSEL_API_MORSELS_URL;?>"+morselGlobal+'.json',
           type : "PUT",
           beforeSend: function(xhr) {
+            console.log("submitMorsel start");
             waitingDialog.show('Please wait, we are processing your request...');
           },
           data : {
@@ -310,6 +314,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
             console.log("Your morsel isn't successfully submitted when set is_submit to true.");
           },
           complete:function(){
+            console.log("submitMorsel complete");
             waitingDialog.hide();
           }
       });
@@ -363,6 +368,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
           api_key:"<?php echo $api_key;?>"
         },
         beforeSend: function(xhr) {
+          console.log("editMorsel start");
           waitingDialog.show('Please wait while loading...');
         },
         success: function(response) {
@@ -389,8 +395,8 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
             var des = ((items[i].description == null) || (items[i].description == "") )?'<i>Please enter some description about item.</i>':items[i].description;
             var desText = (items[i].description == null)?'':items[i].description;
 
-            console.log("des:",des);
-            console.log("items[i].description:",items[i].description);
+            /*console.log("des:",des);
+            console.log("items[i].description:",items[i].description);*/
 
             html += '</div><div class="col-md-6 col-sm-6 item-description mrsl-item-part"><form action="submit.php" id="form'+items[i].id+'" onsubmit="saveItemDes('+items[i].id+');return false;"><span id="span'+items[i].id+'">'+des+'</span><textarea id="textareaItem'+items[i].id+'" name="nameTextareaItem'+items[i].id+'" class="widgEditor nothing editor" style="width:100%; display:none;">'+desText+'</textarea></form></div><div class="col-md-4 col-sm-4 column-title text-center mrsl-item-part"><a class="btn btn-success" id="saveButton'+items[i].id+'" style="display:none;" onClick = "formSubmitItem('+items[i].id+')"><i class="glyphicon glyphicon-ok"></i></a><a class="btn  btn-default" onClick = "editMorselItem('+items[i].id+')"  id="editButton'+items[i].id+'"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;<a onClick = "deleteMorselItem('+items[i].id+')" class ="btn btn-danger " ><i class="glyphicon glyphicon-trash"></i></a></div></form></div>';
             jQuery("#items-body").append(html);
@@ -398,6 +404,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
           //jQuery(".editMorsels").css("display","block");
         },error:function(){},
         complete:function(){
+          console.log("editMorsel complete");
           waitingDialog.hide();
         }
       });
@@ -576,8 +583,9 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
       url:"<?php echo MORSEL_API_URL;?>"+"items.json",
       type:"POST",
       beforeSend: function(response) {
-         //jQuery("#smallAjaxLoaderAddItem").css("display","block");
-         waitingDialog.show('Please wait while loading...');
+         jQuery("#smallAjaxLoaderAddItem").css("display","block");
+         console.log("new item added.start")
+         //waitingDialog.show('Please wait while loading...');
       },
       data:userData,
       success: function(response) {
@@ -605,8 +613,9 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
         console.log("Error: some error appears in add item")
       },
       complete:function(){
-        //jQuery("#smallAjaxLoaderAddItem").css("display","none");
-        waitingDialog.hide();
+        jQuery("#smallAjaxLoaderAddItem").css("display","none");
+        console.log("new item added. complete")
+        //waitingDialog.hide();
       }
     });
     return new_item;
@@ -660,6 +669,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
         item : {"description": jQuery("#textareaItem"+itemID).val() }
       },
       beforeSend:function(){
+        console.log("saveItemDes start");
         waitingDialog.show('Please wait while loading...');
       },
       success: function(response) {
@@ -673,6 +683,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
         // jQuery("#smallAjaxLoaderAddItem").css("display","none");
       },error:function(){},
       complete:function(){
+        console.log("saveItemDes complete");
         waitingDialog.hide();
       }
     });
@@ -685,6 +696,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
       type:"DELETE",
       data:{ api_key : "<?php echo $api_key?>" },
       beforeSend:function(){
+        console.log("deleteMorselItem start");
         waitingDialog.show('Please wait while loading...');
       },
       success: function(response) {
@@ -693,7 +705,8 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
         jQuery("#smallAjaxLoaderAddItem").css("display","none");
       },error:function(){},
       complete:function(){
-         waitingDialog.hide();
+        console.log("deleteMorselItem complete");
+        waitingDialog.hide();
       }
     });
   }
@@ -712,14 +725,14 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
   }
 
   jQuery(".add_ItemMorsel").click(function(event) {
-      jQuery(this).parents('.form-table').remove();
+    jQuery(this).parents('.form-table').remove();
   });
 </script>
 
 <?php
   } //else end
   //include authentication
-  require_once(MORSEL_PLUGIN_URL_PATH. 'includes/authentication.php');
+  //require_once(MORSEL_PLUGIN_URL_PATH. 'includes/authentication.php');
 } //function end create_morsel
 add_shortcode('create_morsel', 'create_morsel');
 

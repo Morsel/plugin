@@ -154,9 +154,10 @@
 <script type="text/javascript">
   jQuery(function ($) {
 
-    jQuery( "#open-morsel-login1" ).click(function() {
+    jQuery(".open-morsel-login").click(function() {
       jQuery('#notMyAccount').hide();
       jQuery('#dontHaveAccount').show();
+      jQuery("#morselLoginModal").modal('show');
     });
 
     jQuery( "#show-mrsl-login-btn" ).click(function() {
@@ -235,10 +236,7 @@
                 jQuery('#dontHaveAccount').hide();
                 jQuery('#notMyAccount').show();
                 jQuery('#mrsl-login-section').show();
-                //dontHaveAccount//notMyAccount
-                //mrsl-signup-section
-                //mrsl-login-section
-                // mrsl-login
+
               } else {
 
               var err = response.responseJSON.errors;

@@ -1351,4 +1351,16 @@
     margin-top: 15px;
   }
 }
+@media(max-width:460px){
+  .morsel-action-btn-area a.btn{
+    width: 100%;
+    max-width: 200px;
+    display: inline-block;
+    margin: 5px auto;
+  }
+  .morsel-action-btn-area{
+    text-align: center;
+  }
+}
 /*End Media Queries*/
+

@@ -85,7 +85,7 @@ jQuery(function($) {
             }
         });
       } else {
-        jQuery("#open-morsel-login1").trigger('click');
+        jQuery(".open-morsel-login").trigger('click');
         return;
       }
   });
