@@ -31,7 +31,6 @@ if ( ! defined( 'WPINC' ) ) {
 define('MORSEL_PLUGIN_URL_PATH', plugin_dir_path( __FILE__ ) );
 define('MORSEL_PLUGIN_IMG_PATH', plugin_dir_url( __FILE__ ).'img/' );
 define('MORSEL_PLUGIN_PATH', plugin_dir_url( __FILE__ ));
-//define('MORSEL_PLUGIN_CKEDITOR_PATH', plugin_dir_url( __FILE__ ).'ckeditor/');
 define('MORSEL_PLUGIN_WIDGET_ASSEST', plugin_dir_url( __FILE__ ).'widget_assests/' );
 define('MORSEL_PLUGIN_ADMIN_ASSEST', plugin_dir_url( __FILE__ ).'admin/assets/' );
 
@@ -482,4 +481,33 @@ function add_morsel_signup_login() {
   echo "<div class='morsel-iso bootstrap-iso'>";
   require_once(MORSEL_PLUGIN_URL_PATH.'includes/authentication.php');
   echo "</div>";
+}
+
+/**
+ * if we got error in signup & login than add filter in content.
+ */
+add_filter( 'the_content', 'add_signup_login_error_msg', 20 );
+function add_signup_login_error_msg( $content ) {
+
+  $error_html = "";
+  if(!is_page( get_option("morsel_plugin_page_id") ) && isset($_SESSION['morsel_error']) || isset($_SESSION['host_morsel_errors']) ) {
+
+    $error_html .= "<div class='mrsl-message-wrapper morsel-iso bootstrap-iso'>";
+    if(isset($_SESSION['morsel_error'])) {
+      unset($_SESSION['morsel_error']);
+      $error_html .= '<div class="alert alert-danger text-center" role="alert">Sorry your userid/email or password not matched, please try again.</div>';
+    }
+    if(isset($_SESSION['host_morsel_errors'])) {
+      $errors = $_SESSION['host_morsel_errors'];
+      unset($_SESSION['host_morsel_errors']);
+      foreach($errors as $error) {
+        $error_html .= '<div class="alert alert-danger text-center" role="alert">'.$error.'</div>';
+      }
+    }
+    $error_html .= "</div>";
+  }
+
+  $content = sprintf('%s%s',$error_html,$content);
+  // Returns the content.
+  return $content;
 }

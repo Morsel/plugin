@@ -283,16 +283,16 @@ function morsel_post_des(){
       <div>
         <div class="modal-morsel-full-slide " >
             <div class="morsel-full">
-              <?php if(isset($_SESSION['morsel_error'])) { unset($_SESSION['morsel_error']);?>
-                <div class="alert alert-danger text-center" role="alert">Sorry your userid/email or password not matched, please try again.</div>
-              <?php }?>
-              <?php if(isset($_SESSION['host_morsel_errors'])) {
+            <?php if(isset($_SESSION['morsel_error'])) { unset($_SESSION['morsel_error']);?>
+                 <div class="alert alert-danger text-center" role="alert">Sorry your userid/email or password not matched, please try again.</div>
+            <?php } ?>
+            <?php if(isset($_SESSION['host_morsel_errors'])) {
                       $errors = $_SESSION['host_morsel_errors'];
                       unset($_SESSION['host_morsel_errors']);
                       foreach($errors as $error) { ?>
                         <div class="alert alert-danger text-center" role="alert"><?php echo $error;?></div>
-                <?php }
-                    }?>
+            <?php }
+                }?>
               <?php if(!isset($morsel_detail)) { ?>
                 <!-- morsel exist -->
                   <div class="morsel-mobile-info alert-danger">
