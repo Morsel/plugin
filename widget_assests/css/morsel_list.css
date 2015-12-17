@@ -1310,10 +1310,15 @@
 .morsel-iso .mrsl-top-border {
   border-top: 1px solid #ccc;
   margin-top: 10px;
+  margin-bottom: 10px;
   padding: 5px;
 }
-
 /*end create item details shortcode css*/
+.mrsl-message-wrapper.morsel-iso.bootstrap-iso {
+  clear: both;
+  display: block;
+  margin: 5px auto;
+}
 /*Some css from bootstrap-iso*/
 .modal-open {
   overflow: hidden;
