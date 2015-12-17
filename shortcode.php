@@ -235,6 +235,12 @@ function morsel_post_des(){
 
   // get all users whome are associate with host admin
   $options = get_option( 'morsel_settings');
+
+  //add other settings also
+  if(get_option('morsel_other_settings')){
+    $options = array_merge($options,get_option('morsel_other_settings'));
+  }
+
   $jsonurl = MORSEL_API_USER_URL.$options['userid']."/association_requests.json?api_key=".$options['userid'].':'.$options['key'];
   $associate_users = json_decode(file_get_contents($jsonurl));
   if(count($associate_users->data)==0){
@@ -306,16 +312,21 @@ function morsel_post_des(){
                   ?>
                   <h2 bo-text="morsel.title" class="morsel-title"><?php echo $morsel_detail->title;?>
                     <span>
-                    <?php if(!empty($_SESSION['morsel_login_userid'])){?>
+
+                    <?php //check if hide_login_settings are enabled or not.
+                      if((!$options["hide_login_btn"]) && ($options["hide_login_btn"] != 1 )) {
+                        if(!empty($_SESSION['morsel_login_userid'])){?>
                       <a href="<?php echo site_url()?>/index.php?pagename=morsel_logout" class="btn btn-danger btn-xs">Logout</a>
                     <!-- Iframe Code -->
                      <!--  <a class="btn btn-danger btn-xs fancybox fancybox.iframe" href="https://www.eatmorsel.com/">Open fancybox iframe with links</a>
                       -->
+
                       <?php if($is_associated) { ?>
-                      <a id="create-morsel-btn-1" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#website-iframe-modal" href="#">Create Morsel</a>
-                      <?php }else {?>
-                      <a id="create-morsel-btn" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#associat-request-modal" href="#<?php // echo MORSEL_PLUGIN_IFRAME_PATH ?>">Create Morsel</a>
+                      <!-- <a id="create-morsel-btn-1" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#website-iframe-modal" href="#">Create Morsel</a> -->
+                      <?php } else {?>
+                      <!-- <a id="create-morsel-btn" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#associat-request-modal" href="#<?php // echo MORSEL_PLUGIN_IFRAME_PATH ?>">Create Morsel</a> -->
                       <?php } ?>
+
                       <!-- prateek code -->
                      <!-- <a id="create-morsel-btn" class="btn btn-danger btn-xs fancybox fancybox.iframe" href="<?php echo MORSEL_PLUGIN_IFRAME_PATH ?>">Create Morsel</a>
 
@@ -343,9 +354,11 @@ function morsel_post_des(){
                       }); // ready
                       </script>-->
                     <!-- Iframe Code -->
-                    <?php } else {?>
-                      <a data-toggle="modal" data-target="#morselLoginModal" id="open-morsel-login1" class="btn btn-danger btn-xs clickeventon">SignUp/Login</a>
-                    <?php } ?>
+                    <?php } else { ?>
+                          <a id="open-morsel-login1" class="open-morsel-login btn btn-danger btn-xs clickeventon">SignUp/Login</a>
+                    <?php }
+                      }
+                    ?>
                     </span>
                   </h2>
                   <div class="user ">
@@ -478,7 +491,7 @@ function morsel_post_des(){
   <!-- Login Modal
   <div id="morsel-login-content" title="Morsel Login" style="display:none;"> -->
 
-  <div class="modal fade" id="morselLoginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <!-- <div class="modal fade" id="morselLoginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -487,12 +500,6 @@ function morsel_post_des(){
            <h4 class="modal-title" id="myModalLabel"></h4>
         </div>
         <div class="modal-body">
-          <!-- <div class="login">
-            <div class="login-header">
-              <h1 class="text-hide"><a href="/" target="_self" class="morsel-text">Morsel</a></h1>
-            </div>
-          </div> -->
-          <!-- Sign Up div-->
           <div class="main-view" >
               <div id="mrsl-signup-section">
                 <div class="container-fluid join-page">
@@ -504,9 +511,6 @@ function morsel_post_des(){
                       <div ui-view="basicInfo" class="">
                         <form novalidate="" class="padded-form" method="post" name="basicInfoForm" id="mrsl-signup-form" enctype="multipart/form-data">
                           <div class="row">
-                            <!-- <div class="col-md-10 col-md-offset-1">
-                              <div class="alert alert-danger"></div>
-                            </div> -->
                           </div>
                           <div class="row">
                             <div class="col-sm-5 col-md-4 col-md-offset-1">
@@ -582,10 +586,8 @@ function morsel_post_des(){
                       <div ui-view="additionalInfo" class=""></div>
                     </div>
                   </div>
-                 <!--  <a class="join-bg" target="_blank" href="https://www.eatmorsel.com/rypfeiffer54/1215-butternut-squash"><i>Butternut Squash</i> by Ryan Pfeiffer</a> -->
                 </div>
-              </div> <!-- #mrsl-signup-section -->
-              <!-- login div-->
+              </div>
               <div id="mrsl-login-section" style="display:none">
                 <div class="container-fluid login-page">
                     <h1 class="text-center">Log In to <?php echo ucwords($blog_title = get_bloginfo('name')); ?></h1>
@@ -610,51 +612,32 @@ function morsel_post_des(){
                             <div class="text-center"><a class="open-site-link" data-toggle="modal" data-src="https://www.eatmorsel.com/auth/password-reset" data-height=500 data-width=100% data-target="#forgetPasswordModal" >Forgot your password?</a></div>
                             <div class="have-an-account text-center"><span id="dontHaveAccount">Don't have an account?</span><span id="notMyAccount" style="display:none;">That is not my username and email.</span> <a target="_blank" href="#">Sign up here.</a></div>
                           </div>
-                        </div> <!-- End row class -->
+                        </div>
                         <input type="hidden" name="pagename" value="morsel_user_login">
                       </form>
                   </div>
-              </div> <!-- #mrsl-login-section -->
+              </div>
           </div>
           <div class="powered-by-morsel">
             <a target="_blank" href="http://www.eatmorsel.com/">Powered by Morsel</a>
           </div>
         </div>
-        <!-- <div class="modal-footer">
-          <footer class="login-footer">
-            <div class="container">
-              <div class="footer-inner">&copy; Morsel Labs, Inc. 2014</div>
-            </div>
-          </footer>
-        </div> -->
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- </div>  End # morsel-login-content -->
   <!-- forget password  -->
-  <div class="modal fade" id="forgetPasswordModal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
+  <!-- <div class="modal fade" id="forgetPasswordModal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-body">
                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
               <iframe frameborder="0"></iframe>
             </div>
-        </div><!-- /.modal-content -->
-     </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
+        </div>
+     </div>
+  </div> -->
   <!-- end forget password  -->
-  <!-- Open Iframe website modal  -->
-  <div class="modal fade" id="website-iframe-modal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel modal-lg" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-         <div class="modal-content">
-            <div class="modal-body">
-               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <iframe frameborder="0"></iframe>
-            </div>
-        </div><!-- /.modal-content -->
-     </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-  <!-- end Iframe website modal  -->
   <!-- End Login Modal -->
   <!-- Embed Code Modal-->
   <div class="modal fade" id="morsel-embed-modal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
@@ -759,7 +742,8 @@ function morsel_post_des(){
   <!-- End After like modal  -->
   <script type="text/javascript">
   jQuery(function ($) {
-    jQuery( "#open-morsel-login1" ).click(function() {
+    //available in includes/autheitication.php
+    /*jQuery( ".open-morsel-login" ).click(function() {
         jQuery('#notMyAccount').hide();
         jQuery('#dontHaveAccount').show();
     });
@@ -767,12 +751,125 @@ function morsel_post_des(){
         jQuery('#notMyAccount').hide();
         jQuery('#dontHaveAccount').show();
     });
+    jQuery("#mrsl-signup-submit-btn").click(function(event){
+
+        event.preventDefault();
+        var signupForm = jQuery("#mrsl-signup-form");
+
+        console.log("photo file ",document.getElementById("mrsl_user_photo").files[0]);
+
+        var fd = new FormData();
+        fd.append("user[email]",jQuery( "#mrsl_user_email" ).val());
+        fd.append("user[password]",jQuery( "#mrsl_user_password" ).val());
+        fd.append("user[username]",jQuery( "#mrsl_user_username" ).val());
+        fd.append("user[first_name]",jQuery( "#mrsl_user_first_name" ).val());
+        fd.append("user[last_name]",jQuery( "#mrsl_user_last_name" ).val());
+
+        if(document.getElementById("mrsl_user_photo").files[0]){
+          fd.append("user[photo]",document.getElementById("mrsl_user_photo").files[0]);
+        }
+
+        fd.append("user[professional]",jQuery( "#mrsl_user_professional" ).val());
+
+        jQuery.ajax({
+          url: "<?php echo MORSEL_API_URL.'users.json';?>",
+          data : fd,
+          type:'POST',
+          contentType: false,
+          cache: false,
+          processData:false,
+          beforeSend: function(xhr){
+              jQuery('#morsel-progress').show();
+              jQuery("#mrsl-signup-submit-btn").hide();
+              xhr.setRequestHeader('host-site',"<?php echo get_site_url(); ?>");
+              xhr.setRequestHeader('host-site',"<?php echo get_site_url(); ?>");
+              xhr.setRequestHeader('share-by',"morsel-plugin")
+              xhr.setRequestHeader('activity','sign-up');
+              xhr.setRequestHeader('morsel-id',"<?php echo $_REQUEST['morselid'];?>");
+              xhr.setRequestHeader('user-id',"0");
+          },
+          complete: function(){
+              //jQuery("#morselLoginModal").modal('show');
+              //waitingDialog.hide();
+              jQuery('#morsel-progress').hide();
+              jQuery("#mrsl-signup-submit-btn").show();
+          },
+          success: function(response){
+
+            if(response.meta.status == 200){
+
+              //set for host login
+              jQuery("#mrsl-login").val(response.data.username);
+              jQuery("#mrsl-password").val(jQuery("#mrsl_user_password").val());
+              jQuery("#morsel-front-login-form").submit();
+
+            } else {
+              alert("Opps Something wrong happend!");
+              return false;
+            }
+          },
+          error:function(response){
+              console.log("Error response :: ",response);
+              console.log("Error response for Email:: ",response.responseJSON.errors.email[0]);         //
+              if( response.responseJSON.errors.email[0] === "has already been taken"){
+                var signUpEmail = jQuery( "#mrsl_user_email" ).val();
+                alert("Looks like you already have an account, please log in.");
+                jQuery("#show-mrsl-login-btn").text('SignUp');
+                jQuery('#mrsl-signup-form')[0].reset();
+                jQuery('#mrsl-signup-section').hide();
+                jQuery( "#mrsl-login" ).val(signUpEmail);
+                jQuery('#dontHaveAccount').hide();
+                jQuery('#notMyAccount').show();
+                jQuery('#mrsl-login-section').show();
+                //dontHaveAccount//notMyAccount
+                //mrsl-signup-section
+                //mrsl-login-section
+                // mrsl-login
+              } else {
+
+              var err = response.responseJSON.errors;
+
+              if(err.first_name){
+                  jQuery("#mrsl_user_first_name").parent(".form-group").append('<label for="mrsl_user_first_name" class="error" style="display: inline-block;">First Name '+err.first_name[0]+'</label>');
+                  jQuery("#mrsl_user_first_name").parent(".form-group").addClass("has-error");
+                }
+
+                if(err.last_name){
+                  jQuery("#mrsl_user_last_name").parent(".form-group").append('<label for="mrsl_user_last_name" class="error" style="display: inline-block;">Last Name '+err.last_name[0]+'</label>');
+                  jQuery("#mrsl_user_last_name").parent(".form-group").addClass("has-error")
+                }
+
+                if(err.photo){
+                  jQuery("#mrsl-signup-error-box").html("Photo "+err.photo[0]);
+                  jQuery("#mrsl-signup-error-box").show();
+                }
+
+                if(err.username){
+                  jQuery("#mrsl_user_username").parent(".form-group").append('<label for="mrsl_user_username" class="error" style="display: inline-block;">Username '+err.username[0]+'</label>');
+                  jQuery("#mrsl_user_username").parent(".form-group").addClass("has-error");
+                }
+
+                if(err.password){
+                  jQuery("#mrsl_user_password").parent(".form-group").append('<label for="mrsl_user_password" class="error" style="display: inline-block;">Password '+err.password[0]+'</label>');
+                  jQuery("#mrsl_user_password").parent(".form-group").addClass("has-error");
+                }
+
+                if(err.email){
+                  jQuery("#mrsl_user_email").parent(".form-group").append('<label for="mrsl_user_email" class="error" style="display: inline-block;">Email '+err.email[0]+'</label>');
+                  jQuery("#mrsl_user_email").parent(".form-group").addClass("has-error");
+                }
+              }
+            }
+        });
+    });*/
+    //end available in includes/autheitication.php
+
     /*add subscription for other morsel like this*/
     $("#morsel-subscribe").click(function(event){
       event.preventDefault();
       var sessionUserId =  "<?php echo $_SESSION['morsel_user_obj']->id;?>"
       if(sessionUserId == ''){
-        jQuery("#open-morsel-login1").trigger('click');
+        jQuery(".open-morsel-login").trigger('click');
         return;
       }
 
@@ -830,7 +927,7 @@ function morsel_post_des(){
       var creatorId = "<?php echo $_SESSION['morsel_user_obj']->id;?>";
       if(creatorId == ''){
         jQuery("#morsel-comment-modal").modal('hide');
-        jQuery("#open-morsel-login1").trigger('click');
+        jQuery(".open-morsel-login").trigger('click');
         return;
       }
       var morselSite = "<?php echo MORSEL_SITE;?>";
@@ -891,7 +988,7 @@ function morsel_post_des(){
 
       /*var sessionUserId =  "<?php echo $_SESSION['morsel_user_obj']->id;?>"
       if(sessionUserId == ''){
-        jQuery("#open-morsel-login1").trigger('click');
+        jQuery(".open-morsel-login").trigger('click');
         return;
       }*/
 
@@ -1012,7 +1109,7 @@ function morsel_post_des(){
 
       var sessionUserId =  "<?php echo $_SESSION['morsel_user_obj']->id;?>";
       if(sessionUserId == ''){
-        jQuery("#open-morsel-login1").trigger('click');
+        jQuery(".open-morsel-login").trigger('click');
         return;
       }
 
@@ -1073,120 +1170,6 @@ function morsel_post_des(){
               return false;
           }
       });
-    });
-
-    jQuery("#mrsl-signup-submit-btn").click(function(event){
-
-        event.preventDefault();
-        var signupForm = jQuery("#mrsl-signup-form");
-
-        console.log("photo file ",document.getElementById("mrsl_user_photo").files[0]);
-
-        var fd = new FormData();
-        fd.append("user[email]",jQuery( "#mrsl_user_email" ).val());
-        fd.append("user[password]",jQuery( "#mrsl_user_password" ).val());
-        fd.append("user[username]",jQuery( "#mrsl_user_username" ).val());
-        fd.append("user[first_name]",jQuery( "#mrsl_user_first_name" ).val());
-        fd.append("user[last_name]",jQuery( "#mrsl_user_last_name" ).val());
-
-        if(document.getElementById("mrsl_user_photo").files[0]){
-          fd.append("user[photo]",document.getElementById("mrsl_user_photo").files[0]);
-        }
-
-        fd.append("user[professional]",jQuery( "#mrsl_user_professional" ).val());
-
-        jQuery.ajax({
-          url: "<?php echo MORSEL_API_URL.'users.json';?>",
-          data : fd,
-          type:'POST',
-          contentType: false,
-          cache: false,
-          processData:false,
-          beforeSend: function(xhr){
-              /*jQuery("#morselLoginModal").modal('hide');
-              waitingDialog.show('Your request is processing, please wait.');*/
-              jQuery('#morsel-progress').show();
-              jQuery("#mrsl-signup-submit-btn").hide();
-              xhr.setRequestHeader('host-site',"<?php echo get_site_url(); ?>");
-              xhr.setRequestHeader('host-site',"<?php echo get_site_url(); ?>");
-              xhr.setRequestHeader('share-by',"morsel-plugin")
-              xhr.setRequestHeader('activity','sign-up');
-              xhr.setRequestHeader('morsel-id',"<?php echo $_REQUEST['morselid'];?>");
-              xhr.setRequestHeader('user-id',"0");
-          },
-          complete: function(){
-              //jQuery("#morselLoginModal").modal('show');
-              //waitingDialog.hide();
-              jQuery('#morsel-progress').hide();
-              jQuery("#mrsl-signup-submit-btn").show();
-          },
-          success: function(response){
-
-            if(response.meta.status == 200){
-
-              //set for host login
-              jQuery("#mrsl-login").val(response.data.username);
-              jQuery("#mrsl-password").val(jQuery("#mrsl_user_password").val());
-              jQuery("#morsel-front-login-form").submit();
-
-            } else {
-              alert("Opps Something wrong happend!");
-              return false;
-            }
-          },
-          error:function(response){
-              console.log("Error response :: ",response);
-              console.log("Error response for Email:: ",response.responseJSON.errors.email[0]);         //
-              if( response.responseJSON.errors.email[0] === "has already been taken"){
-                var signUpEmail = jQuery( "#mrsl_user_email" ).val();
-                alert("Looks like you already have an account, please log in.");
-                jQuery("#show-mrsl-login-btn").text('SignUp');
-                jQuery('#mrsl-signup-form')[0].reset();
-                jQuery('#mrsl-signup-section').hide();
-                jQuery( "#mrsl-login" ).val(signUpEmail);
-                jQuery('#dontHaveAccount').hide();
-                jQuery('#notMyAccount').show();
-                jQuery('#mrsl-login-section').show();
-                //dontHaveAccount//notMyAccount
-                //mrsl-signup-section
-                //mrsl-login-section
-                // mrsl-login
-              } else {
-
-              var err = response.responseJSON.errors;
-
-              if(err.first_name){
-                  jQuery("#mrsl_user_first_name").parent(".form-group").append('<label for="mrsl_user_first_name" class="error" style="display: inline-block;">First Name '+err.first_name[0]+'</label>');
-                  jQuery("#mrsl_user_first_name").parent(".form-group").addClass("has-error");
-                }
-
-                if(err.last_name){
-                  jQuery("#mrsl_user_last_name").parent(".form-group").append('<label for="mrsl_user_last_name" class="error" style="display: inline-block;">Last Name '+err.last_name[0]+'</label>');
-                  jQuery("#mrsl_user_last_name").parent(".form-group").addClass("has-error")
-                }
-
-                if(err.photo){
-                  jQuery("#mrsl-signup-error-box").html("Photo "+err.photo[0]);
-                  jQuery("#mrsl-signup-error-box").show();
-                }
-
-                if(err.username){
-                  jQuery("#mrsl_user_username").parent(".form-group").append('<label for="mrsl_user_username" class="error" style="display: inline-block;">Username '+err.username[0]+'</label>');
-                  jQuery("#mrsl_user_username").parent(".form-group").addClass("has-error");
-                }
-
-                if(err.password){
-                  jQuery("#mrsl_user_password").parent(".form-group").append('<label for="mrsl_user_password" class="error" style="display: inline-block;">Password '+err.password[0]+'</label>');
-                  jQuery("#mrsl_user_password").parent(".form-group").addClass("has-error");
-                }
-
-                if(err.email){
-                  jQuery("#mrsl_user_email").parent(".form-group").append('<label for="mrsl_user_email" class="error" style="display: inline-block;">Email '+err.email[0]+'</label>');
-                  jQuery("#mrsl_user_email").parent(".form-group").addClass("has-error");
-                }
-              }
-            }
-        });
     });
   });
 </script>

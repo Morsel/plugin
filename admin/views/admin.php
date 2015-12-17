@@ -66,7 +66,6 @@
 			  <!-- Host Details Form -->
 			  <h2>Host Details </h2>
 			  <?php
-				//  delete_option('morsel_host_details');
 				// //set morsel host details info if they exists
 			 //   	if(get_option('morsel_host_details')){
 
@@ -80,7 +79,7 @@
 				        $jsonurl = MORSEL_API_USER_URL."/me.json?api_key=".$api_key;
 				        $json = get_json($jsonurl);
 					        if(isset($json->data->profile)){
-		                    	$hostCompany = $json->data->profile->company_name;
+		                $hostCompany = $json->data->profile->company_name;
 					      		$options = array_merge($options,array(
 					      					'profile_id'=>$json->data->profile->id,
 					      					// 'host_address'=>$json->data->profile->address,
@@ -126,7 +125,7 @@
 			  			<input type="text" style="width:50%; margin-top:5px" name="morsel_host_details[host_zip]" id="host_zip" value="<?php echo $options['host_zip'] ?>" placeholder="Zip"/>
 			  			</td>
 			  		</tr>
-					<tr valign="top">
+						<tr valign="top">
 			  			<td scope="row">&nbsp;</td>
 						<td>
 						<?php if(isset($ms_options['userid']) && $ms_options['userid'] > 0) {?>
@@ -138,6 +137,28 @@
 			  		</tr>
 				</table>
 			</form>
+
+		<!-- Other Settings Form -->
+		<h2>Other Settings</h2>
+		<!-- Show morsel login on morsel details page yes or no-->
+		<?php
+			if(get_option('morsel_other_settings')){
+				$options = array_merge($options,get_option('morsel_other_settings'));
+ 	    }
+		?>
+		<form method="post" action="options.php" id="morsel-show-login-btn-form" >
+			<?php
+				settings_fields( 'morsel_other_settings' );
+				do_settings_sections( 'morsel_other_settings' );
+			?>
+	   	<table class="form-table">
+	  		<tr valign="top">
+	  			<td scope="row" style="vertical-align:top;"><input type="checkbox" name="morsel_other_settings[hide_login_btn]" id="hide_login_btn" value="1" <?php checked( $options['hide_login_btn'], 1 ); ?> />&nbsp; Don't show morsel login button on a morsel detail page.</td>
+	  			<td></td>
+	  		</tr>
+				<tr valign="top"><td><?php submit_button("Save","primary","save",null,array( 'id' => 'morsel_show_login_submit' ) ); ?></td></tr>
+			</table>
+		</form>
 <script type="text/javascript">
 	(function($){
 		$("#morsel_host_submit_button").click(function(event){

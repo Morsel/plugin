@@ -3,11 +3,11 @@
 
   label {
       display: inline-block;
-      width  : 200px;        
+      width  : 200px;
   }
   label.error {
       display: inline-block;
-      width  : 100%;        
+      width  : 100%;
       color : red;
   }
   .wid-15{
@@ -23,7 +23,7 @@
   }
 	.side_l {
 		background: none repeat scroll 0 0 #f4e7ea;
-		position: relative; 
+		position: relative;
 		top: 0px;
 		margin-left:0px;
 		width: 20%;
@@ -56,12 +56,12 @@
    /* Front Widget Css */
     .morsel{
         padding: 0;
-        margin: auto;   
+        margin: auto;
         text-align: left;
         max-width: 320px;
         border: solid 1px #eee;
         font-family:Arial, Helvetica, sans-serif;
-        
+
     }
     .morsel,.morsel *{box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;-o-box-sizing:border-box;}
     .morsel ul{padding:0;margin:0;float:left;width:100%;border:1px solid #eee;}
@@ -73,7 +73,7 @@
     }
     .morsel .post-img img {/*border-radius: 3px;*/border: 3px solid #FFF;box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);-webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);-moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);-ms-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);-o-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);max-width:100%;border-radius: 50%;
     }
-    .morsel .post{width: 80%;float: left;padding-left:10px;padding-top: 5px;}        
+    .morsel .post{width: 80%;float: left;padding-left:10px;padding-top: 5px;}
     .morsel .post h3{margin:0;font-size:16px;margin-bottom:10px;}
 
     .morsel li p {font-size:12px;line-height:normal;}
@@ -81,7 +81,7 @@
           padding: 2px;
           overflow: auto;
         }
-         
+
      #morsel-wrapper li:hover {
           background: #eee;
           cursor: pointer;
@@ -91,10 +91,10 @@
     }
     #morsel-wrapper-thumbnail .morsel-row:hover{
         background: #eee;
-        cursor: pointer; 
+        cursor: pointer;
     }
      /*.nano {height: 280px; }*/
-       
+
 
      #morsel-wrapper{height: 266px;}
      .morsel-row{
@@ -126,3 +126,8 @@
 
 /*Footer position set*/
  #wpfooter { position: static !important; }
+ /*add remove icon for keywords of morsel*/
+.mrsl-remove-keyword.dashicons {
+  margin-left: 5px;
+  vertical-align: middle;
+}

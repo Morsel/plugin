@@ -35,7 +35,7 @@ define('MORSEL_PLUGIN_PATH', plugin_dir_url( __FILE__ ));
 define('MORSEL_PLUGIN_WIDGET_ASSEST', plugin_dir_url( __FILE__ ).'widget_assests/' );
 define('MORSEL_PLUGIN_ADMIN_ASSEST', plugin_dir_url( __FILE__ ).'admin/assets/' );
 
-@ini_set('display_errors', 0);
+@ini_set('display_errors', 1);
 // error_reporting(-1);
 
 //for switch to development env set this constant value "dev"
@@ -108,6 +108,7 @@ function register_my_setting() {
   register_setting('morsel_associated_user', 'morsel_associated_user');
 	register_setting('morsel_advanced_tab', 'morsel_advanced_tab');
   register_setting('morsel_settings_Preview', 'morsel_settings_Preview');
+  register_setting('morsel_other_settings', 'morsel_other_settings');
 }
 
 // add_action( 'admin_menu', 'register_my_setting' );
@@ -348,7 +349,7 @@ function morsel_query_vars( $query_vars ){
          foreach ($row->morsel_keywords as $tag_keyword)
           {
            ?>
-        <code style = "line-height: 2;"><?php echo $tag_keyword->name ?></code><br>
+        <code style = "line-height: 2;"><?php echo $tag_keyword->name ?><a href="#" id="keyword-<?php echo $tag_keyword->id ?>" class="dashicons dashicons-no mrsl-remove-keyword" onclick="removeKeyword(<?php echo $row->id ?>,<?php echo $tag_keyword->id ?>); return false;"></a></code><br>
 
         <?php } ?>
 
@@ -474,3 +475,11 @@ function themeblvd_redirect_admin(){
 }
 
 add_action( 'admin_init', 'themeblvd_redirect_admin' );
+
+// add login signup for whole site
+add_action('wp_footer', 'add_morsel_signup_login');
+function add_morsel_signup_login() {
+  echo "<div class='morsel-iso bootstrap-iso'>";
+  require_once(MORSEL_PLUGIN_URL_PATH.'includes/authentication.php');
+  echo "</div>";
+}

@@ -202,7 +202,7 @@ if(count($jsonPost->data)>0){?>
 				</td>
 				<td class="code-keyword categories column-categories">
 				   <?php foreach ($row->morsel_keywords as $tag_keyword){?>
-						<code style = "line-height: 2;"><?php echo $tag_keyword->name ?></code><br>
+						<code style = "line-height: 2;"><?php echo $tag_keyword->name ?><a href="#" id="keyword-<?php echo $tag_keyword->id ?>" class="dashicons dashicons-no mrsl-remove-keyword" onclick="removeKeyword(<?php echo $row->id ?>,<?php echo $tag_keyword->id ?>); return false;"></a></code><br>
 					<?php } ?>
 				</td>
 				<td>
@@ -276,6 +276,30 @@ if(count($jsonPost->data)>0){?>
 
 
 <script type="text/javascript">
+	/**
+	 * Remove keyword function from a morsel
+	 */
+	function removeKeyword(morsel_id,keyword_id){
+		jQuery.ajax({
+				url:"<?php echo MORSEL_API_URL?>"+"morsels/remove_morsel_keywords.json",
+				type:"DELETE",
+				data:{
+	    			morsel:{morsel_keyword_ids:[keyword_id] },
+						morsel_id:morsel_id,
+	    			api_key:"<?php echo $api_key ?>"
+	  		},
+				success: function(response) {
+					if(response.meta.status == "200" && response.meta.message == "OK"){
+						jQuery("#keyword-"+keyword_id).parent().hide()
+          }
+				},error:function(){
+					alert("Opps some thing wrong happen!");
+				},
+				complete:function(){}
+	    });
+		return false;
+	}
+
 	function get_morsel(morsel_id){
 	    jQuery.ajax({
 				url:"<?php echo MORSEL_API_URL?>"+"morsels/"+morsel_id,
@@ -386,7 +410,7 @@ if(count($jsonPost->data)>0){?>
 			url: "<?php echo MORSEL_API_URL.'morsels/update_keyword.json';?>",
 		    type:'post',
 		    data: {
-				morsel:{morsel_keyword_ids:selected_keywords},
+				morsel:{morsel_keyword_ids:[selected_keywords]},
 				morsel_id:morsel_id,
 				user_id:"<?php echo $options['userid']; ?>",
 				api_key:"<?php echo $api_key ?>"
@@ -397,7 +421,7 @@ if(count($jsonPost->data)>0){?>
 					jQuery('#select_keyword_id option:selected').each(function(){
 					    if(jQuery(this).attr('selected') == 'selected') {
 					        var name = jQuery(this).text();
-					        stringhtml += "<code style='line-height: 2;'>"+name+"</code><br>"
+					        stringhtml += "<code style='line-height: 2;'>"+name+"<a href='#' id='keyword-"+selected_keywords+"' class='dashicons dashicons-no mrsl-remove-keyword' onclick='removeKeyword("+morsel_id+","+selected_keywords+"); return false;'></a></code><br>";
 		    		    }
 				    })
 					jQuery("#morsel_post-"+morsel_id+" .code-keyword").html(stringhtml);
