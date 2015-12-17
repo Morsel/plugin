@@ -20,19 +20,6 @@ function create_morsel() {
   <input type= "hidden" id="is_morsel_title_saved"/>
   <div class="editMorsels morsel-iso bootstrap-iso">
     <div class="container-fluid">
-    <!-- show error fo login -->
-  <?php if(isset($_SESSION['morsel_error'])) { unset($_SESSION['morsel_error']);?>
-      <div class="alert alert-danger text-center" role="alert">Sorry your userid/email or password not matched, please try again.</div>
-    <?php }?>
-    <?php if(isset($_SESSION['host_morsel_errors'])) {
-            $errors = $_SESSION['host_morsel_errors'];
-            unset($_SESSION['host_morsel_errors']);
-            foreach($errors as $error) { ?>
-              <div class="alert alert-danger text-center" role="alert"><?php echo $error;?></div>
-    <?php   }
-        }?>
-    <!-- End show error fo login -->
-
 <?php
 /*checked eatmorsel user isn't logged in*/
 if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_obj']))){

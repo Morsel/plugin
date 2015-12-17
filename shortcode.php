@@ -291,8 +291,8 @@ function morsel_post_des(){
                       unset($_SESSION['host_morsel_errors']);
                       foreach($errors as $error) { ?>
                         <div class="alert alert-danger text-center" role="alert"><?php echo $error;?></div>
-            <?php }
-                }?>
+                <?php }
+                  }?>
               <?php if(!isset($morsel_detail)) { ?>
                 <!-- morsel exist -->
                   <div class="morsel-mobile-info alert-danger">
