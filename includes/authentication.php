@@ -10,6 +10,7 @@
       <div class="modal-body">
         <!-- Sign Up div-->
         <div class="main-view" >
+        <div id="login-messages" class="center-block"></div>
           <div id="mrsl-signup-section">
             <div class="container-fluid join-page">
               <div class="row">
@@ -82,9 +83,9 @@
                             </div>
                             <p class="help-block"></p>
                           </div>
-                        <div id="morsel-progress" class="progress" style="display:none;">
-                          <div style="width:100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="100%" role="progressbar" class="progress-bar progress-bar-striped active">Your request is processing, please wait.</div>
-                        </div>
+                          <!-- <div id="morsel-progress" class="progress" style="display:none;">
+                            <div style="width:100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="100%" role="progressbar" class="progress-bar progress-bar-striped active">Your request is processing, please wait.</div>
+                          </div> -->
                           <div class="form-group clearfix">
                             <span id="mrsl-signup-submit-btn-span" data-original-title="Please complete all required fields" data-toggle="tooltip" data-placement="top" class="btn-submit-wrap btn-submit-block disabled">
                               <button id="mrsl-signup-submit-btn" class="btn btn-primary btn-lg" type="submit">Sign Up</button>
@@ -127,10 +128,14 @@
                         <div class="have-an-account text-center"><span id="dontHaveAccount">Don't have an account?</span><span id="notMyAccount" style="display:none;">That is not my username and email.</span> <a target="_blank" href="#">Sign up here.</a></div>
                       </div>
                     </div> <!-- End row class -->
-                    <input type="hidden" name="pagename" value="morsel_user_login">
+                    <!-- <input type="hidden" name="pagename" value="morsel_user_login"> -->
+                    <input type="hidden" name="pagename" value="morsel_ajax_user_login">
                   </form>
               </div>
           </div> <!-- #mrsl-login-section -->
+          <div id="morsel-progress" class="progress" style="display:none;">
+            <div style="width:100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="100%" role="progressbar" class="progress-bar progress-bar-striped active">Your request is processing, please wait.</div>
+          </div>
         </div>
         <div class="powered-by-morsel">
           <a target="_blank" href="http://www.eatmorsel.com/">Powered by Morsel</a>
@@ -154,7 +159,47 @@
 <script type="text/javascript">
   jQuery(function ($) {
 
-    jQuery(".open-morsel-login").click(function() {
+    //login btn calling mrsl login by ajax in morsel.p
+    $("#mrsl-submit-btn").click(function(event) {
+      event.preventDefault();
+
+      jQuery.ajax({
+          url: "<?php echo site_url()?>" + "/index.php",
+          data : $("#morsel-front-login-form").serialize(),
+          type : 'POST',
+          async : false,
+          beforeSend: function(xhr){
+            jQuery('#morsel-progress').show();
+            $("#login-messages").html("");
+          },
+          complete: function(){
+            jQuery('#morsel-progress').hide();
+          },
+          success: function(response){
+            console.log("response get in login time",response);
+            response = JSON.parse(response);
+            console.log("after JSON.parse response get in login time",response);
+
+            for (var i=0; i < response.msg.length; i++ ) {
+              console.log("msg object in loop",response.msg[i]);
+              if(response.status){
+                $("#login-messages").append('<div class="alert alert-success text-center" role="alert">'+response.msg[i]+'</div>');
+              } else {
+                $("#login-messages").append('<div class="alert alert-danger text-center" role="alert">'+response.msg[i]+'</div>');
+              }
+            }
+
+            if(response.status){
+              setTimeout(function(){ location.reload(); }, 1000);
+            }
+          },
+          error:function(response){ alert("Opps something wrong happend!"); }
+        });
+      return false;
+    });
+
+    jQuery(".open-morsel-login").click(function(event) {
+      event.preventDefault();
       jQuery('#notMyAccount').hide();
       jQuery('#dontHaveAccount').show();
       jQuery("#morselLoginModal").modal('show');
@@ -163,6 +208,8 @@
     jQuery( "#show-mrsl-login-btn" ).click(function() {
       jQuery('#notMyAccount').hide();
       jQuery('#dontHaveAccount').show();
+      //clear error messages genrated by morsel login
+      $("#login-messages").html("");
     });
 
     jQuery("#mrsl-signup-submit-btn").click(function(event){
@@ -216,7 +263,8 @@
               //set for host login
               jQuery("#mrsl-login").val(response.data.username);
               jQuery("#mrsl-password").val(jQuery("#mrsl_user_password").val());
-              jQuery("#morsel-front-login-form").submit();
+              //jQuery("#morsel-front-login-form").submit();
+              jQuery("#mrsl-submit-btn").trigger("click");
 
             } else {
               alert("Opps Something wrong happend!");
@@ -225,8 +273,7 @@
           },
           error:function(response){
               console.log("Error response :: ",response);
-              console.log("Error response for Email:: ",response.responseJSON.errors.email[0]);         //
-              if( response.responseJSON.errors.email[0] === "has already been taken"){
+              if( (typeof response.responseJSON.errors.email != "undefined") && response.responseJSON.errors.email[0] === "has already been taken"){
                 var signUpEmail = jQuery( "#mrsl_user_email" ).val();
                 alert("Looks like you already have an account, please log in.");
                 jQuery("#show-mrsl-login-btn").text('SignUp');

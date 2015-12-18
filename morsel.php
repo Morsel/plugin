@@ -172,7 +172,6 @@ function morsel_query_vars( $query_vars ){
     );
 
     $context  = stream_context_create($opts);
-    //echo MORSEL_API_URL.'users/sign_in.json';
 
     $result = @file_get_contents(MORSEL_API_URL.'users/sign_in.json', false, $context);
 
@@ -251,13 +250,14 @@ function morsel_query_vars( $query_vars ){
       if(!isset($_SESSION['host_morsel_errors'])){ //if no error set morsel session
         $_SESSION['morsel_login_userid'] = $result->data->id;
         $_SESSION['morsel_user_obj'] = $result->data;
-        $_SESSION['current_morsel_user_psd'] = base64_encode($_POST['user']['password']);
+        //$_SESSION['current_morsel_user_psd'] = base64_encode($_POST['user']['password']);
       }
 
       header('Location:'.$_SERVER['HTTP_REFERER']);
       exit(0);
     }
    }
+
 
    //logout user
    if($_REQUEST['pagename']=='morsel_logout') {
@@ -267,6 +267,123 @@ function morsel_query_vars( $query_vars ){
       header('Location:'.$_SERVER['HTTP_REFERER']);
       exit(0);
    }
+
+   //make ajax morsel login functionality
+   if($_REQUEST['pagename']=='morsel_ajax_user_login'){
+
+    $login_result = array("status"=>false,"msg"=>"", "api_result"=>"");
+
+    unset($_POST['pagename']);
+
+    $postdata = http_build_query($_POST);
+
+    $opts = array('http' =>
+        array(
+            'method'  => 'POST',
+            'header'  => 'Content-type: application/x-www-form-urlencoded',
+            'content' => $postdata
+        )
+    );
+
+    $context  = stream_context_create($opts);
+
+    $result = @file_get_contents(MORSEL_API_URL.'users/sign_in.json', false, $context);
+
+    $login_result["api_result"] = $result;
+
+    $result = json_decode($result);
+
+
+
+    if(empty($result)) { //result not found by eatmorsel
+
+      //$_SESSION['morsel_error'] = true;
+      $login_result["msg"] = array("Sorry your userid/email or password not matched, please try again.");
+
+    } else {
+
+      //get user by email
+      $userByEmail = get_user_by_email($result->data->email);
+
+      if($userByEmail){ //if found
+
+        $wpUser =  $userByEmail->data;
+
+        if(is_user_logged_in()) { //if anyother user logged in logg them off
+          $currentUserId = get_current_user_id( );
+
+          if($currentUserId != $wpUser->ID){ //current user and login user not matched
+            wp_logout();
+
+            // login user
+            if ( !is_wp_error($wpUser) ) {
+              getUserLoggedIn($wpUser->ID);
+              $login_result["msg"] = array("You are successfully logged in.");
+              $login_result["status"] = true;
+            } else {
+              //$_SESSION['host_morsel_errors'] = $wpUser->get_error_messages();
+              $login_result["msg"] = $wpUser->get_error_messages();
+            }
+          }
+        } else { // if no one is logged in
+
+            // login user
+            if ( !is_wp_error($wpUser) ) {
+              getUserLoggedIn($wpUser->ID);
+              $login_result["msg"] = array("You are successfully logged in.");
+              $login_result["status"] = true;
+            } else {
+              //$_SESSION['host_morsel_errors'] = $wpUser->get_error_messages();
+              $login_result["msg"] = $wpUser->get_error_messages();
+            }
+        }
+
+      } else { //not found create user
+
+          $newUserName = getUniqueUsername($result->data->username.'-'.$result->data->id);
+
+          //if(!username_exists($newUserName) ){ //check username is exist or not
+          $random_password = wp_generate_password(6,false);
+          $newWpUserID = wp_create_user($newUserName,$random_password,$result->data->email);
+          $newlyCreatedUser = new WP_User($newWpUserID);
+          $newlyCreatedUser->set_role('subscriber');
+          //}
+
+          $message = "Welcome ".$newUserName.",
+                        Your new account has been created successfully on ".get_site_url().".
+                          your username is ".$newUserName." and password is ".$random_password."
+                          Thank you.";
+
+          //send email to new user
+          //wp_mail($result->data->email,'New Registration',$message);
+
+          // login user
+          if ( !is_wp_error($newWpUserID) ) {
+
+            if(is_user_logged_in()) { //if anyother user logged in logg them off
+              wp_logout();
+            }
+
+            $login_result["msg"] = array("You are successfully logged in.");
+            $login_result["status"] = true;
+            getUserLoggedIn($newWpUserID);
+          } else { //if error
+            //$_SESSION['host_morsel_errors'] = $newWpUserID->get_error_messages();
+            $login_result["msg"] = $newWpUserID->get_error_messages();
+          }
+      }
+
+      if($login_result["status"]){ //if no error set morsel session
+        $_SESSION['morsel_login_userid'] = $result->data->id;
+        $_SESSION['morsel_user_obj'] = $result->data;
+        //$_SESSION['current_morsel_user_psd'] = base64_encode($_POST['user']['password']);
+      }
+    }
+    echo json_encode($login_result);
+    exit(0);
+   }
+   //End ajax morsel login functionality
+
    // get all users whome are associate with host admin
    if($_REQUEST['pagename']=='morsel_get_associated_user'){
      $options = get_option( 'morsel_settings');
@@ -481,33 +598,4 @@ function add_morsel_signup_login() {
   echo "<div class='morsel-iso bootstrap-iso'>";
   require_once(MORSEL_PLUGIN_URL_PATH.'includes/authentication.php');
   echo "</div>";
-}
-
-/**
- * if we got error in signup & login than add filter in content.
- */
-add_filter( 'the_content', 'add_signup_login_error_msg', 20 );
-function add_signup_login_error_msg( $content ) {
-
-  $error_html = "";
-  if(!is_page( get_option("morsel_plugin_page_id") ) && isset($_SESSION['morsel_error']) || isset($_SESSION['host_morsel_errors']) ) {
-
-    $error_html .= "<div class='mrsl-message-wrapper morsel-iso bootstrap-iso'>";
-    if(isset($_SESSION['morsel_error'])) {
-      unset($_SESSION['morsel_error']);
-      $error_html .= '<div class="alert alert-danger text-center" role="alert">Sorry your userid/email or password not matched, please try again.</div>';
-    }
-    if(isset($_SESSION['host_morsel_errors'])) {
-      $errors = $_SESSION['host_morsel_errors'];
-      unset($_SESSION['host_morsel_errors']);
-      foreach($errors as $error) {
-        $error_html .= '<div class="alert alert-danger text-center" role="alert">'.$error.'</div>';
-      }
-    }
-    $error_html .= "</div>";
-  }
-
-  $content = sprintf('%s%s',$error_html,$content);
-  // Returns the content.
-  return $content;
 }

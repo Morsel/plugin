@@ -1260,7 +1260,7 @@ function queue_my_admin_scripts() {
         "morsel_api_url" => MORSEL_API_URL,
         "morsel_api_user_url" => MORSEL_API_USER_URL,
         "morsel_site" => MORSEL_SITE,
-        "current_morsel_user_psd" => $_SESSION['current_morsel_user_psd'],
+        //"current_morsel_user_psd" => $_SESSION['current_morsel_user_psd'],
         "current_morsel_id" => $_REQUEST["morselid"]
       )
     );
