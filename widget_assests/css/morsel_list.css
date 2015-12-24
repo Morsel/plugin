@@ -1313,6 +1313,16 @@
   margin-bottom: 10px;
   padding: 5px;
 }
+
+#morsel-progress {
+  margin: 20px auto 0;
+  max-width: 78%;
+}
+
+#login-messages {
+  max-width: 94%;
+}
+
 /*end create item details shortcode css*/
 .mrsl-message-wrapper.morsel-iso.bootstrap-iso {
   clear: both;

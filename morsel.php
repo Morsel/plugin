@@ -63,6 +63,7 @@ if(MORSEL_PLUGIN_ENV == 'prod'){
 define('MORSEL_API_USER_URL', MORSEL_API_URL.'users/');
 define('MORSEL_API_MORSELS_URL', MORSEL_API_URL.'morsels/');
 define('MORSEL_API_ITEMS_URL', MORSEL_API_URL.'items/');
+define('MORSEL_API_KEYWORDS_URL', MORSEL_API_URL.'keywords/');
 define('MORSEL_API_COUNT', 20 );
 /*----------------------------------------------------------------------------*
  * Public-Facing Functionality
@@ -88,6 +89,7 @@ require_once(MORSEL_PLUGIN_URL_PATH. 'public/morsel-utility-functions.php' );
 require_once(MORSEL_PLUGIN_URL_PATH. 'shortcode.php'); //for shortcode
 require_once(MORSEL_PLUGIN_URL_PATH. 'slider_shortcode.php'); //for Slider Shortcode
 require_once(MORSEL_PLUGIN_URL_PATH. 'includes/create_morsel_shortcode.php');//Create Morsel
+require_once(MORSEL_PLUGIN_URL_PATH. 'includes/user-preference-shortcode.php');//For showing user preference of morsel
 require_once(MORSEL_PLUGIN_URL_PATH. 'page/page_create.php'); //for page
 
 /*

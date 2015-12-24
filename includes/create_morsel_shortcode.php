@@ -25,7 +25,7 @@ function create_morsel() {
 if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_obj']))){
     ?>
     <div class='row'>
-      <div class='col-md-6'>You must be sign/login before create a morsel, click here for <a id='open-morsel-login1' class='open-morsel-login btn btn-danger btn-xs clickeventon'>SignUp/Login</a></div>
+      <div class='col-md-6'>You must be sign/login before create a morsel, click here for <a id='open-morsel-login1' class='open-morsel-login btn btn-danger btn-xs'>SignUp/Login</a></div>
     </div>
 <?php
     } else { //user is logged in
