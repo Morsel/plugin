@@ -872,12 +872,9 @@ function morsel_post_des(){
         jQuery(".open-morsel-login").trigger('click');
         return;
       }
-
       var subscribeUrl = "<?php echo MORSEL_API_USER_URL.'morsel_subscribe'; ?>";
-
       var activity = 'morsel-subscribe';
       var key = "<?php echo $_SESSION['morsel_user_obj']->id.':'.$_SESSION['morsel_user_obj']->auth_token;?>";
-
       var morselId = "<?php echo $_REQUEST['morselid'];?>";
       var post_data = {
                         //user:{subscriptions_attributes : [{morsel_id:morselId}] },
@@ -886,7 +883,6 @@ function morsel_post_des(){
                       };
 
       console.log("post_data : ",post_data);
-
       jQuery.ajax({
           url: subscribeUrl,
           type: 'POST',

@@ -17,6 +17,7 @@ function user_preference($atts){
     $morsel_desc_url =  get_permalink(get_option( 'morsel_plugin_page_id'));
 
     $user = $_SESSION['morsel_user_obj'];
+    $user_id = $user->id;
     $api_key = $user->id.':'.$user->auth_token;
 
     $host_info = get_option('morsel_settings');
@@ -31,9 +32,81 @@ function user_preference($atts){
     <div class="center-block text-center col-sm-12 col-md-12">
       <button id="all-keyword-select" class="btn btn-danger select" id="clear-all-select">Select All</button>
       <button class="btn btn-danger" id="keyword-unsubscribe">Unsubscribe</button>
+      <button class="btn btn-danger" id ="morsel-subscription">Subscribe</button>
     </div>
   <script type="text/javascript">
-    jQuery(document).ready(function($){
+   jQuery("#morsel-subscription").click(function(event){
+      event.preventDefault();
+      //var sessionUserId =  "<?php echo $_SESSION['morsel_user_obj']->id;?>"
+      // if(sessionUserId == ''){
+      //   jQuery(".open-morsel-login").trigger('click');
+      //   return;
+      // }
+
+      var subscribeUrl = "<?php echo MORSEL_API_USER_URL.'morsel_subscribe'; ?>";
+      var morselId = [];
+      jQuery.each(jQuery("input[name='keyword_id[]']:checked"), function() {
+          morselId.push(parseInt(jQuery(this).attr('morsel-id')));
+        });
+      var post_data = {
+                        user:{subscribed_morsel_ids : morselId },
+                        api_key:"<?php echo $api_key ?>"
+                      };
+
+      console.log("post_data : ",post_data);
+
+      jQuery.ajax({
+          url: subscribeUrl,
+          type: 'POST',
+          data: post_data,
+          complete: function(){
+            //alert("Action Complete");
+            waitingDialog.hide();
+          },
+          beforeSend: function(xhr) {
+            waitingDialog.show('Loading...');
+          },
+          success: function(response, status){
+            console.log("response :: ",response);
+            console.log("status :: ",status);
+
+            if(status == 'success'){
+              alert("You have been subscribed successfully.");
+            } else {
+              alert("Opps Something wrong happend!");
+            }
+          },
+          error:function(response, status, xhr){
+              console.log("error response :: ",response);
+          }
+      });
+
+    });
+
+  function subscribed_keyword()
+  {
+    var ids = [];
+    jQuery.ajax({
+      url:"<?php echo MORSEL_API_USER_URL.$user_id;?>"+"/subscribed_keyword.json",
+      type:"GET",
+      async:false,
+      crossDomain: true,
+      dataType: "json",
+      data:{
+        api_key : "<?php echo $api_key;?>" ,
+      },
+      success: function(response) {
+        if(response.meta.status == "200" && response.meta.message == "OK"){
+          ids = response.data;
+        }
+      },
+      error:function(e){
+
+      }
+    });
+    return ids;
+  }
+  jQuery(document).ready(function($){
       //get all keywords with example of loggedin user
       jQuery.ajax({
         url:"<?php echo MORSEL_API_USER_URL.$host_id;?>"+"/subscribe_morsels.json",
@@ -51,10 +124,11 @@ function user_preference($atts){
           var morsel_desc_url = "<?php echo $morsel_desc_url;?>";
           if(response.meta.status == "200" && response.meta.message == "OK"){
             var result = response.data;
+            var keyword_ids = subscribed_keyword();
             $.each(result, function( key, value ) {
-              console.log( key + ": " + value );
-              blocks += '<div class="col-sm-4 col-md-4 shortcode-msl-block">';
+
               if(value.first_morsel != null){
+                 blocks += '<div class="col-sm-4 col-md-4 shortcode-msl-block">';
                 blocks += '<div class="morsel-block morsel-bg" morsel-url="'+morsel_desc_url+'?morselid='+value.first_morsel.id+'" >\
                     <div class="morsel-info">\
                     <h1 class="h2 morsel-block-title"><a class="white-link" href="'+morsel_desc_url+'?morselid='+value.first_morsel.id+'">'+value.first_morsel.title+'</a></h1>\
@@ -71,24 +145,34 @@ function user_preference($atts){
                 var mrsl_img_url = "";
                 if(value.first_morsel.photos._800x600 != ""){
                  mrsl_img_url = value.first_morsel.photos._800x600;
-                }  else {
+                }else{
                  mrsl_img_url = "<?php echo MORSEL_PLUGIN_IMG_PATH.'no_image.png'?>";
                 }
-                console.log("mrsl_img_url:",mrsl_img_url);
-      blocks +=  '<a class="morsel-img " href="#" style="background-image: url('+mrsl_img_url+');"></a>\
-                <img class="spacer loader " src="'+"<?php echo MORSEL_PLUGIN_IMG_PATH.'spacer.png'?>"+'">\
-              </div>\
-              <div class="checkbox text-center"><label><input type="checkbox" name="keyword_id[]" value="'+value.id+'">'+value.name+'</label></div>';
-
-            } else{
-              blocks += '<div class="checkbox text-center"><label>'+value.name+'</label></div>';
-            }
-
-            blocks += '</div>';
+                blocks +=  '<a class="morsel-img " href="#" style="background-image: url('+mrsl_img_url+');"></a>\
+                        <img class="spacer loader " src="'+"<?php echo MORSEL_PLUGIN_IMG_PATH.'spacer.png'?>"+'">\
+                        </div>';
+                if(jQuery.inArray(value.id,keyword_ids)!=-1){
+                  blocks += '<div class="checkbox text-center"><label><input type="checkbox" name="keyword_id[]" morsel-id="'+value.first_morsel.id+'" checked value="'+value.id+'">'+value.name+'</label></div>';
+                }
+                else{
+                  blocks += '<div class="checkbox text-center"><label><input type="checkbox" name="keyword_id[]" morsel-id="'+value.first_morsel.id+'" value="'+value.id+'">'+value.name+'</label></div>';
+                }
+               blocks += '</div>';
+              }else{
+               //  blocks += '<div class="col-sm-4 col-md-4 shortcode-msl-block">';
+               //  blocks += '<div class="morsel-block morsel-bg">\
+               //        <div class="morsel-info">\
+               //        <h1 class="h2 morsel-block-title"><a class="white-link">No Morsel Available</a></h1>\
+               //        </div>';
+               //  blocks += '<a class="morsel-img " href="#" style="background-image: url(http://l7connect.com/wp-content/uploads/2015/06/no-preview.png);"></a>\
+               //            <img class="spacer loader " src="'+"<?php echo MORSEL_PLUGIN_IMG_PATH.'spacer.png'?>"+'">\
+               //            </div>\
+               //            <div class="checkbox text-center"><label style="color: red;font-weight: bold;">'+value.name+'</label></div>';
+               // blocks += '</div>';
+              }
 
             }); //end itration of results
-
-            $("#user-prefrence-blocks").append(blocks);
+          $("#user-prefrence-blocks").append(blocks);
           }
         },error:function(){},
         complete:function(){
@@ -101,16 +185,15 @@ function user_preference($atts){
       $("#keyword-unsubscribe").click(function(event){
         event.preventDefault();
         jQuery("input[name='keyword_id[]']").val();
-
         var selected_ids = new Array();
-        $.each(jQuery("input[name='keyword_id[]']:checked"), function() {
+        $.each(jQuery("input[name='keyword_id[]']:not(:checked)"), function() {
           selected_ids.push($(this).val());
         });
-
+        console.log('tttttttt',selected_ids);
         //unsubscribe the keywords
         jQuery.ajax({
             url:"<?php echo MORSEL_API_USER_URL.$user->id;?>"+'/unsubscribe_users_keyword.json',
-            type:"POST",
+            type:"DELETE",
             async:false,
             data:{
               user: {keyword_id:selected_ids},

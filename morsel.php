@@ -292,7 +292,6 @@ function morsel_query_vars( $query_vars ){
     $result = @file_get_contents(MORSEL_API_URL.'users/sign_in.json', false, $context);
 
     $result = json_decode($result);
-
     //$login_result["api_result"] = $result;
 
     if(empty($result)) { //result not found by eatmorsel

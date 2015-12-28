@@ -72,12 +72,23 @@ if(isset($hostCompany) && $hostCompany != ""){
 	  		</tr>
 				<tr valign="top">
 	  			<td scope="row">&nbsp;</td>
-					<td><?php submit_button("Get Shortcode","primary","save",null,array('id'=>'morsel_shortcode_submit')); ?>&nbsp; &nbsp;<input type="button" value="Show Advanced" onclick="checkAdvancedTab('showAdvancedTab')" id="showAdvancedTab" class="button button-primary"></td>
+					<td><?php submit_button("Get Shortcode","primary","save",null,array('id'=>'morsel_shortcode_submit')); ?>&nbsp; &nbsp;<input type="button" value="Show Advanced" onclick="checkAdvancedTab('showAdvancedTab')" id="showAdvancedTab" class="button button-primary">
+					&nbsp; &nbsp;<input type="button" value="Community shortcode" onclick="other_shortcode();" class="button button-primary">
+					</td>
 	  		</tr>
 		</table>
 	</form>
 </div>
+<div id="shortcode_model_id" style="display:none;">
+	 <span><b>[create_morsel]</b> Shortcode is used to create a page where your community can share their morsels and support your brand.</span>
+	 <br><br>
+</div>
 <script type="text/javascript">
+ function other_shortcode(){
+		   var url = "#TB_inline?width=570&height=45&inlineId=shortcode_model_id";
+			 tb_show("Shortcode for community", url);
+	}
+
 function checkAdvancedTab(buttonID){
   jQuery("#"+buttonID).css("display","none");
   jQuery("#tabs1-morsel_advanced_tab").css("display","inline-block");
