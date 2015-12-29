@@ -1,10 +1,10 @@
 <?php
-//user_preference shortcode funcationaliy which get all key words of
-function user_preference($atts){
+//morsel_user_preference shortcode funcationaliy which get all key words of
+function morsel_user_preference($atts){
   $atts = shortcode_atts(
     array(
 
-    ), $atts, 'user_preference' ); ?>
+    ), $atts, 'morsel_user_preference' ); ?>
   <div id="user-prefrence-wrapper" class="morsel-iso bootstrap-iso">
   <?php  /*checked eatmorsel user isn't logged in*/
   if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_obj']))){
@@ -313,5 +313,5 @@ function user_preference($atts){
 </div><!--End div #user-prefrence-wrapper -->
 <?php
 }
-add_shortcode('user_preference', 'user_preference');
+add_shortcode('morsel_user_preference', 'morsel_user_preference');
 ?>
