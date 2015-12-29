@@ -892,7 +892,8 @@ function morsel_post_des(){
             waitingDialog.hide();
           },
           beforeSend: function(xhr) {
-            xhr.setRequestHeader('share-by',"morsel-plugin")
+            xhr.setRequestHeader('host-site',"<?php echo get_site_url(); ?>");
+            xhr.setRequestHeader('share-by',"morsel-plugin");
             xhr.setRequestHeader('activity',"Morsel Subscribe");
             xhr.setRequestHeader('activity-id',"<?php echo $_REQUEST['morselid'];?>");
             xhr.setRequestHeader('activity-type',"Morsel");
