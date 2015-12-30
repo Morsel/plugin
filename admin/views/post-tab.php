@@ -1,5 +1,5 @@
 <?php
-//if(isset($hostCompany) && $hostCompany != ""){
+if(isset($hostCompany) && $hostCompany != ""){
 ?>
 <link rel="stylesheet" type="text/css" href=<?php echo MORSEL_PLUGIN_ADMIN_ASSEST.'editor/css/widgEditor.css'?>>
 <?php
@@ -964,6 +964,6 @@ width: 100%;
     });
 </script>
 <!-- datetimepicker -->
-<? //} else { ?>
+<? } else { ?>
 Please Enter Host Details First.
-<? //} ?>
+<? } ?>
