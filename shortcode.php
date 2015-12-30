@@ -130,17 +130,12 @@ function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
            <div class="page-wrapper morsel-iso bootstrap-iso" >
                   <div class="site">
                       <div class="tab-content">
-
-                          <div class="tab-pane  active">
-
+                          <div class="tab-pane active">
                               <div class="row no-gutter" id="morsel-posts-row">
-
                               <?php foreach ($morsel_post_sht as $row_sht) {
-
                                   if(in_array($row_sht->id, $post_selected))
                                     continue;
                                  echo grid($row_sht,$morsel_page_id,$atts['morsel_in_row']);
-
                                } ?>
                               </div>
                           </div>
@@ -700,7 +695,7 @@ function morsel_post_des(){
               <!-- <h4 class="modal-title">Comments</h4> -->
             </div>
             <div class="modal-body">
-                <p>Hungry for more? We can let you know when more morsels like this are posted.</p>
+                <p>Hungry for more? We can let you know when more morsels(<?php echo $row_item->morsel_keywords->name;?>) like this are posted.</p>
                 <form novalidate="" name="addCommentForm" role="form" class="">
                   <div class="checkbox">
                     <label><input type="checkbox" checked="checked" value="1">Yes, let me know when morsels like this are posted.</label>

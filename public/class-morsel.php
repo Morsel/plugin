@@ -181,6 +181,7 @@ class Morsel {
 		}
 
 		morsel_page_plugin_remove();
+		morsel_page_user_preference_remove();
 	}
 
 	/**

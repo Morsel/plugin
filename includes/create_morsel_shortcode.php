@@ -46,7 +46,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
       </div>
       <div class="col-sm-12" style="text-align:right;">
         <span>Logged in with : <b><?php echo $full_name ?></b></span>
-        <a href="<?php echo site_url()?>/index.php?pagename=morsel_logout" class="label label-danger">Logout</a>
+        <!-- <a href="<?php echo site_url()?>/index.php?pagename=morsel_logout" class="label label-danger">Logout</a> -->
       </div>
         <div class="form-table MorselEdit col-md-12 col-sm-12">
           <div class='row'>
@@ -59,6 +59,15 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
                 <button id="post_title_savebtn" class=" btn btn-danger  morselSave" onclick="saveMorsel('morselTitle','title',this)">Save</button>
                 <img style="display:none;" class="smallAjaxLoader" src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif">
               </div> <!-- End morsel-title-area col-md-12 col-sm-12 -->
+              <div class="morsel-title-area col-md-12 col-sm-12 mrsl-top-border">
+                <div class="form-group">
+                  <label for="morselTitle">Video(Embedded Code):</label>
+                  <textarea class="form-control" name="morselVideo" id="morselVideo"></textarea>
+                </div>
+                <button id="post_title_savebtn" class=" btn btn-danger  morselSave" onclick="saveMorsel('morselVideo','video',this)">Save</button>
+                <img style="display:none;" class="smallAjaxLoader" src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif">
+              </div>
+              
               <div class="morsel-item-list-area col-md-12 col-sm-12 mrsl-top-border">
                 <h3>Items:</h3>
                 <!-- <div style="float:right;"></div> -->

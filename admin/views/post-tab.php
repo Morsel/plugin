@@ -1,5 +1,5 @@
 <?php
-if(isset($hostCompany) && $hostCompany != ""){
+//if(isset($hostCompany) && $hostCompany != ""){
 ?>
 <link rel="stylesheet" type="text/css" href=<?php echo MORSEL_PLUGIN_ADMIN_ASSEST.'editor/css/widgEditor.css'?>>
 <?php
@@ -198,7 +198,11 @@ if(count($jsonPost->data)>0){?>
 				    <?php if(!$row->is_submit) { ?>
 				    <abbr title="<?php echo date("m/d/Y", strtotime($row->published_at));?>"><?php echo date("m/d/Y", strtotime($row->published_at));?></abbr>
 				    <br />PUBLISHED
-				    <?php } else { echo "NULL";} ?>
+				    <?php } else if($row->schedual_date){
+				        echo "Schedualed at ".date('d-m-Y H:i', strtotime($row->schedual_date));?> 
+                        <br><a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" morsel-schedualdate="<?php echo $row->schedual_date;?>" class="all_unpublish_morsel_scheduled button">ReSchedule</a> 
+				    <? }
+				     else { echo "NULL";} ?>
 				</td>
 				<td class="code-keyword categories column-categories">
 				   <?php foreach ($row->morsel_keywords as $tag_keyword){?>
@@ -223,8 +227,10 @@ if(count($jsonPost->data)>0){?>
 					<?php } ?>
 					<?php if($row->is_submit) { ?>
 						<a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_unpublish_morsel_id button">Publish Morsel</a>
-				<!-- 		<a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" class="all_unpublish_morsel_scheduled button">scheduled Publishing</a>
-			 -->		<?php } ?>
+						<? if($row->schedual_date == ""){?>
+							<a style=" margin-bottom: 5px;" morsel-id = "<?php echo $row->id ?>" morsel-schedualdate="<?php echo $row->schedual_date;?>" class="all_unpublish_morsel_scheduled button">Scheduled</a>
+					    <? }
+					} ?>
 				</td>
 			</tr>
 		  <?php } ?>
@@ -272,7 +278,6 @@ if(count($jsonPost->data)>0){?>
 <?php } else { ?>
   <p><h3>Oops! You don't have any morsel on your site.</h3></p>
 <?php } ?>
-
 
 
 <script type="text/javascript">
@@ -343,7 +348,7 @@ if(count($jsonPost->data)>0){?>
 				    	all_unpublish_morsel_id.addClass('button').text('Publish Morsel');
 				    }
 				    else{
-				     get_morsel(morsel_id);
+				        get_morsel(morsel_id);
 				    }
 				},error:function(){
 					console.log("Some issue to add keywords to morsel");
@@ -878,6 +883,87 @@ width: 100%;
 		}
 	});
 </script>
-<? } else { ?>
+<!-- datetimepicker -->
+    <link href="<?php echo MORSEL_PLUGIN_ADMIN_ASSEST.'datetimepicker/bootstrap/css/bootstrap.min.css'?>" rel="stylesheet" media="screen">
+    <link href="<?php echo MORSEL_PLUGIN_ADMIN_ASSEST.'datetimepicker/bootstrap/css/bootstrap-datetimepicker.min.css'?>" rel="stylesheet" media="screen">
+	<div id="modal-datetimepicker-id" style="display:none;">
+	    <form action="" class="form-horizontal">
+	        <input id="schedualMorsel" value="" type="hidden">
+	        <fieldset>
+     	        <legend>Select Date & Time</legend>
+	            <div class="controls input-append date form_datetime" data-date="2015-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="scheduleDataMorsel">
+	                <input size="16" type="text" value="" readonly style="width:240px;">
+	                <span class="add-on"><i class="icon-th"></i></span>
+	            </div>
+					<input type="hidden" id="scheduleDataMorsel" value="" />
+				<br/>
+	            <br>
+	            <?php
+                    //echo $d = date( 'Y-m-d H:i:s', current_time( 'timestamp', 1 ) );
+                    //$d1 = new DateTime('2008-08-03 14:52');
+					//$d2 = new DateTime('2008-08-03 14:53');
+					//var_dump($d1 == $d2);
+					//var_dump($d1 > $d2);
+					//var_dump($d1 < $d2);
+
+                ?>
+	            <a id="morsel_schedule" class="button button-primary"> Schedule </a>&nbsp;&nbsp;
+     		</fieldset>
+	    </form>
+	</div>
+<script>
+ 	jQuery('.all_unpublish_morsel_scheduled').click(function(){
+        var all_morsel_keyowrd_id = jQuery(this);
+        // all_morsel_keyowrd_id.text('Please wait!');
+		var morsel_id = jQuery(this).attr("morsel-id");
+	    jQuery('#schedualMorsel').val(morsel_id);
+	    alert("keyword");
+                    var url = "#TB_inline?width=500&height=200&inlineId=modal-datetimepicker-id";
+	                tb_show("Schedule", url);
+            
+	});
+	jQuery("#morsel_schedule").click(function(){
+		alert("save Schedule");
+		if(jQuery("#scheduleDataMorsel").val() == ""){
+			alert("Please Select Data & Time");
+			return;
+		}
+		jQuery.ajax({
+			url:"<?php echo MORSEL_API_URL?>"+"morsels/"+jQuery('#schedualMorsel').val(),
+			type:"PUT",
+			data:{
+	   			morsel:{
+	   				schedual_date:jQuery("#scheduleDataMorsel").val(),
+	   			},
+	   			api_key:"<?php echo $api_key ?>"
+			},
+			success: function(response) {
+              console.log("response--schduling---------",response.data.schedual_date);
+               // morsel-schedualdate
+               // jQuery(this).attr("morsel-schedualdate",response.data.schedual_date);
+              window.location.reload(true);
+            },error:function(){
+				alert("Please add Keyword first.");
+			},complete:function(){}   
+	    });
+	})
+</script>
+<script type="text/javascript" src="<?php echo MORSEL_PLUGIN_ADMIN_ASSEST.'datetimepicker/bootstrap/js/bootstrap-datetimepicker.js'?>" charset="UTF-8"></script>
+<script type="text/javascript">
+    jQuery('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1,
+        zIndex: 999999999,
+        startDate: new Date() 
+    });
+</script>
+<!-- datetimepicker -->
+<? //} else { ?>
 Please Enter Host Details First.
-<? } ?>
+<? //} ?>

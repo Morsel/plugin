@@ -116,7 +116,8 @@ function register_my_setting() {
 
 add_action( 'admin_init', 'register_my_setting' );
 
-add_action('init', 'morsel_page_plugin_add'); //for add page
+add_action('init', 'morsel_page_plugin_add'); //for add page morsel description
+add_action('init', 'morsel_page_add_user_preference'); //for add page morsel user preference
 
 // add_action( 'init', 'morsel_rewrites_init' );
 
@@ -290,10 +291,14 @@ function morsel_query_vars( $query_vars ){
     $context  = stream_context_create($opts);
 
     $result = @file_get_contents(MORSEL_API_URL.'users/sign_in.json', false, $context);
-
+    //$result = @wp_remote_retrieve_body(wp_remote_get(MORSEL_API_URL.'users/sign_in.json', false, $context));
+    
     $result = json_decode($result);
-    //$login_result["api_result"] = $result;
+     
 
+
+    //$login_result["api_result"] = $result;
+    
     if(empty($result)) { //result not found by eatmorsel
 
       //$_SESSION['morsel_error'] = true;

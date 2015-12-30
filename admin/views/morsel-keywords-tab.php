@@ -1,5 +1,5 @@
 <?php
-if(isset($hostCompany) && $hostCompany != ""){
+// if(isset($hostCompany) && $hostCompany != ""){
 ?>
 <script type="text/javascript">
 	jQuery( document ).ready(function() {
@@ -193,6 +193,6 @@ function deleteKeywords(keywordID){
 		});
 	}(jQuery));
 </script>
-<? } else { ?>
+<? //} else { ?>
 Please Enter Host Details First.
-<? } ?>
+<? //} ?>
