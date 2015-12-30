@@ -152,23 +152,23 @@ function morsel_user_preference($atts){
                         <img class="spacer loader " src="'+"<?php echo MORSEL_PLUGIN_IMG_PATH.'spacer.png'?>"+'">\
                         </div>';
                 if(jQuery.inArray(value.id,keyword_ids)!=-1){
-                  blocks += '<div class="checkbox text-center"><label><input type="checkbox" name="keyword_id[]" morsel-id="'+value.first_morsel.id+'" checked value="'+value.id+'">'+value.name+'</label></div>';
+                  blocks += '<div class="checkbox text-center"><label><input type="checkbox" class="mrsl-susbcribe-checked" name="keyword_id[]" morsel-id="'+value.first_morsel.id+'" checked value="'+value.id+'">'+value.name+'</label></div>';
                 }
                 else{
-                  blocks += '<div class="checkbox text-center"><label><input type="checkbox" name="keyword_id[]" morsel-id="'+value.first_morsel.id+'" value="'+value.id+'">'+value.name+'</label></div>';
+                  blocks += '<div class="checkbox text-center"><label><input type="checkbox" class="mrsl-susbcribe-checked" name="keyword_id[]" morsel-id="'+value.first_morsel.id+'" value="'+value.id+'">'+value.name+'</label></div>';
                 }
                blocks += '</div>';
               }else{
-               //  blocks += '<div class="col-sm-4 col-md-4 shortcode-msl-block">';
-               //  blocks += '<div class="morsel-block morsel-bg">\
-               //        <div class="morsel-info">\
-               //        <h1 class="h2 morsel-block-title"><a class="white-link">No Morsel Available</a></h1>\
-               //        </div>';
-               //  blocks += '<a class="morsel-img " href="#" style="background-image: url(http://l7connect.com/wp-content/uploads/2015/06/no-preview.png);"></a>\
-               //            <img class="spacer loader " src="'+"<?php echo MORSEL_PLUGIN_IMG_PATH.'spacer.png'?>"+'">\
-               //            </div>\
-               //            <div class="checkbox text-center"><label style="color: red;font-weight: bold;">'+value.name+'</label></div>';
-               // blocks += '</div>';
+                blocks += '<div class="col-sm-4 col-md-4 shortcode-msl-block">';
+                blocks += '<div class="morsel-block morsel-bg">\
+                      <div class="morsel-info">\
+                      <h1 class="h2 morsel-block-title"><a class="white-link">No Morsel Available</a></h1>\
+                      </div>';
+                blocks += '<a class="morsel-img " href="#" style="background-image: url(http://l7connect.com/wp-content/uploads/2015/06/no-preview.png);"></a>\
+                          <img class="spacer loader " src="'+"<?php echo MORSEL_PLUGIN_IMG_PATH.'spacer.png'?>"+'">\
+                          </div>\
+                          <div class="checkbox text-center"><label style="color: red;font-weight: bold;">'+value.name+'</label></div>';
+               blocks += '</div>';
               }
 
             }); //end itration of results
@@ -229,6 +229,83 @@ function morsel_user_preference($atts){
           $(this).text("Select All");
         }
       });
+
+      $("input.mrsl-susbcribe-checked").live("click",function(){
+
+        if($(this).is(":checked")){
+          var subscribeUrl = "<?php echo MORSEL_API_USER_URL.'morsel_subscribe'; ?>";
+          var morselId = [parseInt(jQuery(this).attr('morsel-id'))];
+
+          var post_data = {
+                            user:{subscribed_morsel_ids : morselId },
+                            api_key:"<?php echo $api_key ?>"
+                          };
+
+          console.log("post_data : ",post_data);
+
+          jQuery.ajax({
+              url: subscribeUrl,
+              type: 'POST',
+              data: post_data,
+              complete: function(){
+                waitingDialog.hide();
+              },
+              beforeSend: function(xhr) {
+                waitingDialog.show('Loading...');
+                xhr.setRequestHeader('host-site',"<?php echo get_site_url(); ?>");
+                xhr.setRequestHeader('share-by',"morsel-plugin")
+                xhr.setRequestHeader('activity','Morsel Subscribe');
+                xhr.setRequestHeader('activity-id',parseInt(jQuery(this).attr('morsel-id')));
+                xhr.setRequestHeader('activity-type',"Morsel");
+                xhr.setRequestHeader('user-id',"<?php echo $user->id;?>");
+              },
+              success: function(response, status){
+                console.log("response :: ",response);
+                console.log("status :: ",status);
+                if(status == 'success'){
+                  alert("You have been subscribed successfully.");
+                } else {
+                  alert("Opps Something wrong happend!");
+                }
+              },
+              error:function(response, status, xhr){
+                  console.log("error response :: ",response);
+              }
+          });
+        } else {
+
+          var selected_ids = new Array();
+          selected_ids.push($(this).val());
+          console.log("keyword for unsubscribe : ",$(this).val());
+          //unsubscribe the keywords
+          jQuery.ajax({
+            url:"<?php echo MORSEL_API_USER_URL.$user->id;?>"+'/unsubscribe_users_keyword.json',
+            type:"DELETE",
+            async:false,
+            data:{
+              user: {keyword_id:selected_ids},
+              api_key : "<?php echo $api_key;?>"
+            },
+            beforeSend: function(xhr) {
+              waitingDialog.show('Please wait while loading...');
+              xhr.setRequestHeader('host-site',"<?php echo get_site_url(); ?>");
+              xhr.setRequestHeader('share-by',"morsel-plugin")
+              xhr.setRequestHeader('activity','keyword-unsubscribe');
+              xhr.setRequestHeader('user-id',"<?php echo $user->id;?>");
+            },
+            success: function(response) {
+              console.log("new_born_morsel response: ",response);
+              if(response.meta.status == "200" && response.meta.message == "OK"){
+                alert("You are successfully unsubscribed the keywords");
+              }
+            },error:function(){},
+            complete:function(){
+              waitingDialog.hide();
+            }
+          });
+        }
+      });
+
     });
   </script>
 <?php
