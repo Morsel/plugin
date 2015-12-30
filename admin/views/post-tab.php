@@ -917,13 +917,13 @@ width: 100%;
         // all_morsel_keyowrd_id.text('Please wait!');
 		var morsel_id = jQuery(this).attr("morsel-id");
 	    jQuery('#schedualMorsel').val(morsel_id);
-	    alert("keyword");
+	    // alert("keyword");
                     var url = "#TB_inline?width=500&height=200&inlineId=modal-datetimepicker-id";
 	                tb_show("Schedule", url);
             
 	});
 	jQuery("#morsel_schedule").click(function(){
-		alert("save Schedule");
+		//alert("save Schedule");
 		if(jQuery("#scheduleDataMorsel").val() == ""){
 			alert("Please Select Data & Time");
 			return;
