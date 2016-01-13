@@ -25,9 +25,11 @@
 			<li class='tab'><a href="#associated_user">Associated User</a></li>
 			<li class='tab'><a href="#tabs1-js">Morsel</a></li>
 			<li class='tab'><a href="#morsel_keywords_panel">Manage Keywords</a></li>
+			<li class='tab'><a href="#morselTopic">Morsel Topic</a></li>
 			<!-- <li class='tab'><a href="#host_details">Host Details</a></li> -->
 			<li class='tab'><a href="#tabs1-shortcode">Display</a></li>
-			<li class='tab'><a href="#tabs1-morsel_advanced_tab">Advanced</a></li>
+			<!-- <li class='tab'><a href="#tabs1-morsel_advanced_tab">Advanced</a></li> -->
+		    <li class='tab'><a href="#sliderTab">Morsel Slider</a></li>
 		</ul>
 	    <div class='panel-container'>
     		<div id="tabs1-settings">
@@ -138,6 +140,30 @@
 			  		</tr>    		
 				</table>
 			</form>
+			<!-- Other Settings Form -->
+		<h2>Other Settings</h2>
+		<!-- Show morsel login on morsel details page yes or no-->
+		<?php
+			if(get_option('morsel_other_settings')){
+				$options = array_merge($options,get_option('morsel_other_settings'));
+ 	    }
+		?>
+		<form method="post" action="options.php" id="morsel-show-login-btn-form" >
+			<?php
+				settings_fields( 'morsel_other_settings' );
+				do_settings_sections( 'morsel_other_settings' );
+			?>
+	   	<table class="form-table">
+	   	    <tr>
+	   	    	<td colspan="2">You Can use morsel login on your wordpress default login by just add "open-morsel-login" class to your login/Signup anchor tag. <br><b> &lt;a class="open-morsel-login" href="#"&gt;SignUp/LogIn&lt;/a&gt;</b></td>
+	   	    </tr>
+	  		<tr valign="top">
+	  			<td scope="row" style="vertical-align:top;"><input type="checkbox" name="morsel_other_settings[hide_login_btn]" id="hide_login_btn" value="1" <?php checked( $options['hide_login_btn'], 1 ); ?> />&nbsp; Don't show morsel login button on a morsel detail page.</td>
+	  			<td></td>
+	  		</tr>
+				<tr valign="top"><td><?php submit_button("Save","primary","save",null,array( 'id' => 'morsel_show_login_submit' ) ); ?></td></tr>
+			</table>
+		</form>
 <script type="text/javascript">
 	(function($){
 		$("#morsel_host_submit_button").click(function(event){
@@ -218,11 +244,17 @@
            Sorry, You have to authenticate first with any of Wordpress Login. Thankyou. 
 	    <?php } ?>
 	</div>
+	<div id="morselTopic" style="display:none">
+           <?php include_once("morselTopic.php");?>
+    </div>
 	<div id="tabs1-shortcode">        
         <?php include_once("shortcode-tab.php");?>	    
     </div>
 	<div id="tabs1-morsel_advanced_tab">        
-        <?php include_once("advanced.php");?>	    
+        <?php //include_once("advanced.php");?>	    
+    </div>
+    <div id="sliderTab">
+        <?php include_once("slider.php");?>
     </div>
 	</div>
 </div>
@@ -394,4 +426,5 @@ window.onload =function(){
 	});
 }(jQuery))
 </script>
+<script type="text/javascript" src="<?php echo MORSEL_PLUGIN_ADMIN_ASSEST;?>editor/scripts/widgEditor.js"></script>
 </div>

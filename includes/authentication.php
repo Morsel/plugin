@@ -83,6 +83,13 @@
                             </div>
                             <p class="help-block"></p>
                           </div>
+                          <div class="form-group">
+                            <div class="checkbox">
+                              <label for="user[email_not]" class="control-label" style="width:100%">
+                                <input type="checkbox" value="true" name="user[email_not]" id="mrsl_user_email_not" class="">Email Recieved by site.</label>
+                            </div>
+                            <p class="help-block"></p>
+                          </div>
                           <!-- <div id="morsel-progress" class="progress" style="display:none;">
                             <div style="width:100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="100%" role="progressbar" class="progress-bar progress-bar-striped active">Your request is processing, please wait.</div>
                           </div> -->
@@ -107,6 +114,7 @@
             <div class="container-fluid login-page">
                 <h1 class="text-center">Log In to <?php echo ucwords($blog_title = get_bloginfo('name')); ?></h1>
                 <form action="<?php echo site_url()?>/index.php" class="padded-form" method="post" name="loginForm" id="morsel-front-login-form">
+                    <input type="hidden" name="user[email_not]" id="mrsl-emailSendOrNot" value="false">
                     <div class="row">
                       <div class="col-md-12 center-block">
                           <div class="form-group">
@@ -124,6 +132,16 @@
                             <button id="mrsl-submit-btn" class="btn btn-primary btn-lg" type="submit" >Login</button>
                           </span>
                         </div>
+       <!--                  <div class="form-group clearfix" >
+                          <span id="mrsl-submit-btn-span" class="btn-submit-wrap btn-submit-block disabled" title="Please complete all required fields" data-toggle="tooltip" data-placement="top">
+                            <a class="btn btn-primary btn-lg">Login with Facebook</a>
+                          </span>
+                        </div> -->
+                        <!-- <div class="form-group clearfix" >
+                          <span id="mrsl-submit-btn-span" class="btn-submit-wrap btn-submit-block disabled" title="Please complete all required fields" data-toggle="tooltip" data-placement="top">
+                            <a href="<?php echo site_url()?>/index.php?pagename=morsel_twitter_login" class="btn btn-primary btn-lg">Login with Twitter</a>
+                          </span>
+                        </div> -->
                         <div class="text-center"><a class="open-site-link" data-toggle="modal" data-src="https://www.eatmorsel.com/auth/password-reset" data-height=500 data-width=100% data-target="#forgetPasswordModal" >Forgot your password?</a></div>
                         <div class="have-an-account text-center"><span id="dontHaveAccount">Don't have an account?</span><span id="notMyAccount" style="display:none;">That is not my username and email.</span> <a target="_blank" href="#">Sign up here.</a></div>
                       </div>
@@ -231,6 +249,7 @@
       }
 
       fd.append("user[professional]",jQuery( "#mrsl_user_professional" ).val());
+      fd.append("user[email_not]",jQuery( "#mrsl_user_email_not" ).val());
         jQuery.ajax({
           url: "<?php echo MORSEL_API_URL.'users.json';?>",
           data : fd,
@@ -263,6 +282,7 @@
               //set for host login
               jQuery("#mrsl-login").val(response.data.username);
               jQuery("#mrsl-password").val(jQuery("#mrsl_user_password").val());
+              jQuery("#mrsl-emailSendOrNot").val(jQuery( "#mrsl_user_email_not" ).val());
               //jQuery("#morsel-front-login-form").submit();
               jQuery("#mrsl-submit-btn").trigger("click");
 
@@ -322,4 +342,21 @@
         });
       });
   });
+
+<?php if($_SESSION['morsel']['popup_open'] == 1 && isset($_SESSION['morsel']['popup_open'])){
+         unset($_SESSION['morsel']['popup_open']);
+?>
+// console.log(".........................",<?=$_SESSION['morsel']['access_tokenn']['screen_name']?>);
+alert("Sorry It seems that your account not created on eatmorsel");
+//open signup popup
+jQuery(document).ready(function(){
+    jQuery('.open-morsel-login').trigger('click');
+    jQuery("#mrsl_user_first_name").val("<?=$_SESSION['morsel']['access_tokenn']['screen_name']?>");
+    jQuery("#mrsl_user_username").val("<?=$_SESSION['morsel']['access_tokenn']['screen_name']?>");
+});
+//change text
+<?php } ?>
 </script>
+
+
+

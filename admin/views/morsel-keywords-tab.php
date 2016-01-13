@@ -132,11 +132,6 @@ function deleteKeywords(keywordID){
 			if($("#keyword_name").val() != ""){
 				var keywords_name = $("#keyword_name").val();
 				$("#morsel-keywords-submit").val('Please wait!');
-				// var regex = /[^\w\s]/gi;
-				// if(regex.test(keywords_name) == true) {
-				//     alert('Your keyword string contains illegal characters.');
-				//     return;
-				// }
 				if($("#keyword_id").val() != ""){ //for edit keyword
 					$.ajax({
 						url: "<?php echo MORSEL_API_URL;?>"+"keywords/edit_morsel_keyword",
@@ -193,6 +188,6 @@ function deleteKeywords(keywordID){
 		});
 	}(jQuery));
 </script>
-<? } else { ?>
+<?} else { ?>
 Please Enter Host Details First.
-<? } ?>
+<?} ?>

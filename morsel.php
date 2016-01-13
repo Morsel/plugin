@@ -52,8 +52,8 @@ if(MORSEL_PLUGIN_ENV == 'prod'){
     define('MORSEL_API_URL', 'https://api-staging.eatmorsel.com/');
     define('MORSEL_PLUGIN_IFRAME_PATH','http://dev.eatmorsel.com/addnewmorsel');
   } else {
-    define('MORSEL_API_URL', 'http://localhost:3000/');
-    //define('MORSEL_API_URL', 'http://e510e9fa.ngrok.io/');
+    //define('MORSEL_API_URL', 'http://localhost:3000/');
+    define('MORSEL_API_URL', 'https://e52e58e4.ngrok.io/');
     define('MORSEL_PLUGIN_IFRAME_PATH','http://localhost:5000/addnewmorsel');
   }
   define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-staging/embed.js');
@@ -235,8 +235,10 @@ function morsel_query_vars( $query_vars ){
                           your username is ".$newUserName." and password is ".$random_password."
                           Thank you.";
 
+          
           //send email to new user
-          //wp_mail($result->data->email,'New Registration',$message);
+          if($result->data->email_not == true)
+            wp_mail($result->data->email,'New Registration',$message);
 
           // login user
           if ( !is_wp_error($newWpUserID) ) {
@@ -268,6 +270,7 @@ function morsel_query_vars( $query_vars ){
       unset($_SESSION['morsel_login_userid']);
       unset($_SESSION['current_morsel_user_psd']);
       header('Location:'.$_SERVER['HTTP_REFERER']);
+      // header('Location:'.$_SERVER['HTTP_REFERER'].'?morselid='.$_REQUEST["morselid"]);
       exit(0);
    }
 
@@ -277,9 +280,11 @@ function morsel_query_vars( $query_vars ){
     $login_result = array("status"=>false,"msg"=>"");
 
     unset($_POST['pagename']);
+    
+    $users = $_REQUEST["user"];
 
     $postdata = http_build_query($_POST);
-
+    
     $opts = array('http' =>
         array(
             'method'  => 'POST',
@@ -290,8 +295,8 @@ function morsel_query_vars( $query_vars ){
 
     $context  = stream_context_create($opts);
 
-    $result = @file_get_contents(MORSEL_API_URL.'users/sign_in.json', false, $context);
-    //$result = @wp_remote_retrieve_body(wp_remote_get(MORSEL_API_URL.'users/sign_in.json', false, $context));
+    // $result = @file_get_contents(MORSEL_API_URL.'users/sign_in.json', false, $context);
+    $result = @wp_remote_retrieve_body(wp_remote_get(MORSEL_API_URL.'users/sign_in.json', false, $context));
     
     $result = json_decode($result);
      
@@ -359,7 +364,8 @@ function morsel_query_vars( $query_vars ){
                           Thank you.";
 
           //send email to new user
-          //wp_mail($result->data->email,'New Registration',$message);
+          if($users["email_not"] == true)
+            wp_mail($result->data->email,'New Registration',$message);
 
           // login user
           if ( !is_wp_error($newWpUserID) ) {
@@ -504,7 +510,42 @@ function morsel_query_vars( $query_vars ){
     }
     exit(0);
   }
+  if($_REQUEST['pagename'] == 'morsel_twitter_login'){
+    define('CONSUMER_KEY',"OWJtM9wGQSSdMctOI0gHkQ");
+    define('CONSUMER_SECRET',"21EsTV2n8QjBUGZPfYx5JPKnxjicxboV0IHflBZB6w");
+    define('OAUTH_CALLBACK',site_url().'/index.php?pagename=morsel_twitter_login');
+    include(plugin_dir_path( __FILE__ ).'includes/twitter/process.php');
+    exit;
+  }
+  if($_REQUEST['pagename'] == 'morselMetaPreview'){
+    $url = $_REQUEST["url"];
+    $tags = get_meta_tags($url);
+    $res = file_get_contents($url);
+    preg_match("~(.*?)~", $res, $match);//fetching title 
+    $title = $match[1]; 
+    $description = $tags['description'];
+    $image = $tags['image'];
+    // print_r($tags);
 
+    if($title == ""){ //for title
+      $title = ($tags['twitter:title'])?$tags['twitter:title']:$tags['og:title'];
+    } 
+    if($description == ""){ //for description
+      $description = ($tags['twitter:description'])?$tags['twitter:description']:$tags['og:description'];
+    } 
+    if($image == ""){ //for image src
+      $image = ($tags['twitter:image:src'])?$tags['twitter:image:src']:$tags['og:image'];
+    }
+    $meta = [];
+    $meta["title"] = $title;
+    $meta["description"] = $description;
+    $meta["image"] = $image;
+    // $imagedata = @wp_remote_retrieve_body(wp_remote_get($meta["image"]));
+    // // alternatively specify an URL, if PHP settings allow
+    // echo $base64 = base64_encode($imagedata);
+    echo json_encode($meta);
+    exit();
+  }
   return $query_vars;
 }
 

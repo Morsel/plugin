@@ -23,11 +23,14 @@ function create_morsel() {
 <?php
 /*checked eatmorsel user isn't logged in*/
 if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_obj']))){
+  // echo $options["hide_login_btn"]; 
+  if(get_option('morsel_other_settings')['hide_login_btn'] != 1) {
     ?>
     <div class='row'>
       <div class='col-md-6'>You must be sign/login before create a morsel, click here for <a id='open-morsel-login1' class='open-morsel-login btn btn-danger btn-xs'>SignUp/Login</a></div>
     </div>
 <?php
+  } //end login hide
     } else { //user is logged in
     //get host admin info
     $host_info = get_option('morsel_settings');
@@ -58,13 +61,18 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
                 </div>
                 <button id="post_title_savebtn" class=" btn btn-danger  morselSave" onclick="saveMorsel('morselTitle','title',this)">Save</button>
                 <img style="display:none;" class="smallAjaxLoader" src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif">
-              </div> <!-- End morsel-title-area col-md-12 col-sm-12 -->
+              </div> 
+              <!-- End morsel-title-area col-md-12 col-sm-12 -->
               <div class="morsel-title-area col-md-12 col-sm-12 mrsl-top-border">
                 <div class="form-group">
                   <label for="morselTitle">Video(Embedded Code):</label>
                   <textarea class="form-control" name="morselVideo" id="morselVideo"></textarea>
                 </div>
-                <button id="post_title_savebtn" class=" btn btn-danger  morselSave" onclick="saveMorsel('morselVideo','video',this)">Save</button>
+                <div class="form-group">
+                  <label for="morselTitle">Video Text:</label>
+                  <textarea class="form-control" name="video_text" id="video_text"></textarea>
+                </div>
+                <button id="post_video_savebtn" class=" btn btn-danger  morselSave" onclick="saveMorselVideo('morsel_video','video_text',this)">Save</button>
                 <img style="display:none;" class="smallAjaxLoader" src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif">
               </div>
               
@@ -255,6 +263,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
 
   });
 
+
   //function that the current submit morsel
   function submitMorsel(){
 
@@ -349,6 +358,37 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
         }
     });
     return result;
+  }
+
+function saveMorselVideo(fieldId1,fieldId2,element){
+    console.log("this element",element);
+        if(jQuery("#"+fieldId1).val() == ""){
+          alert("Please Enter Video embedded code");
+          return false;
+        } else if(jQuery("#"+fieldId2).val() == ""){
+        alert("Please Enter Text for video");
+          return false;
+        } else {
+         data = {
+           api_key:"<?php echo $api_key;?>",
+           morsel : { "morsel_video" : jQuery("#"+fieldId1).val() , "video_text" : jQuery("#"+fieldId2).val()}
+         }
+        jQuery.ajax({
+        url:"<?php echo MORSEL_API_URL;?>"+"morsels/"+morselGlobal,
+        type:"PUT",
+        data:data,
+        beforeSend: function(response) {
+          jQuery("#"+element.id).next("img.smallAjaxLoader").show();
+        },
+        success: function(response) {
+          console.log("morsel_response add------------",response);
+        },error:function(){
+          jQuery("#"+element.id).next("img.smallAjaxLoader").hide();
+        },complete:function(){
+          jQuery("#"+element.id).next("img.smallAjaxLoader").hide();
+        }
+          });
+        }
   }
 
   function editMorsel(morselid){
