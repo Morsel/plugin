@@ -152,10 +152,12 @@
 			if(get_option('morsel_other_settings')){
 				$options = array_merge($options,get_option('morsel_other_settings'));
  	        }
- 	        settings_fields( 'morsel_other_settings' );
-			do_settings_sections( 'morsel_other_settings' );
 		?>
 		<form method="post" action="options.php" id="morsel-show-login-btn-form" >
+        <?
+         	settings_fields( 'morsel_other_settings' );
+			do_settings_sections( 'morsel_other_settings' );
+		?>
 		<table class="form-table otherSettingsMorsel">
 	   	    <tr>
 	   	    	<td colspan="2">You Can use morsel login on your wordpress default login by just add "open-morsel-login" class to your login/Signup anchor tag. <br><b> &lt;a class="open-morsel-login" href="#"&gt;SignUp/LogIn&lt;/a&gt;</b></td>
