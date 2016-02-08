@@ -19,30 +19,23 @@ if(isset($hostCompany) && $hostCompany != ""){
 				if(response.data!="blank"){
 			        var data = response.data;
 		            jQuery('#post_keyword_id').val(JSON.stringify(data));
-								/*create option for shortcode tab*/
-					  		//jQuery(data).each(function() {
-								//jQuery('#shortcode_keyword').append(jQuery("<option>").attr('value',this.id).text(this.name));
-								// });
-							 	jQuery('#shortcode_keyword').html("");
-							 	jQuery('#shortcode_keyword').append(jQuery("<option>").attr('value',0).text("- Please select keyword -"));
+						jQuery('#shortcode_keyword').html("");
+						jQuery('#shortcode_keyword').append(jQuery("<option>").attr('value',0).text("- Please select keyword -"));
 		            for(var k in data){
 		                jQuery('#shortcode_keyword').append(jQuery("<option>").attr('value',data[k].id).text(data[k].name));
-
-								    var html = '<tr id="morsel_keyword-'+data[k].id+'" class="post-'+data[k].id+' type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">';
-			            	html +='<td class="post-title page-title column-title"><strong>'+data[k].id+'</strong></td>';
-										html +='<td class="categories column-categories" id="keyword-name-'+data[k].id+'">'+data[k].name+'</td>';
-		                html +='<td class="date column-date"><abbr title="">'+data[k].created_at.slice(0,10)+'</abbr><br />Created</td>';
-										html +='<td class="edit-btn column-categories"><button onclick="updateKeywords('+"'"+data[k].id+"'"+',1,'+"'"+escape(data[k].name)+"'"+')">Edit</button> &nbsp;&nbsp; <button onclick="deleteKeywords('+"'"+data[k].id+"'"+')">Delete</button></td>';
+					    var html = '<tr id="morsel_keyword-'+data[k].id+'" class="post-'+data[k].id+' type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0 keywordMorselList">';
+			            	html +='<td class="post-title page-title column-title keywordMorselList"><strong>'+data[k].id+'</strong></td>';
+							html +='<td class="categories column-categories keywordMorselList" id="keyword-name-'+data[k].id+'">'+data[k].name+'</td>';
+  		                    html +='<td class="date column-date keywordMorselList"><abbr title="">'+data[k].created_at.slice(0,10)+'</abbr><br />Created</td>';
+							html +='<td class="edit-btn column-categories keywordMorselList"><button onclick="updateKeywords('+"'"+data[k].id+"'"+',1,'+"'"+escape(data[k].name)+"'"+')">Edit</button> &nbsp;&nbsp; <button onclick="deleteKeywords('+"'"+data[k].id+"'"+')">Delete</button></td>';
 				            html +='</tr>';
-
-		                jQuery("#morsel-keyword-list_data").append(html);
+                        jQuery("#morsel-keyword-list_data").append(html);
 		            }
 		        } else {
 				    var html = '<tr><td></td><td><b>NO RESULT FOUND</b></td><td></td><td></td></tr>';
 				    jQuery("#morsel-keyword-list_data").prepend(html);
 		        }
 			}, error:function(){
-				//alert('Error in getting morsel keywords of user');
 			    var html = '<tr><td></td><td><b>NO RESULT FOUND</b></td><td></td><td></td></tr>';
 			    jQuery("#morsel-keyword-list_data").append(html);
 			    jQuery("#ajaxLoaderPostForKeyword").css("display","none");
@@ -75,56 +68,62 @@ function deleteKeywords(keywordID){
 		}, error:function(){
 			console.log('Error in delete morsel keywords');
 		}, complete:function(){
-			// $("#morsel-keywords-submit").val('Connect');
 			console.log('delete morsel keywords is complete');
 		}
 	});
 }
 </script>
-
-<!-- Edit Form -->
-<!-- <form method="post" action="" id="morsel-host-keywords-form"> 	        -->
-   	<table class="form-table">
-  		<tr valign="top">
-  			<td scope="row">Keyword Name:</td>
+<style type="text/css">
+/*	.keywordAddMorsel td { padding: 0;}
+	.keywordAddMorsel td input[type="text"] { margin: 0; width: 300px;}
+	.keywordAddMorsel td input[type="button"] { margin: 10px 0 ;}
+	.keywordAddMorsel .textTd { width: 285px; margin-bottom:8px; vertical-align: top; margin-top: 5px;}
+	.keywordMorselList { text-align: center !important;}
+	.clearkeyboard{ clear: both;}
+    .clearkeyboardWithMargin{ clear: both;margin-bottom: 5px;}
+    .keywordListDiv { width: 100%; overflow: auto;}*/
+</style>
+<!-- Keyword Edit Form -->
+	<table class="form-table keywordAddMorsel">
+  		<tr>  			
+  			<td class="textTd">Keyword Name : </td>
 			<td>
 				<input type="hidden" name="post_keyword_id" id="post_keyword_id" value=""/>
 				<input type="hidden" name="updated_keywords" id="updated_keywords" value="0"/>
 				<input type="hidden" name="keyword_id" id="keyword_id" value=""/>
 				<input type="text" style="width:50%" name="keyword[name]" id="keyword_name" value=""/>
+				<div class="clearkeyboardWithMargin"></div>
+				<input type="button" class="button button-primary" name="morsel-keywords-form" id="morsel-keywords-submitKey" value="Save">
 			</td>
-  		</tr>
-		<tr valign="top">
-  			<td scope="row">&nbsp;</td>
-			<td><input id="morsel-keywords-submitKey" class="button button-primary" type="button" value="Save" name="morsel-keywords-form"></td>
-  		</tr>
+  		</tr>  		
 	</table>
 <!-- </form> -->
 <!-- Edit Form -->
 <div id="ajaxLoaderPostForKeyword" style="display:none; text-align:center;">
     <span><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajax-loader.gif"></span>
 </div>
-<table class="wp-list-table widefat posts">
-	<thead>
-		<tr>
-			<th scope='col' id='keyword-id' class='manage-column column-categories'><span>Keyword ID</span></th>
-			<th scope='col' id='keyword-name' class='manage-column column-title sortable desc'><span>Keyword Name</span></th>
-			<th scope='col' id='date' class='manage-column column-date sortable asc'><span>Date</span></th>
-			<th scope='col' class='manage-column column-date sortable asc'>Actions</th>
-	  	</tr>
-	</thead>
-	<tfoot>
-		<tr>
-			<th scope='col' id='keyword-id' class='manage-column column-categories'>Keyword ID</th>
-			<th scope='col' id='keyword-name' class='manage-column column-title sortable desc'><span>Keyword Name</span></th>
-			<th scope='col' class='manage-column column-date sortable asc'><span>Date</span></th>
-			<th scope='col' class='manage-column column-date sortable asc'>Actions</th>
-		</tr>
-	</tfoot>
-	<tbody id="morsel-keyword-list_data"></tbody>
-</table>
-
-<div class="clear"><br></div>
+<div class="keywordListDiv">
+	<table class="widefat posts">
+		<thead>
+			<tr>
+				<th id='keyword-id' class='manage-column column-categories keywordMorselList'><span>Keyword ID</span></th>
+				<th id='keyword-name' class='manage-column column-title sortable desc keywordMorselList'><span>Keyword Name</span></th>
+				<th id='date' class='manage-column column-date sortable asc keywordMorselList'><span>Date</span></th>
+				<th class='manage-column column-date sortable asc keywordMorselList'>Actions</th>
+		  	</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th id='keyword-id' class='manage-column column-categories keywordMorselList'>Keyword ID</th>
+				<th id='keyword-name' class='manage-column column-title sortable desc keywordMorselList'><span>Keyword Name</span></th>
+				<th class='manage-column column-date sortable asc keywordMorselList'><span>Date</span></th>
+				<th class='manage-column column-date sortable asc keywordMorselList'>Actions</th>
+			</tr>
+		</tfoot>
+		<tbody id="morsel-keyword-list_data"></tbody>
+	</table>
+</div>	
+<div class="clearkeyboard"></div>
 
 <script type="text/javascript">
 	(function($){
@@ -132,11 +131,6 @@ function deleteKeywords(keywordID){
 			if($("#keyword_name").val() != ""){
 				var keywords_name = $("#keyword_name").val();
 				$("#morsel-keywords-submit").val('Please wait!');
-				// var regex = /[^\w\s]/gi;
-				// if(regex.test(keywords_name) == true) {
-				//     alert('Your keyword string contains illegal characters.');
-				//     return;
-				// }
 				if($("#keyword_id").val() != ""){ //for edit keyword
 					$.ajax({
 						url: "<?php echo MORSEL_API_URL;?>"+"keywords/edit_morsel_keyword",
@@ -193,6 +187,6 @@ function deleteKeywords(keywordID){
 		});
 	}(jQuery));
 </script>
-<? } else { ?>
+<?} else { ?>
 Please Enter Host Details First.
-<? } ?>
+<?} ?>

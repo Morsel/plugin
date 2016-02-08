@@ -1,5 +1,5 @@
 function timeAgo(selector) {
-    
+
     var templates = {
         prefix: "",
         suffix: " ago",
@@ -63,12 +63,12 @@ function timeAgo(selector) {
 function creatCommentList(commentData,morselSite,avatar_image) {
   var html = '';
   if(jQuery.isArray(commentData)){
-   
-    commentData.reverse().forEach(function(entry) {     
+
+    commentData.reverse().forEach(function(entry) {
       html += '<li class="view-more-list">\
                 <div class="user-info">';
       if(entry.creator.photos){
-       html +=     '<a class="profile-pic-link profile-pic-s" title="'+entry.creator.username+'" href="'+morselSite+entry.creator.username+'"><img class="img-circle" src="'+entry.creator.photos._72x72+'"></a>';     
+       html +=     '<a class="profile-pic-link profile-pic-s" title="'+entry.creator.username+'" href="'+morselSite+entry.creator.username+'"><img class="img-circle" src="'+entry.creator.photos._72x72+'"></a>';
       } else {
         html +=     '<a class="profile-pic-link profile-pic-s" title="'+entry.creator.username+'" href="'+morselSite+entry.creator.username+'"><img class="img-circle" src="'+avatar_image+'"></a>';
       }
@@ -81,18 +81,18 @@ function creatCommentList(commentData,morselSite,avatar_image) {
                   </div>\
                 </div>\
               </li>';
-      });  
+      });
 
   } else {
 
     html = '<li class="view-more-list">\
               <div class="user-info">';
     if(commentData.creator.photos){
-     html +=     '<a class="profile-pic-link profile-pic-s" title="'+commentData.creator.username+'" href="'+morselSite+commentData.creator.username+'"><img class="img-circle" src="'+commentData.creator.photos._72x72+'"></a>';     
+      html += '<a class="profile-pic-link profile-pic-s" title="'+commentData.creator.username+'" href="'+morselSite+commentData.creator.username+'"><img class="img-circle" src="'+commentData.creator.photos._72x72+'"></a>';
     } else {
-      html +=     '<a class="profile-pic-link profile-pic-s" title="'+commentData.creator.username+'" href="'+morselSite+commentData.creator.username+'"><img class="img-circle" src="'+avatar_image+'"></a>';
+      html += '<a class="profile-pic-link profile-pic-s" title="'+commentData.creator.username+'" href="'+morselSite+commentData.creator.username+'"><img class="img-circle" src="'+avatar_image+'"></a>';
     }
-    html +=     '<div class="user-body user-extra-info">\
+      html +=   '<div class="user-body user-extra-info">\
                   <h5 class="user-info-main">\
                     <a class="overflow-ellipsis" href="'+morselSite+commentData.creator.username+'">'+commentData.creator.first_name+' '+commentData.creator.last_name+'</a>\
                   </h5>\
@@ -102,7 +102,6 @@ function creatCommentList(commentData,morselSite,avatar_image) {
               </div>\
             </li>';
   }
-  
   return html;
 }
 
@@ -128,6 +127,8 @@ var waitingDialog = (function ($) {
      *          options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
      */
     show: function (message, options) {
+      //add modal to bootstrap-iso class div because we use bootstrap with parent .bootstrap-iso class
+      $('div.bootstrap-iso').append($dialog);
       // Assigning defaults
       var settings = $.extend({
         dialogSize: 'm',
@@ -159,24 +160,93 @@ var waitingDialog = (function ($) {
 
 })(jQuery);
 
+var iframeDialog = (function ($) {
+
+    // Creating modal dialog's DOM
+  var $dialog = $(
+    '<div id="morselIframeModal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
+    '<div class="modal-dialog modal-m">' +
+    '<div class="modal-content">' +
+      '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h3 style="margin:0;"></h3></div>' +
+      '<div class="modal-body">' +
+        '<iframe id = "socialLinkId"></iframe>' +
+      '</div>' +
+    '</div></div></div>');
+
+  return {
+    /**
+     * Opens our dialog
+     * @param message Custom message
+     * @param options Custom options:
+     *          options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
+     *          options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
+     */
+    show: function (message, options) {
+      //add modal to bootstrap-iso class div because we use bootstrap with parent .bootstrap-iso class
+      $('div.bootstrap-iso').append($dialog);
+      // Assigning defaults
+      var settings = $.extend({
+        dialogSize: 'm',
+        progressType: ''
+      }, options);
+      if (typeof message === 'undefined') {
+        message = 'Loading';
+      }
+      if (typeof options === 'undefined') {
+        options = {};
+      }
+      // Configuring dialog
+      $dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
+      $dialog.find('.progress-bar').attr('class', 'progress-bar');
+      if (settings.progressType) {
+        $dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
+      }
+      $dialog.find('h3').text(message);
+      // Opening dialog
+      $dialog.modal();
+    },
+    /**
+     * Closes dialog
+     */
+    hide: function () {
+      $dialog.modal('hide');
+    }
+  }
+
+})(jQuery);
+
+
+
+
 function showDialog(page){
-  //close main popup      
+  //close main popup
   jQuery("#morsel-login-content").dialog("close");
 
   var jQuerydialog = jQuery('<div></div>')
            .html('<iframe style="border: 0px; " src="' + page + '" width="100%" height="100%"></iframe>')
            .dialog({
                autoOpen: false,
-               modal: true,                    
-               width: "40%",          
-               height : 500,
-               title: "Eatmorsel"
+               modal: true,
+               bgiframe:true,
+               height : 480,
+               title: "Connect to social",
+               open: function(event, ui) {
+                jQuery(this).closest('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
+               },
+               button: [
+                {
+                  text: "Close",
+                  click: function() {
+                  jQuery( this ).dialog( "close" );
+                  }
+                }
+              ]
            });
   jQuerydialog.dialog('open');
 }
 
 function likesCountText(isIncrease) {
-  
+
   var isIncrease = isIncrease;
   var text = jQuery("#like-count").text();
   text = text.trim();
@@ -204,7 +274,7 @@ function likesCountText(isIncrease) {
 }
 
 function commentsCountText(itemId,isIncrease) {
-  
+
   var isIncrease = isIncrease;
   var itemId = itemId;
   var text = jQuery("#comment-count-"+itemId).text();
@@ -235,6 +305,7 @@ function commentsCountText(itemId,isIncrease) {
 }
 
   jQuery(function ($) {
+
     //check for comment textarea blank
     jQuery("#comment-text").keypress(function() {
         if(jQuery("#comment-text").val() != ''){
@@ -245,14 +316,14 @@ function commentsCountText(itemId,isIncrease) {
     });
 
     //add modal-open class to body
-    jQuery(window).on('shown.bs.modal', function(){        
+    jQuery(window).on('shown.bs.modal', function(){
         if(!jQuery("body").hasClass('modal-open')){
           jQuery("body").addClass('modal-open')
         }
     });
-    
+
     //FOR HIDDING remove modal-open class to body
-    jQuery(window).on('hidden.bs.modal', function(){              
+    jQuery(window).on('hidden.bs.modal', function(){
         if(jQuery("body").hasClass('modal-open')){
           jQuery("body").removeClass('modal-open')
         }
@@ -261,7 +332,7 @@ function commentsCountText(itemId,isIncrease) {
     //focus on share functionality
     jQuery("#share-morsel-focus").click(function(event){
       event.preventDefault();
-      //jQuery('#share-morsel')[0].scrollIntoView(true);      
+      //jQuery('#share-morsel')[0].scrollIntoView(true);
       $('html, body').animate({ scrollTop: $("#share-morsel").offset().top }, 500);
     });
 
@@ -291,14 +362,14 @@ function commentsCountText(itemId,isIncrease) {
             alert("Please upload a valid image file.");
         }
     });
-      
+
 
     /*show hide of signup and login panel*/
     jQuery("#show-mrsl-login-btn").click(function(event){
-      
+
       jQuery("#mrsl-signup-section").toggle();
-      jQuery("#mrsl-login-section").toggle();        
-      
+      jQuery("#mrsl-login-section").toggle();
+
       if(jQuery("#show-mrsl-login-btn").text() =='Login'){
         jQuery("#show-mrsl-login-btn").text('Signup');
       } else {
@@ -309,26 +380,26 @@ function commentsCountText(itemId,isIncrease) {
 
     // Setup signup span for tooltip
     jQuery("#mrsl-signup-submit-btn-span").mouseover(function(event){
-      
-      if((jQuery('#mrsl_user_first_name').val() == "") 
-          || (jQuery('#mrsl_user_last_name').val() == "") 
+
+      if((jQuery('#mrsl_user_first_name').val() == "")
+          || (jQuery('#mrsl_user_last_name').val() == "")
           || (jQuery('#mrsl_user_email').val() == "")
-          || (jQuery('#mrsl_user_password').val() == "") 
-          || (jQuery('#varification').val() == "") 
+          || (jQuery('#mrsl_user_password').val() == "")
+          || (jQuery('#varification').val() == "")
           ){
         jQuery("#mrsl-signup-submit-btn-span").attr("data-original-title","Please complete all required fields");
-        jQuery("#mrsl-signup-submit-btn-span").attr("data-toggle","tooltip");        
+        jQuery("#mrsl-signup-submit-btn-span").attr("data-toggle","tooltip");
         jQuery("#mrsl-signup-submit-btn").prop("disabled",true);
       } else if(jQuery("#mrsl-signup-form div").children("div.form-group").hasClass("has-error")){
         jQuery("#mrsl-signup-submit-btn-span").attr("data-original-title","Please correct errors in indicated fields");
-        jQuery("#mrsl-signup-submit-btn-span").attr("data-toggle","tooltip");        
+        jQuery("#mrsl-signup-submit-btn-span").attr("data-toggle","tooltip");
         jQuery("#mrsl-signup-submit-btn").prop("disabled",true);
-      } else {        
+      } else {
         jQuery("#mrsl-signup-submit-btn-span").attr("data-toggle","");
-        jQuery("#mrsl-signup-submit-btn").prop("disabled",false);        
+        jQuery("#mrsl-signup-submit-btn").prop("disabled",false);
       }
     });
-      
+
     // Setup form validation on the signup-form element
     jQuery("#mrsl-signup-form").validate({
 
@@ -346,7 +417,7 @@ function commentsCountText(itemId,isIncrease) {
               equalTo: "#mrsl_user_password"
             }
         },
-        
+
         // Specify the validation error messages
         messages: {
             "user[first_name]" : " First Name is required",
@@ -355,46 +426,46 @@ function commentsCountText(itemId,isIncrease) {
             "user[email]" : {
               required : "Email is required",
               email: "Email is invalid"
-            },  
+            },
             "user[password]": "Password is required",
             verification: {
               equalTo: "Passwords don't match"
             }
         },
-        
+
         highlight: function(element) {
-            jQuery(element).parent('div').addClass("has-error");            
+            jQuery(element).parent('div').addClass("has-error");
         },
-        
+
         unhighlight: function(element) {
-            jQuery(element).parent('div').removeClass("has-error");            
+            jQuery(element).parent('div').removeClass("has-error");
         },
 
         submitHandler: function(form) {
-            form.submit();            
+            form.submit();
         },
 
-        onfocusout: function(element) { 
-          this.element(element); 
+        onfocusout: function(element) {
+          this.element(element);
         }
-    }); 
-      
+    });
 
-    /*end signup section*/  
+
+    /*end signup section*/
 
 
     jQuery('body').tooltip({
       selector: '[data-toggle="tooltip"]'
-    });    
+    });
 
     jQuery('a.open-site-link').click(function(event){   //bind handlers
-      event.preventDefault();       
+      event.preventDefault();
       jQuery("#morselLoginModal").modal('hide');
 
       var src = jQuery(this).attr('data-src');
       var height = jQuery(this).attr('data-height') || 300;
       var width = jQuery(this).attr('data-width') || 400;
-    
+
       jQuery("#forgetPasswordModal iframe").attr({'src':src,
                         'height': height,
                         'width': width});
@@ -403,11 +474,11 @@ function commentsCountText(itemId,isIncrease) {
     // Setup form validation on the #register-form element
    jQuery("#mrsl-submit-btn-span").mouseover(function(event){
       if((jQuery('#mrsl-login').val() == "") || (jQuery('#mrsl-password').val() == "") ){
-        jQuery("#mrsl-submit-btn-span").attr("data-toggle","tooltip");        
+        jQuery("#mrsl-submit-btn-span").attr("data-toggle","tooltip");
         jQuery("#mrsl-submit-btn").prop("disabled",true);
-      } else {        
+      } else {
         jQuery("#mrsl-submit-btn-span").attr("data-toggle","");
-        jQuery("#mrsl-submit-btn").prop("disabled",false);        
+        jQuery("#mrsl-submit-btn").prop("disabled",false);
       }
    });
 
@@ -425,27 +496,27 @@ function commentsCountText(itemId,isIncrease) {
             "user[login]" : "required",
             "user[password]": "required"
         },
-        
+
         // Specify the validation error messages
         messages: {
             "user[login]": "Email or Username is required",
-            "user[password]": "Password is required"            
+            "user[password]": "Password is required"
         },
-        
+
         highlight: function(element) {
-            jQuery(element).parent('div').addClass("has-error");            
+            jQuery(element).parent('div').addClass("has-error");
         },
-        
+
         unhighlight: function(element) {
-            jQuery(element).parent('div').removeClass("has-error");            
+            jQuery(element).parent('div').removeClass("has-error");
         },
 
         submitHandler: function(form) {
-            form.submit();            
+            form.submit();
         },
 
-        onfocusout: function(element) { 
-          this.element(element); 
+        onfocusout: function(element) {
+          this.element(element);
         }
-    }); 
+    });
 });

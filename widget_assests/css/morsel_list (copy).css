@@ -1,0 +1,1295 @@
+@import url(https://fonts.googleapis.com/css?family=Merriweather|Lato:400,700);
+
+/*! normalize.css v3.0.1 | MIT License | git.io/normalize */
+
+@import url(https://fonts.googleapis.com/css?family=Merriweather|Lato:400,700);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Slab:400,700);
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400);
+body {
+  font-family: "Lato", "Helvetica Neue Light", "Helvetica Neue", "Arial", sans-serif;
+  font-size: 13px;
+  line-height: 1.42857;
+  color: #394038;
+  background-color: #fff;
+}
+
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+a {
+  color: #ee8872;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  color: #e96144;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+a:focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+figure {
+  margin: 0;
+}
+
+img {
+  vertical-align: middle;
+}
+
+.morsel-hide {
+  display: none;
+}
+
+.item-img.image-loaded img {
+  max-width: 90%;
+}
+
+.img-responsive {
+  display: block;
+  width: 100% \9;
+  max-width: 100%;
+  height: auto;
+}
+
+.img-rounded {
+  border-radius: 3px;
+}
+
+.img-thumbnail {
+  padding: 4px;
+  line-height: 1.42857;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  -webkit-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  display: inline-block;
+  width: 100% \9;
+  max-width: 100%;
+  height: auto;
+}
+
+.img-circle {
+  border-radius: 50%;
+}
+
+hr {
+  margin-top: 18px;
+  margin-bottom: 18px;
+  border: 0;
+  border-top: 1px solid #eee;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.morsel-or,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: "Lato", "Helvetica Neue Light", "Helvetica Neue", "Arial", sans-serif;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #394038;
+}
+
+h1 small,
+h1 .small,
+h2 small,
+h2 .small,
+h3 small,
+h3 .small,
+h4 small,
+h4 .small,
+h5 small,
+h5 .small,
+h6 small,
+h6 .small,
+.h1 small,
+.h1 .small,
+.h2 small,
+.morsel-or small,
+.h2 .small,
+.morsel-or .small,
+.h3 small,
+.h3 .small,
+.h4 small,
+.h4 .small,
+.h5 small,
+.h5 .small,
+.h6 small,
+.h6 .small {
+  font-weight: normal;
+  line-height: 1;
+  color: #777;
+}
+
+h1,
+.h1,
+h2,
+.h2,
+.morsel-or,
+h3,
+.h3 {
+  margin-top: 18px;
+  margin-bottom: 9px;
+}
+
+h1 small,
+h1 .small,
+.h1 small,
+.h1 .small,
+h2 small,
+h2 .small,
+.h2 small,
+.morsel-or small,
+.h2 .small,
+.morsel-or .small,
+h3 small,
+h3 .small,
+.h3 small,
+.h3 .small {
+  font-size: 65%;
+}
+
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+  margin-top: 9px;
+  margin-bottom: 9px;
+}
+
+h4 small,
+h4 .small,
+.h4 small,
+.h4 .small,
+h5 small,
+h5 .small,
+.h5 small,
+.h5 .small,
+h6 small,
+h6 .small,
+.h6 small,
+.h6 .small {
+  font-size: 75%;
+}
+
+h4.modal-title {
+  font-size: 18px;
+}
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.container:before,
+.container:after {
+  content: " ";
+  display: table;
+}
+
+.container:after {
+  clear: both;
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+  ;
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+  /*increase width of modal of bootstrap*/
+  .modal-lg {
+    width: 1200px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+  ;
+}
+
+.container-fluid {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.container-fluid:before,
+.container-fluid:after {
+  content: " ";
+  display: table;
+}
+
+.container-fluid:after {
+  clear: both;
+}
+
+.row {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.row:before,
+.row:after {
+  content: " ";
+  display: table;
+}
+
+.row:after {
+  clear: both;
+}
+
+input,
+textarea,
+select {
+  font-family: "Merriweather", "Helvetica Neue Light", "Helvetica Neue", "Arial", sans-serif;
+}
+
+.spacer {
+  display: block;
+  width: 100%;
+  height: auto;
+  z-index: -1;
+}
+
+a.white-link {
+  color: white;
+}
+
+a.white-link:hover,
+a.white-link:active {
+  color: #e96144 !important;
+}
+
+a.dark-link {
+  color: #394038;
+}
+
+a.dark-link:hover,
+a.dark-link:active {
+  color: #e96144 !important;
+}
+
+.page-wrapper {
+  width: 100%;
+  /*background-color: #fff;*/
+  background-color: transparent;
+  /*position: absolute;*/
+  overflow: hidden;
+}
+
+.morsel-bg {
+  background-color: #fff;
+}
+
+.row.no-gutter {
+  margin: 0;
+  padding: 0;
+}
+
+.row.no-gutter [class*="col-"] {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@media (min-width: 768px) {
+  .page-wrapper {
+    /*background-color: #f3f2f0;*/
+    background-color: transparent;
+  }
+  .main-view {
+    padding-bottom: 35px;
+  }
+  .main-view-offset {
+    margin-bottom: -35px;
+  }
+  .main-header .morsel-logo {
+    margin: 2px 0;
+  }
+  .main-header nav>ul>li {
+    margin: 0 10px;
+  }
+  ;
+}
+
+.morsel {
+  position: relative;
+  white-space: normal;
+  width: 100%;
+  height: 100%;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.morsel-block {
+  position: relative;
+  height: 250px;
+  padding: 1px;
+}
+
+.morsel-block:hover:after {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+.morsel-block:hover .morsel-img {
+  -webkit-filter: grayscale(60%);
+  filter: grayscale(60%);
+  opacity: 0.45;
+  filter: alpha(opacity=45);
+}
+
+.morsel-block:hover .loader {
+  background-image: none;
+}
+
+.morsel-block:hover .morsel-block-title a {
+  color: #e96144;
+}
+
+.morsel-block:after {
+  -webkit-transition: opacity 0.1s ease-out;
+  -o-transition: opacity 0.1s ease-out;
+  transition: opacity 0.1s ease-out;
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+  content: '';
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iMzIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzMxMjMwOSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAwMDAwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -moz-radial-gradient(#312309, #000000 320px);
+  background-image: -webkit-radial-gradient(#312309, #000000 320px);
+  background-image: radial-gradient(#312309, #000000 320px);
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#312309', endColorstr='#000000', GradientType=1);
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  z-index: 0;
+}
+
+.morsel-block.using-spacer {
+  height: auto;
+}
+
+.morsel-block.using-spacer .spacer {
+  max-height: 250px;
+}
+
+.morsel-block .morsel-info {
+  position: absolute;
+  bottom: 1px;
+  left: 1px;
+  right: 1px;
+  z-index: 2;
+  padding: 15px 5px 8px;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzE3MTQxMSIgc3RvcC1vcGFjaXR5PSIwLjAiLz48c3RvcCBvZmZzZXQ9IjElIiBzdG9wLWNvbG9yPSIjMTcxNDExIiBzdG9wLW9wYWNpdHk9IjAuMCIvPjxzdG9wIG9mZnNldD0iOCUiIHN0b3AtY29sb3I9IiMxNzE0MTEiIHN0b3Atb3BhY2l0eT0iMC4wNSIvPjxzdG9wIG9mZnNldD0iNjQlIiBzdG9wLWNvbG9yPSIjMTcxNDExIiBzdG9wLW9wYWNpdHk9IjAuNSIvPjxzdG9wIG9mZnNldD0iODYlIiBzdG9wLWNvbG9yPSIjMTcxNDExIiBzdG9wLW9wYWNpdHk9IjAuNyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzE3MTQxMSIgc3RvcC1vcGFjaXR5PSIwLjgiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(23, 20, 17, 0)), color-stop(1%, rgba(23, 20, 17, 0)), color-stop(8%, rgba(23, 20, 17, 0.05)), color-stop(64%, rgba(23, 20, 17, 0.5)), color-stop(86%, rgba(23, 20, 17, 0.7)), color-stop(100%, rgba(23, 20, 17, 0.8)));
+  background-image: -moz-linear-gradient(rgba(23, 20, 17, 0) 0%, rgba(23, 20, 17, 0) 1%, rgba(23, 20, 17, 0.05) 8%, rgba(23, 20, 17, 0.5) 64%, rgba(23, 20, 17, 0.7) 86%, rgba(23, 20, 17, 0.8) 100%);
+  background-image: -webkit-linear-gradient(rgba(23, 20, 17, 0) 0%, rgba(23, 20, 17, 0) 1%, rgba(23, 20, 17, 0.05) 8%, rgba(23, 20, 17, 0.5) 64%, rgba(23, 20, 17, 0.7) 86%, rgba(23, 20, 17, 0.8) 100%);
+  background-image: linear-gradient(rgba(23, 20, 17, 0) 0%, rgba(23, 20, 17, 0) 1%, rgba(23, 20, 17, 0.05) 8%, rgba(23, 20, 17, 0.5) 64%, rgba(23, 20, 17, 0.7) 86%, rgba(23, 20, 17, 0.8) 100%);
+  text-align: center;
+}
+
+.morsel-block .morsel-info .morsel-block-title {
+  font-size: 15px;
+  line-height: 1.2;
+  margin: 0 0 3px;
+  padding: 0 5px;
+}
+
+.morsel-block .morsel-info .morsel-block-creator {
+  font-size: 14px;
+  margin: 0;
+  font-weight: 400;
+  padding: 0 5px;
+}
+
+.morsel-block .morsel-info .morsel-block-creator .user-by:before {
+  color: white;
+}
+
+.morsel-block .morsel-info .morsel-block-place {
+  font-size: 14px;
+  line-height: 24px;
+  font-style: italic;
+  margin: 0;
+  font-weight: 400;
+}
+
+.morsel-block .morsel-info:hover a {
+  color: white;
+}
+
+.morsel-block .morsel-info .morsel-info-bottom {
+  text-align: center;
+}
+
+.morsel-block .morsel-info .morsel-info-bottom.featured-or-tagged .morsel-block-place {
+  padding: 0 70px;
+}
+
+.morsel-block .morsel-info .morsel-info-bottom i {
+  float: left;
+  vertical-align: middle;
+}
+
+.morsel-block .morsel-info .morsel-info-bottom .morsel-featured,
+.morsel-block .morsel-info .morsel-info-bottom .morsel-tagged-count {
+  vertical-align: middle;
+  line-height: 24px;
+  color: white;
+}
+
+.morsel-block .morsel-info .morsel-info-bottom .morsel-featured a,
+.morsel-block .morsel-info .morsel-info-bottom .morsel-tagged-count a {
+  color: white;
+}
+
+.morsel-block .morsel-info .morsel-info-bottom .morsel-featured a:hover,
+.morsel-block .morsel-info .morsel-info-bottom .morsel-tagged-count a:hover {
+  color: #e96144;
+}
+
+.morsel-block .morsel-info .morsel-info-bottom .morsel-featured {
+  float: left;
+  margin-right: 5px;
+  font-size: 10px;
+}
+
+.morsel-block .morsel-info .morsel-info-bottom .morsel-tagged-count {
+  display: inline-block;
+  float: right;
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+.morsel-block .morsel-info .morsel-info-bottom .morsel-tagged-count span:hover {
+  color: #e96144;
+  cursor: pointer;
+}
+
+.morsel-block .morsel-img {
+  background-position: center;
+  background-size: cover;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  bottom: 1px;
+  right: 1px;
+  z-index: 1;
+  -webkit-filter: grayscale(0%);
+  filter: grayscale(0%);
+  opacity: 1;
+  filter: alpha(opacity=100);
+  -webkit-transition: all 0.1s ease-out;
+  -o-transition: all 0.1s ease-out;
+  transition: all 0.1s ease-out;
+}
+
+.morsel-block-wrap {
+  padding: 5px 18px 0;
+}
+
+@media (min-width: 768px) {
+  .morsel-block {
+    /*height: 320px;*/
+    height: auto;
+  }
+  .morsel-block.using-spacer {
+    height: auto;
+  }
+  .morsel-block.using-spacer .spacer {
+    max-height: none;
+  }
+  ;
+}
+
+.modal-morsel-full-slide .morsel-mobile-info {
+  background-color: #f3f1ef;
+  text-align: center;
+}
+
+.modal-morsel-full-slide .morsel-full .morsel-title {
+  color: #394038;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 0px;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.morsel-title > span {
+  float: right;
+  position: absolute;
+  right: 20px;
+}
+
+.modal-morsel-full-slide .user {
+  display: inline-block;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: normal;
+  /*44px;*/
+  vertical-align: middle;
+  padding: 5px;
+}
+
+.morsel-mobile-info h2,
+.morsel-mobile-info .user {
+  font-family: "Roboto Slab", "Helvetica Neue Light", "Helvetica Neue", Arial, sans-serif;
+}
+
+.page-wrapper-details {
+  max-width: 660px
+}
+
+.modal-morsel-full-slide .item-img-wrap {
+  height: 100%;
+}
+
+.modal-morsel-full-slide .slide-item > div {
+  position: relative;
+  text-align: center;
+}
+
+.modal-morsel-full-slide .item-info {
+  padding: 15px 20px;
+}
+
+.modal-morsel-full-slide .item-description {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+  overflow: auto;
+  padding: 5px 10px;
+  text-align: justify;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+}
+
+.modal-morsel-full-slide .slide-item {
+  background-color: #f3f1ef;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.modal-morsel-full-slide .share-item .social-sharing {
+  margin-bottom: 20px;
+}
+
+.social-sharing {
+  padding: 10px;
+  text-align: center;
+}
+
+.modal-morsel-full-slide .share-item h5 {
+  color: #93a491;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: uppercase;
+  font-family: "Roboto Slab", "Helvetica Neue Light", "Helvetica Neue", "Arial", sans-serif;
+}
+
+.share-item hr {
+  padding: 0px;
+  margin: 0px;
+}
+
+.modal-morsel-full-slide .slide-item + .slide-item hr {
+  background-image: url("../images/dark-line.png");
+  border: 0 none;
+  display: block;
+  height: 4px;
+  margin-bottom: 25px;
+}
+
+.social-sharing .btn-social {
+  display: inline-block;
+  font-weight: 300;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.social-sharing > .btn-social {
+  font-size: 0;
+}
+
+.modal-morsel-full-slide a {
+  font-family: "Roboto Slab", "Helvetica Neue Light", "Helvetica Neue", Arial, sans-serif;
+}
+
+.btn-submit-wrap.disabled {
+  cursor: not-allowed;
+}
+
+#morselLoginModal {
+  font-family: "Lato", "Helvetica Neue Light", "Helvetica Neue", "Arial", sans-serif;
+  color: #394038;
+}
+
+label.required::after {
+  color: #d9534f;
+  content: "*";
+}
+
+label.control-label {
+  color: #394038;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1.42857;
+}
+
+.has-error label.control-label {
+  color: #a94442;
+}
+
+.btn-submit-wrap.btn-submit-block {
+  display: block;
+  float: none;
+}
+
+.container.login-page > h1 {
+  font-size: 18px;
+}
+
+.btn-submit-wrap.btn-submit-block .btn {
+  float: none;
+  width: 100%;
+}
+
+.btn-submit-wrap.btn-submit-block .btn-lg {
+  border-radius: 3px;
+  font-size: 17px;
+  padding: 10px 16px;
+}
+
+.btn-submit-wrap.btn-submit-block .btn-primary {
+  background-color: #e96144;
+  border-color: transparent;
+  color: #fff;
+}
+
+.btn-submit-wrap.btn-submit-block .btn-primary:hover,
+.btn-submit-wrap.btn-submit-block .btn-primary:focus,
+.btn-submit-wrap.btn-submit-block .btn-primary:active,
+.btn-submit-wrap.btn-submit-block .btn-primary.active {
+  background-color: #e03d1a;
+  border-color: transparent;
+  color: #fff;
+}
+
+.has-error label.error {
+  color: #a94442;
+  display: block;
+  margin: 10px 0 5px;
+}
+
+.have-an-account a {
+  color: #ee8872!important;
+}
+
+
+/*.login {
+  background: url("../images/light-line.png") repeat scroll right top rgba(0, 0, 0, 0);
+  height: 100%;
+  text-align: center;
+}
+
+.login .login-header {
+    border-bottom: 1px solid #e2ddd7;
+}
+
+.login .login-footer {
+  border-top: 1px solid #e2ddd7;
+  color: #93a491;
+  padding: 30px 0 60px;
+}*/
+
+.powered-by-morsel a {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+  background-image: url('../images/powered-by-morsel.png');
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  width: 135px;
+  height: 65px;
+  background-size: 135px 65px;
+  display: block;
+  text-indent: -9999px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.login .login-header h1 {
+  margin: 25px 0;
+  text-align: center;
+}
+
+.text-hide {
+  background-color: transparent;
+  border: 0 none;
+  color: transparent;
+  font: 0px/0 a;
+  text-shadow: none;
+}
+
+.morsel-text {
+  background-color: transparent;
+  background-image: url("../images/morsel-text.png");
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 130px 59px;
+  border: 0 none;
+  color: transparent;
+  display: inline-block;
+  font: 0px/0 a;
+  height: 59px;
+  text-shadow: none;
+  width: 130px;
+}
+
+.form-control::-webkit-input-placeholder {
+  color: #777;
+}
+
+.form-control:-moz-placeholder {
+  /* Firefox 18- */
+  color: #777;
+}
+
+.form-control::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #777;
+}
+
+.form-control:-ms-input-placeholder {
+  color: #777;
+}
+
+input[type="text"]:focus::-webkit-input-placeholder {
+  color: #e2ddd7;
+}
+
+input[type="text"]:focus:-moz-placeholder {
+  /* Firefox 18- */
+  color: #e2ddd7;
+}
+
+input[type="text"]:focus::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #e2ddd7;
+}
+
+input[type="text"]:focus:-ms-input-placeholder {
+  color: #e2ddd7;
+}
+
+button#show-mrsl-login-btn {
+  margin-right: 1%;
+}
+
+
+/*signup form css*/
+
+form#mrsl-signup-form .image-add {
+  display: block;
+}
+
+form#mrsl-signup-form .image-add.avatar-add .img-circle {
+  background-image: url("../images/avatar_144x144.jpg");
+}
+
+form#mrsl-signup-form .image-add .img-circle {
+  background-color: #e2ddd7;
+  display: block;
+  height: 148px;
+  margin: 0 auto 10px;
+  position: relative;
+  width: 148px;
+}
+
+form#mrsl-signup-form .drop-box {
+  display: block;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 9;
+}
+
+form#mrsl-signup-form .image-add .plus-sign {
+  display: block;
+  font-size: 74px;
+  line-height: 148px;
+  opacity: 0.7;
+  text-align: center;
+  transition: all 0.2s ease-in-out 0s;
+  z-index: 5;
+}
+
+form#mrsl-signup-form .image-add input[type="file"] {
+  cursor: pointer;
+  font-size: 50px;
+  height: 100%;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+form#mrsl-signup-form .image-add .image-preview {
+  background-color: #ffffff;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 8;
+}
+
+form#mrsl-signup-form .image-add .img-circle:hover .drop-box {
+  border: 2px dashed #e96144;
+}
+
+form#mrsl-signup-form .image-add .img-circle:hover .plus-sign {
+  color: #e96144;
+  opacity: 0.9;
+}
+
+
+/*end signup form css*/
+
+#myModalLabel {
+  height: 10px;
+}
+
+.embed-code.stLarge {
+  background-color: #ee8872;
+  background-image: url("../images/white-code.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  border-radius: 3px;
+}
+
+
+/*.like-btn.stLarge {
+  background-color: #ee8872;
+  background-image: url("../images/heart-outline.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  border-radius: 3px;
+}
+
+.already-liked .like-btn.stLarge {
+  background-image: url("../images/heart-filled.png");
+}*/
+
+.embed-code.stButton,
+.like-btn.stButton {
+  text-decoration: none;
+  color: #000000;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.embed-code.stLarge:hover,
+.like-btn.stLarge:hover {
+  background-position: center;
+  opacity: 0.75;
+}
+
+#morsel-loading-img {
+  background: none repeat scroll 0 0 #ffffff;
+  bottom: 0;
+  height: 260px;
+  left: 0;
+  margin: auto;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 350px;
+  z-index: 99;
+}
+
+#morsel-loading .overlay {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8);
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1;
+}
+
+#morselLoginModal p {
+  font-size: 13px;
+}
+
+#morselLoginModal h1 {
+  font-size: 36px;
+}
+
+h2.morsel-title > span > a.btn {
+  color: #fff;
+}
+
+textarea#clipboard-text {
+  background-color: #ee8872;
+  resize: none;
+}
+
+
+/*for like and share stick to bottom area*/
+
+.morsel-actions {
+  bottom: 0;
+}
+
+.morsel-actions-wrap .morsel-actions {
+  background-color: rgba(255, 255, 255, 0.9);
+  bottom: 0;
+  left: 0;
+  padding: 2px 10px;
+  text-align: center;
+  width: 100%;
+  z-index: 15;
+}
+
+.morsel-actions-wrap .morsel-actions {
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  /*bottom: auto;*/
+  box-shadow: 0 -1px 7px 0 rgba(0, 0, 0, 0.1);
+  left: 0;
+  padding: 10px 8px;
+  position: fixed;
+  /*top: 30%;*/
+  width: auto;
+}
+
+.morsel-actions-wrap .morsel-actions .btn {
+  display: block;
+  width: 100%;
+  line-height: 1;
+}
+
+.morsel-actions-wrap .btn-link {
+  color: #ee8872;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.morsel-actions-wrap .morsel-like-count {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.morsel-actions-wrap .morsel-actions .btn i {
+  margin: 0;
+}
+
+.common-like-empty,
+.common-like-filled,
+.common-share,
+.common-comment-empty,
+.common-comment-filled {
+  background-image: url("../images/morsel-icon.png");
+  background-repeat: no-repeat;
+}
+
+.common-like-empty,
+.common-like-filled,
+.common-share,
+.common-comment-empty,
+.common-comment-filled {
+  display: inline-block;
+}
+
+.common-like-empty {
+  background-position: 0 -480px;
+  height: 36px;
+  width: 36px;
+}
+
+.common-like-filled {
+  background-position: 0 -552px;
+  height: 36px;
+  width: 36px;
+}
+
+.common-share {
+  background-position: 0 -756px;
+  height: 36px;
+  width: 36px;
+}
+
+.morsel-actions-wrap .morsel-actions .col-sm-12 {
+  float: none;
+  margin-bottom: 12px;
+}
+
+@media screen and (max-width: 640px) {
+  .morsel-actions-wrap .morsel-actions {
+    width: 100%;
+  }
+  .morsel-actions-wrap .morsel-actions .col-sm-12 {
+    float: left;
+    margin-bottom: 0;
+  }
+  .morsel-title > span {
+    float: none;
+    clear: both;
+    display: block;
+    position: relative;
+    right: 0;
+  }
+}
+
+
+/*End for like and share stick to bottom area*/
+
+
+/*css for comments area */
+
+.item-comments {
+  display: inline-block;
+  float: left;
+  padding-left: 8px;
+  padding-top: 3px;
+  text-align: center;
+}
+
+.item-comments i {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.common-comment-empty {
+  background-position: 0 -120px;
+  height: 24px;
+  width: 24px;
+}
+
+.common-comment-empty:hover {
+  background-position: 0 -120px;
+}
+
+.common-comment-filled {
+  background-position: 0 -144px;
+  height: 24px;
+  width: 24px;
+}
+
+.common-comment-filled:hover {
+  background-position: 0 -168px;
+}
+
+.item-comments a.dark-link {
+  line-height: 1;
+  font-size: 14px;
+  text-decoration: none;
+  border-bottom: none !important;
+}
+
+.morsel-loader {
+  background: url("../images/morsel-loader.gif") no-repeat scroll center center rgba(0, 0, 0, 0);
+  height: 100px;
+  width: 100%;
+}
+
+.user-list ul {
+  margin: 0;
+}
+
+.user-list ul li {
+  border-bottom: 1px solid #e2ddd7;
+  list-style: outside none none;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  margin-left: 0px;
+  list-style: outside none none;
+}
+
+.view-more-list {
+  opacity: 1;
+  transition: all 0.5s linear 0s;
+}
+
+ul#comment-list li {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.user-info {
+  overflow: hidden;
+}
+
+.user-list .profile-pic-link {
+  height: 76px;
+  width: 76px;
+  margin: 0 15px;
+  float: left;
+}
+
+.profile-pic-link {
+  display: inline-block;
+  padding: 2px;
+}
+
+.profile-pic-link img {
+  box-shadow: 0 0 0 1px #e6e6e6, 0 0 0 2px #fafafa;
+}
+
+.user-info .user-body {
+  overflow: hidden;
+}
+
+.user-list li .user-info-main {
+  line-height: inherit;
+}
+
+.user-list .user-extra-info .user-info-main {
+  margin: 0 8px 0 0;
+}
+
+.user-list h5 {
+  font-size: 18px;
+}
+
+.user-list .user-info-main a {
+  color: #394038;
+}
+
+.user-list .user-info-main a:hover {
+  color: #e96144;
+}
+
+.overflow-ellipsis {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-list .time-ago {
+  color: #93a491;
+  display: inline-block;
+  font-style: italic;
+}
+
+.time-ago {
+  font-size: 12px;
+  margin: 0;
+}
+
+.user-list .user-list-text {
+  margin: 5px 0 0;
+}
+
+.user-list p.user-list-text {
+  font-family: "Merriweather", "Lato", "Helvetica Neue Light", "Helvetica Neue", "Arial", sans-serif;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.user-list .btn-link:hover,
+.user-list .btn-link:focus {
+  background-color: transparent;
+  color: #e96144;
+  text-decoration: underline;
+}
+
+.user-list .btn-link {
+  border-radius: 0;
+  color: #ee8872;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+#view-more-comments,
+.uset-list #morsel-loader {
+  height: 40px !important;
+}
+
+#add-comment-btn {
+  background-color: #e96144;
+  border-color: transparent;
+}
+
+.user-list .add-comment {
+  margin-top: 10px;
+  overflow: hidden;
+  padding-top: 15px;
+}
+
+.lato {
+  font-family: "Lato", "Helvetica Neue Light", "Helvetica Neue", "Arial", sans-serif;
+}
+
+
+/*End for like and share stick to bottom area*/
+
+
+/*Add Comment*/
+.addComment {
+  color: #ee8872 !important;
+}
+/*Add Comment*/
+/*Profile Photo in morsel*/
+.morselUserImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+/*Add Comment*/
+.orange-btn,.orange-btn:hover,.orange-btn:focus {
+  background: #ee8872;
+  border-color: transparent;
+}

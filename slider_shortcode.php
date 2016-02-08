@@ -8,7 +8,7 @@ function sliderFrontendScripts() {
   }
 }
 
-function morselDisplaySlider()
+function morseldisplayslider()
 {
 
   $shs_settings=get_option('morselSliderSettings');
@@ -18,26 +18,55 @@ function morselDisplaySlider()
   // $height=$shs_settings['height'];
   // $direction=$shs_settings['direction'];
   $autoplay=$shs_settings['show_navigation'];
-
+  $slug = get_post(get_option("morsel_plugin_page_id"))->post_name;
   ?>
-  <div style="width:<?=$width;?> ; margin:0 auto;">
-    <div id="jssor_1" style="position: relative; margin: 0 auto; top: 0px; left: 0px; width: 1300px; height: 500px; overflow: hidden; visibility: hidden;">
+  <style type="text/css">
+   .sliderPTag { left: 0;
+    margin: auto;
+    padding: 10px;
+    right: 0;
+    text-align: center;
+    top: 68%;
+    font-size: 28px;
+    position: absolute;
+    z-index: 999;
+    color: #ffffff;
+    font-weight: 700px;
+    text-shadow: 1px 1px 1px rgb(0, 0, 0);
+    text-transform: capitalize;
+  }
+.img-circular{
+  width: 72px;
+  height: 72px;
+  display: block;
+  border-radius: 50%;
+  margin: 0 auto; 
+}
+  </style>
+  <div style="width:<?=$width?>;  margin:0 auto;">
+    <div id="jssor_1" style="position: relative; margin: 0 auto; top: 0px; left: 0px; width: 1200px; height: 800px; overflow: hidden; visibility: hidden;">
         <!-- Loading Screen -->
 
         <div data-u="loading" style="position: absolute; top: 0px; left: 0px;">
             <div style="filter: alpha(opacity=70); opacity: 0.7; position: absolute; display: block; top: 0px; left: 0px; width: 100%; height: 100%;"></div>
             <div class="sliderAboveDiv"></div>
         </div>
-        <div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 0px; width: 1300px; height: 500px; overflow: hidden;">
-            <?
-
-            $contents = get_option('shs_slider_contents');
-
-            foreach ($contents as $key => $value) {
-
+        <div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 0px; width: 1200px; height: 800px; overflow: hidden;">
+        <?php $contents = get_option('shs_slider_contents');
+          //print_r($contents);
+          foreach ($contents as $key => $value) { 
+            $imageArray = explode("@@$@@", $value);
+            //print_r($imageArray);
             ?>
             <div data-p="225.00" style="display: none;">
-                <img data-u="image" src="<?=$value?>" />
+              <div class="sliderPTag"><?=$imageArray[1]?>
+                <? if($imageArray[2] != ''){?>
+                  <p class="img-circular" style="background-image: url(<?=$imageArray[2]?>);"></p>
+                <? } ?>
+              </div>
+              <a class="morsel-slider-img" target="blank" href="<?php echo site_url(),"/",$slug,"/?morselid=",$key;?>">
+              <img data-u="image" src="<?=$imageArray[0]?>" />
+              </a>
             </div>
             <? } ?>
         </div>
@@ -92,5 +121,5 @@ function morselDisplaySlider()
     </script>
 
 <? } //function end
-  add_shortcode('morselDisplaySlider', 'morselDisplaySlider');
+  add_shortcode('morseldisplayslider', 'morseldisplayslider');
 

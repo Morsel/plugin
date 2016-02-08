@@ -5,7 +5,6 @@ if(isset($hostCompany) && $hostCompany != ""){
 	jQuery( document ).ready(function() {
 		getTopicData("<?php echo $options['userid'] ?>","<?php echo $options['userid'].':'.$options['key'] ?>")
 	});
-
 	function getTopicData(userid,auth_key){
 		jQuery("#morselTopicsList").html("");
 		jQuery("#ajaxLoaderPostForTopic").css("display","block");
@@ -23,11 +22,11 @@ if(isset($hostCompany) && $hostCompany != ""){
                     for(var k in data){
 		                jQuery('#shortcode_topic').append(jQuery("<option>").attr('value',data[k].id).text(data[k].name));
 
-					    var html = '<tr id="morsel_topic-'+data[k].id+'" class="post-'+data[k].id+' type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0">';
-		            	html +='<td class="post-title page-title column-title"><strong>'+data[k].id+'</strong></td>';
-						html +='<td class="categories column-categories" id="topic-name-'+data[k].id+'">'+data[k].name+'</td>';
-		                html +='<td class="date column-date"><abbr title="">'+data[k].created_at.slice(0,10)+'</abbr><br />Created</td>';
-						html +='<td class="edit-btn column-categories"><button onclick="updateTopics('+"'"+data[k].id+"'"+',1,'+"'"+escape(data[k].name)+"'"+')">Edit</button> &nbsp;&nbsp; <button onclick="deleteTopics('+"'"+data[k].id+"'"+')">Delete</button></td>';
+					    var html = '<tr id="morsel_topic-'+data[k].id+'" class="post-'+data[k].id+' type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0 topicMorselList">';
+		            	html +='<td class="post-title page-title column-title topicMorselList"><strong>'+data[k].id+'</strong></td>';
+						html +='<td class="categories column-categories topicMorselList" id="topic-name-'+data[k].id+'">'+data[k].name+'</td>';
+		                html +='<td class="date column-date topicMorselList"><abbr title="">'+data[k].created_at.slice(0,10)+'</abbr><br />Created</td>';
+						html +='<td class="edit-btn column-categories topicMorselList"><button onclick="updateTopics('+"'"+data[k].id+"'"+',1,'+"'"+escape(data[k].name)+"'"+')">Edit</button> &nbsp;&nbsp; <button onclick="deleteTopics('+"'"+data[k].id+"'"+')">Delete</button></td>';
 			            html +='</tr>';
 		                jQuery("#morselTopicsList").append(html);
 		            }
@@ -63,7 +62,7 @@ function deleteTopics(topicId){
 		    api_key:"<?php echo $options['userid'].':'.$options['key'] ?>"
 		},
 		success: function(response) {
-			alert("topic succssfully deleted.");
+			alert("Topic succssfully deleted.");
 			jQuery("#morselTopicsList").html("");
 			getTopicData("<?php echo $options['userid'] ?>","<?php echo $options['userid'].':'.$options['key'] ?>");
 		}, error:function(){
@@ -75,50 +74,59 @@ function deleteTopics(topicId){
 	});
 }
 </script>
-
+<style type="text/css">
+/*	.topicAddMorsel td { padding: 0;}
+	.topicAddMorsel td input[type="text"] { margin: 0; width: 300px;}
+	.topicAddMorsel td input[type="button"] { margin: 10px 0 ;}
+	.topicAddMorsel .textTd { width: 285px; margin-bottom:8px; vertical-align: top; margin-top: 5px;}
+	.topicMorselList { text-align: center !important;}
+	.clearTopic{ clear: both;}
+    .clearTopicWithMargin{ clear: both;margin-bottom: 5px;}
+    .topicListDiv { width: 100%; overflow: auto;}*/
+</style>
 <!-- Edit Form -->
-<!-- <form method="post" action="" id="morsel-host-topics-form"> 	        -->
-   	<table class="form-table">
-  		<tr valign="top">
-  			<td scope="row">topic Name:</td>
+<!-- <form method="post" action="" id="morsel-host-topics-form">-->
+	<table class="form-table keywordAddMorsel">
+  		<tr>  			
+  			<td class="textTd">Topic Name : </td>
 			<td>
 				<input type="hidden" name="post_topic_id" id="post_topic_id" value=""/>
 				<input type="hidden" name="updateTopicsValue" id="updateTopicsValue" value="0"/>
 				<input type="hidden" name="topic_id" id="topic_id" value=""/>
 				<input type="text" style="width:50%" name="topic[name]" id="topic_name" value=""/>
-			</td>
-  		</tr>
-		<tr valign="top">
-  			<td scope="row">&nbsp;</td>
-			<td><input id="morsel-topics-submitKey" class="button button-primary" type="button" value="Save" name="morsel-topics-form"></td>
-  		</tr>
+				<div class="clearTopicWithMargin"></div>
+				<input id="morsel-topics-submitKey" class="button button-primary" type="button" value="Save" name="morsel-topics-form"></td>
+  		</tr>  		
 	</table>
+
 <!-- </form> -->
 <!-- Edit Form -->
 <div id="ajaxLoaderPostForTopic" style="display:none; text-align:center;">
     <span><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajax-loader.gif"></span>
 </div>
-<table class="wp-list-table widefat posts">
+<div class="topicListDiv">
+<table class="widefat posts">
 	<thead>
 		<tr>
-			<th scope='col' id='topic-id' class='manage-column column-categories'><span>Id</span></th>
-			<th scope='col' id='topic-name' class='manage-column column-title sortable desc'><span>Topic Name</span></th>
-			<th scope='col' id='date' class='manage-column column-date sortable asc'><span>Date</span></th>
-			<th scope='col' class='manage-column column-date sortable asc'>Actions</th>
+			<th class='manage-column column-categories topicMorselList'><span>Id</span></th>
+			<th class='manage-column column-title sortable desc topicMorselList'><span>Topic Name</span></th>
+			<th class='manage-column column-date sortable asc topicMorselList'><span>Date</span></th>
+			<th class='manage-column column-date sortable asc topicMorselList'>Actions</th>
 	  	</tr>
 	</thead>
 	<tfoot>
 		<tr>
-			<th scope='col' id='topic-id' class='manage-column column-categories'>Id</th>
-			<th scope='col' id='topic-name' class='manage-column column-title sortable desc'><span>Topic Name</span></th>
-			<th scope='col' class='manage-column column-date sortable asc'><span>Date</span></th>
-			<th scope='col' class='manage-column column-date sortable asc'>Actions</th>
+			<th class='manage-column column-categories topicMorselList'>Id</th>
+			<th class='manage-column column-title sortable desc topicMorselList'><span>Topic Name</span></th>
+			<th class='manage-column column-date sortable asc topicMorselList'><span>Date</span></th>
+			<th class='manage-column column-date sortable asc topicMorselList'>Actions</th>
 		</tr>
 	</tfoot>
 	<tbody id="morselTopicsList"></tbody>
 </table>
+</div>
 
-<div class="clear"><br></div>
+<div class="clearTopic"></div>
 
 <script type="text/javascript">
 	(function($){
@@ -138,7 +146,7 @@ function deleteTopics(topicId){
 		    				api_key:"<?php echo $options['userid'].':'.$options['key'] ?>"
 		  				},
 						success: function(response) {
-							alert("topic Updated succssfully.");
+							alert("Topic Updated succssfully.");
 							jQuery("#morselTopicsList").html("");
 							getTopicData("<?php echo $options['userid'] ?>","<?php echo $options['userid'].':'.$options['key'] ?>");
 							$("#topic_id").val("");//topics_name
