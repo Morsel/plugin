@@ -82,3 +82,43 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 "gap_in_morsel" : You can set through like 5px or 5% as a string, than it creates gaps between morsel blocks through padding-left and padding right with important,otherwise normal gap is maintained.
 "wrapper_width" : Set the morsel wrapper width in %, if you want to make morsel window smaller in view, default is 100%.
 "default email wordpress" : Stopped email for new user is created by morsel plugin. default role is subscriber and wp-admin does not open for subscriber. 
+
+
+Morsel Plugin description
+=============================================================================================================
+
+
+Admin Side 
+Settings : Login with your eatmorsel account also you have to put host settings.
+Associated user : Admin can add other eatmorsel user in to his site and fetch their morsel as well.
+Morsel : Whole morsel listing with several options over their.
+         # Admin can edit whole morsel just same as eatmorsel site.
+         # Pick keywords : Morsel also categorized by keyword(every morsel has only one keyword). Admin can select keyword or delete as well.
+         # Pick Topic : Morsel also categorized by Topic(every morsel has multiple topics). Admin can select multiple topics via select box or delete as well.
+         # Publish Morsel : Admin can also publish his unpublished morsel.
+         # Schedule : Admin can also set time and date to publish his morsel automatically.
+
+Manage Keywords: Admin can add edit delete keyword which is associated with his account.
+Morsel Topic: Admin can add edit delete topic which is associated with his account.
+
+Display : Admin can create shotcode for showing morsel on his site, There are certain parameters over shortcode.
+        ## General Option
+	         #Number of morsels to display: Number of morsel.
+	         #Keyword to display: Choose keyword by select drop down.
+	         #Associated user to display: Choose user by select drop down.
+	         #Topic to display:  Choose topic by select drop down.
+        ## Advance Option
+             #Gap In Morsel: Gaps between morsel blocks through padding-left and padding right.
+             #Wrapper Width: Morsel wrapper width in %, if you want to make morsel window smaller in view.
+             #Center Block: For center the blocks of morsel.
+             #Morsel In A Row: how many morsel in a row will be shown by shortcode
+        ## Community Shortcode : You can create morsel add funnctionality over page and post by just put this [create_morsel] shortcode.
+Slider : Just put this [morseldisplayslider] shortcode, slider will be put over any page and post. You can choose what morsel image you want over slider by simply select checkbox.
+		# Width: Width of slider in % or px;
+		# Slider Duration: interval duration between slides (in ms).
+		# Autoplay: trur/false
+
+
+=============================================================================================================
+
+
