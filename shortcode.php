@@ -11,9 +11,7 @@ function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
             </h1>
             <div class="morsel-info-bottom">
                 <h3  class="h6 morsel-block-place ">
-                <? //print_r($row_sht->creator);?>
-                    <!-- <a class="white-link overflow-ellipsis" href="<?php echo $morsel_url; ?>"><?php echo $row_sht->title;?></a> -->
-                     <?php if($row_sht->creator->photos != ""){ //_144x144?>
+                    <?php if($row_sht->creator->photos != ""){ //_144x144?>
                       <img class="morselUserImage" src="<?=$row_sht->creator->photos->_144x144?>"/>
                     <? }?>
                     <a class="white-link overflow-ellipsis" href="<?php echo $morsel_url; ?>">
@@ -22,23 +20,14 @@ function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
                 </h3>
             </div>
         </div>
-        <?php if($row_sht->photos->_800x600)
+        <?php               
+              if($row_sht->photos->_800x600){
                 $img_url = $row_sht->photos->_800x600;
-              else
+              } else {
                 $img_url = MORSEL_PLUGIN_IMG_PATH.'no_image.png';
+              }
         ?>
-        <?php if($row_sht->morsel_video != NuLL){?>
-          <div class="morsel-img">
-            <? //$row_sht->morsel_video;
-            $unit = extract_unit($row_sht->morsel_video, 'src="', '"');
-                 echo '<iframe width="640" height="360" src="'.$unit.'?modestbranding=1&autohide=1&showinfo=0&controls=0"  allowfullscreen></iframe>'
-            ?>    
-            <!-- <iframe style="opacity:0.5" width="100%" height="100%" src="https://www.youtube.com/embed/-a8O5oJehTk?controls=0"></iframe> -->
-          </div>
-        
-        <?php } else {?>
-           <a class="morsel-img " href="#" style="background-image: url('<?php echo $img_url;?>');"></a>
-        <?php } ?>
+        <a class="morsel-img " href="#" style="background-image: url('<?php echo $img_url;?>');"></a>
         
         <img class="spacer loader " src="<?php echo MORSEL_PLUGIN_IMG_PATH.'spacer.png'?>">
         <!-- end ngIf: spacer -->
@@ -69,14 +58,6 @@ function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
   $topicName = ($atts['topic_name'] != NuLL) ? "&topic_id=".$atts['topic_name'] : "";
   $userID = (isset($atts['associated_user']) && $atts['associated_user'] != "0" && $atts['associated_user'] != "")? $atts['associated_user']:$options['userid'];
   $atts['associated_user'];
-
-  // if($atts['keyword_id'] > 0) {
-  //   $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count']."&keyword_id=".$atts['keyword_id'];
-  // } elseif($atts['count'] > 0) {
-  //   $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".$atts['count'];
-  // } else {
-  //   $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&count=".MORSEL_API_COUNT;
-  // }
   $jsonurl = MORSEL_API_URL."users/".$userID."/morsels.json?api_key=$api_key&count=".$morselCount.$keywordID.$topicName;
 
   $json = json_decode(file_get_contents($jsonurl));//wp_remote_get
@@ -101,29 +82,23 @@ function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
 
 ?>
      <?php if($count_morsel>0){?>
-        <!-- <link rel="stylesheet" href="<?php echo MORSEL_PLUGIN_WIDGET_ASSEST.'css/bootstrap.min.css';?>"> -->
-        <!-- <link rel="stylesheet" href="<?php echo MORSEL_PLUGIN_WIDGET_ASSEST.'css/bootstrap-iso.css';?>">
-        <link rel="stylesheet" type="text/css" href="<?php echo MORSEL_PLUGIN_WIDGET_ASSEST.'css/morsel_list.css'?>"> -->
         <style type="text/css">
           <?php if($atts['center_block'] == 1){ ?>
                  #morsel-posts-row {
                     font-size: 0;
                     text-align: center;
                   }
-                  /*#morsel-posts-row .col-sm-4.col-md-4 {*/
                   #morsel-posts-row .shortcode-msl-block {
                     display: inline-block;
                     float: none;
                   }
                   @media screen and (max-width: 767px) {
-                    /*#morsel-posts-row .col-sm-4.col-md-4 {*/
                     #morsel-posts-row .shortcode-msl-block{
-	                    display: block;
+                      display: block;
                     }
                   }
           <?php } ?>
           <?php if(isset($atts['gap_in_morsel'])){ ?>
-                  /*#morsel-posts-row .col-sm-4.col-md-4 {*/
                   #morsel-posts-row .shortcode-msl-block {
                     padding: 0 <?php echo $atts['gap_in_morsel'];?>!important;
                   }
@@ -160,8 +135,6 @@ function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
                       </div>
                </div>
                <div class="col-sm-12 col-md-12 load-more-wrap" >
-               <!-- previous code
-                  <button class="btn  btn-lg btn-block btn-info" type="button" id="load-morsel">Load more!</button>  -->
                 <?php if($atts['count'] == 0) { ?>
                  <button style="display:none" class="btn btn-primary morselbtn" type="button" id="load-morsel" morsel-count="<?php echo $atts['count'];?>" >View more morsels</button>
                  <div id="ajaxLoaderFront" style="display:none">
@@ -180,7 +153,6 @@ function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
                     function loadMorsel() {
                       var morsePageCount = 1;
                       var count = '20';
-
                       if (jQuery(this).attr("morsel-count")) {
                         count = jQuery(this).attr("morsel-count");
                       }
@@ -195,9 +167,7 @@ function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
                               else {
                                 morsePageCount--;
                                 morselNoMore = true;
-
                               }
-
                               jQuery('[morsel-url]').click(function() {
                                 window.location.href = jQuery(this).attr('morsel-url');
                               })
@@ -244,8 +214,6 @@ function morsel_post_des(){
   global $morsel_user_detail;
   global $morsel_likers;
 
-  //var_dump($_SESSION['current_morsel_user_psd']);
-
   // get all users whome are associate with host admin
   $options = get_option( 'morsel_settings');
 
@@ -259,9 +227,6 @@ function morsel_post_des(){
   if(count($associate_users->data)==0){
     $associate_users = json_decode(wp_remote_fopen($jsonurl));
   }
-  /*var_dump($morsel_detail);
-  echo "<br/><br/>";
-  var_dump($associate_users->data);*/
 
   $is_associated = false;
   if(isset($morsel_user_detail->id)){
@@ -288,9 +253,18 @@ function morsel_post_des(){
 
   $pintrestShareSummry = '"'.$morsel_detail->title.'" from '.$morsel_user_detail->first_name." ".$morsel_user_detail->last_name." on Morsel";
   ?>
-  <!-- <link rel="stylesheet" href="<?php echo MORSEL_PLUGIN_WIDGET_ASSEST.'css/bootstrap.min.css';?>"> -->
-<!-- <link rel="stylesheet" href="<?php echo MORSEL_PLUGIN_WIDGET_ASSEST.'css/bootstrap-iso.css';?>">
-<link rel="stylesheet" type="text/css" href=<?php echo MORSEL_PLUGIN_WIDGET_ASSEST.'css/morsel_list.css'?>> -->
+<style type="text/css">
+  /*morsel description*/
+  
+  .videoIframe { width: 992px; height:750px;}
+  
+  @media screen and (max-width: 420px) {
+    .itemDesktop { display: none;}
+    .itemMobile {display: block !important;}
+    .videoIframe { width: 80%!important; height: 80%!important;}
+  }
+  .noIdontWant{padding:5px 0; font-size:9px;}
+</style>  
 <div class="page-wrapper page-wrapper-details center-block morsel-iso bootstrap-iso">
 
       <div>
@@ -330,43 +304,6 @@ function morsel_post_des(){
                       if((!$options["hide_login_btn"]) && ($options["hide_login_btn"] != 1 )) {
                         if(!empty($_SESSION['morsel_login_userid'])){?>
                       <a href="<?php echo site_url()?>/index.php?pagename=morsel_logout" class="btn btn-danger btn-xs">Logout</a>
-                    <!-- Iframe Code -->
-                     <!--  <a class="btn btn-danger btn-xs fancybox fancybox.iframe" href="https://www.eatmorsel.com/">Open fancybox iframe with links</a>
-                      -->
-
-                      <?php if($is_associated) { ?>
-                      <!-- <a id="create-morsel-btn-1" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#website-iframe-modal" href="#">Create Morsel</a> -->
-                      <?php } else {?>
-                      <!-- <a id="create-morsel-btn" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#associat-request-modal" href="#<?php // echo MORSEL_PLUGIN_IFRAME_PATH ?>">Create Morsel</a> -->
-                      <?php } ?>
-
-                      <!-- prateek code -->
-                     <!-- <a id="create-morsel-btn" class="btn btn-danger btn-xs fancybox fancybox.iframe" href="<?php echo MORSEL_PLUGIN_IFRAME_PATH ?>">Create Morsel</a>
-
-                       <link rel="stylesheet" type="text/css" href="http://picssel.com/demos/demos.css" />
-                      <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" />
-                      <style type="text/css">
-                      span {font-weight: bold; display: block;}
-                      p {padding-bottom: 0 !important;}
-                      </style>
-                      <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-                      <script src="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-                      <script>
-                      function closeFancybox(href){
-                        jQuery.fancybox.close();
-                        window.location.href=href;
-                      }
-
-                      jQuery(document).ready(function ($) {
-                          $(".fancybox").fancybox({
-                               'width' : '85%',
-                               afterShow : function () {
-                                  $(".fancybox-iframe").contents().find("a").attr("onclick", "parent.closeFancybox(this.href)");
-                              }
-                          })
-                      }); // ready
-                      </script>-->
-                    <!-- Iframe Code -->
                     <?php } else { ?>
                           <a id="open-morsel-login1" class="open-morsel-login btn btn-danger btn-xs clickeventon">SignUp/Login</a>
                     <?php }
@@ -381,87 +318,53 @@ function morsel_post_des(){
                         <?php echo $creator = $morsel_detail->creator->first_name." ".$morsel_detail->creator->last_name; ?>
                   </div>
                 </div>
-        <?php if($morsel_detail->primary_item_photos->_640x640)
-                $img_url = $morsel_detail->primary_item_photos->_640x640;
-              else
-                $img_url = MORSEL_PLUGIN_IMG_PATH.'no_image.png';
+        <?php 
+        if($morsel_detail->primary_item_photos->_992x992)
+          $img_url = $morsel_detail->primary_item_photos->_992x992;
+        else
+          $img_url = MORSEL_PLUGIN_IMG_PATH.'no_image.png';
         ?>
-  <!--  <div class="slide-item morsel-item">
-          <hr>
-          <div class="item-img-wrap">
-            <div  class="item-img image-loaded">
-              <div>
-                <img src="<?php echo $img_url;?>">
-              </div>
-            </div>
-          </div>
-          <div class="clear"></div>
-          <div class="item-info">
-            <div class="item-description">
-              <p bo-html="formatDescription(item.description)"><?php echo $morsel_detail->summary;?></p>
-            </div>
-          </div>
-        </div> -->
-
-        <!-- morsel Video -->
-        <? if($morsel_detail->morsel_video != NuLL){?>
-        <!--<script type="text/javascript">
-              jQuery(document).ready(function () {
-                  jQuery("iframe").width("640px");
-                  jQuery("iframe").height("500px");
-              });
-            </script>-->
-        <div class="slide-item morsel-item " style="padding: 0 !important" >
-          <hr>
-          <div class="item-img-wrap">
-            <div class="item-img image-loaded">
-              <div>
-                <?php 
-                 $unit = extract_unit($morsel_detail->morsel_video, 'src="', '"');
-                 echo '<iframe width="640" height="360" src="'.$unit.'?modestbranding=1&autohide=1&showinfo=0&controls=0"  allowfullscreen></iframe>'
-                ?>
-              </div>
-            </div>
-          </div>          
-          <?php if($morsel_detail->video_text != ""){?>
-          <div class="clear"></div>
-          <div class="item-info" style="padding:0px !important">
-            <div class="item-description">
-              <p><?php echo $morsel_detail->video_text;?></p>
-            </div>
-          </div>
-          <?php } ?>
-        </div>
-        <?php } ?>
-        <!-- morsel video End -->
         <?php $items = $morsel_detail->items; ?>
         <!-- Item start -->
         <?php foreach ($items as $row_item) {?>
 
-        <?php if($row_item->photos->_640x640)
-                $items_url = $row_item->photos->_640x640;
-              else
-                $items_url = MORSEL_PLUGIN_IMG_PATH.'no_image.png';
+        <?php 
+              $text = html_entity_decode($row_item->description);
+              preg_match('/<iframe.*src=\"(.*)\".*><\/iframe>/isU', $text, $matches);
         ?>
         <div class="slide-item morsel-item " style="padding:0px !important" >
           <hr>
           <div class="item-img-wrap">
             <div class="item-img image-loaded">
               <div>
-                <img  src="<?php echo $items_url;?>">
-              </div>
+                <?php
+                    if(count($matches)!= 0){
+                      echo '<iframe class="videoIframe" src="'.$matches[1].'?modestbranding=1&autohide=1&showinfo=0&controls=0"  allowfullscreen></iframe>';
+                      $itemDes = preg_replace('/<iframe.*?\/iframe>/i','', $text);
+                    } else {
+                      $itemDes = $row_item->description;                 
+                        if($row_item->photos->_992x992){
+                          $items_url = $row_item->photos->_992x992;
+                          $items_urlMobile = $row_item->photos->_320x320;
+                        }
+                        else{
+                          $items_url = MORSEL_PLUGIN_IMG_PATH.'no_image.png';
+                          $items_urlMobile = MORSEL_PLUGIN_IMG_PATH.'no_image.png';
+                        }
+                      echo "<img class='itemDesktop' src='".$items_url."' style='max-width:992px !important;'><img class='itemMobile' style='display:none' src='".$items_urlMobile."' style='max-width:320px !important;'>";
+                    }
+                ?>
+                 </div>
             </div>
           </div>
           <div class="clear"></div>
           <div class="item-info">
             <div class="item-description">
-              <p><?php echo $row_item->description;?></p>
-
+              <p><?php echo nl2br($itemDes);?></p>
             </div>
             <!-- comments area -->
             <div class="item-comments">
               <a class="dark-link comment-popup-link" item-id="<?php echo $row_item->id;?>" comment-count="<?php echo ($row_item->comment_count) ? $row_item->comment_count: 0; ?>">
-                <!-- <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> -->
               <?php if($row_item->comment_count) { ?>
                       <i class="common-comment-filled"></i>
                       <span id="comment-count-<?php echo $row_item->id;?>"><?php echo $row_item->comment_count;?><?php echo ($row_item->comment_count > 1)?' comments':' comment';?></span>
@@ -486,19 +389,14 @@ function morsel_post_des(){
 
                 <span class='st_linkedin_large' displayText='LinkedIn' st_url="<?php echo $shtnUrl;?>" st_title="<?php echo htmlspecialchars($morsel_detail->title.' - '.$morsel_user_detail->first_name.' '.$morsel_user_detail->last_name.' | Morsel');?>" st_image="<?php echo $img_url?>" st_summary="<?php echo htmlspecialchars($morsel_detail->items['0']->description);?>"></span>
 
-                <!-- <span class='st_googleplus_large' displayText='Google +' st_title="<?php echo $morsel_detail->title.' - '.$morsel_user_detail->first_name.' '.$morsel_user_detail->last_name.' | Morsel';?>" st_image="<?php echo $img_url?>" st_summary="<?php echo $morsel_detail->items['0']->description;?>"></span> -->
-
                 <span class='st_pinterest_large' displayText='Pinterest' st_url="<?php echo $shtnUrl;?>" st_title="<?php echo htmlspecialchars($morsel_detail->items['0']->description);?>" st_summary="<?php echo htmlspecialchars($pintrestShareSummry);?>" st_image="<?php echo $img_url?>"></span>
 
                 <span id="embed-code-link" data-target="#morsel-embed-modal" data-toggle="modal">
                   <span class="embed-code stButton"><span class="embed-code stLarge" ></span></span>
                 </span>
             </div>
-            <!-- <a  href="<?php echo $morsel_detail->url; ?>">View this and follow <?php echo $creator;?> on Morsel</a> -->
             <span class="Unsubscribe_button" style="font-size:18px;"></span>
-          </div>
-
-          
+          </div>          
         </div>
         <!-- Like & share Part -->
         <div class="morsel-actions-wrap fixed">
@@ -528,7 +426,6 @@ function morsel_post_des(){
       <?if(!empty($_SESSION['morsel_login_userid'])){?>
       <script type="text/javascript">
       jQuery( document ).ready(function() {
-        // Handler for .ready() called.
           var ids = [];
           jQuery.ajax({
             url:"<?php echo MORSEL_API_USER_URL.$_SESSION['morsel_user_obj']->id;?>"+"/subscribed_keyword.json",
@@ -588,8 +485,7 @@ function morsel_post_des(){
               waitingDialog.hide();
             }
         });
-        });
-
+      });
         //subscribe_morsel_info
         jQuery("#subscribe_morsel_info").live("click",function(){
           var selected_ids = new Array();
@@ -611,8 +507,6 @@ function morsel_post_des(){
               waitingDialog.show('Loading...');
             },
             success: function(response, status){
-              console.log("response :: ",response);
-              console.log("status :: ",status);
               if(status == 'success'){
                 alert("You have been subscribed successfully.");
                 jQuery(".Unsubscribe_button").html("<a id='unsubscribe_morsel_info'>Unsubscribe</a>");
@@ -627,7 +521,8 @@ function morsel_post_des(){
         });
 
       </script>
-        <?php }
+        <?php 
+         }
       } ?>   <!-- End else part -->
       </div><!-- end ngIf: morsel && showMorsel -->
     </div><!-- end ngIf: type === 'morsel' -->
@@ -639,157 +534,6 @@ function morsel_post_des(){
   </script>
   <!-- Share script -->
 
-  <!-- Login Modal
-  <div id="morsel-login-content" title="Morsel Login" style="display:none;"> -->
-
-  <!-- <div class="modal fade" id="morselLoginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-           <button id="show-mrsl-login-btn" type="button" class="btn btn-danger btn-xs pull-right">Login</button>
-           <h4 class="modal-title" id="myModalLabel"></h4>
-        </div>
-        <div class="modal-body">
-          <div class="main-view" >
-              <div id="mrsl-signup-section">
-                <div class="container-fluid join-page">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <h1 class="text-center">Please Sign Up</h1>
-                      <div id="mrsl-signup-error-box" class="alert alert-danger" style="display:none"></div>
-                      <div class="join-landing" ui-view="landing"></div>
-                      <div ui-view="basicInfo" class="">
-                        <form novalidate="" class="padded-form" method="post" name="basicInfoForm" id="mrsl-signup-form" enctype="multipart/form-data">
-                          <div class="row">
-                          </div>
-                          <div class="row">
-                            <div class="col-sm-5 col-md-4 col-md-offset-1">
-                              <div class="form-group">
-                                <div class="avatar-add image-add">
-                                  <div data-original-title="Click to select or drag and drop a photo from your computer" data-toggle="tooltip" data-placement="bottom" class="img-circle">
-                                    <div class="drop-box"></div>
-                                    <span class="h1 plus-sign">+</span>
-                                    <input type="file" name="user[photo]" id="mrsl_user_photo">
-                                    <div class="image-preview" style="display:none"></div>
-                                  </div>
-                                </div>
-                                <label for="photo" class="control-label center-block text-center">Profile Photo</label>
-                              </div>
-                          </div>
-                          <div class="col-sm-7 col-md-6">
-                          <div class="form-group">
-                            <label for="user[first_name]" class="control-label required">First Name</label>
-                            <input type="text" name="user[first_name]" id="mrsl_user_first_name" class="form-control" placeholder="John" required="required">
-                            <p class="help-block"></p>
-                          </div>
-                          <div class="form-group">
-                            <label for="user[last_name]" class="control-label required">Last Name</label>
-                            <input type="text" name="user[last_name]" id="mrsl_user_last_name" class="form-control" placeholder="Smith" required="required">
-                            <p class="help-block"></p>
-                          </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
-                      <div class="form-group">
-                        <label for="user[username]" class="control-label required">Username</label>
-                        <input type="text" name="user[username]" id="mrsl_user_username" class="form-control" placeholder="johnnyboy" required="required">
-                        <p class="help-block">Must be alphanumeric and not include spaces</p>
-                        <span class="help-block" id="mrsl_username_error"></span>
-                      </div>
-
-                      <div class="form-group">
-                        <label for="user[email]" class="control-label required">Email</label>
-                        <input type="email" name="user[email]" id="mrsl_user_email" class="form-control" placeholder="johnsmith@example.com" required="required">
-                        <p class="help-block ng-binding"></p>
-                      </div>
-                      <div class="form-group">
-                        <label for="user[password]" class="control-label required">Password</label>
-                        <input type="password" name="user[password]" id="mrsl_user_password" class="form-control" placeholder="" required="required">
-                        <p class="help-block"></p>
-                      </div>
-                      <div class="form-group">
-                        <label for="verification" class="control-label required">Confirm Password</label>
-                        <input type="password" name="verification" id="verification" class="form-control" placeholder="" required="required">
-                        <p class="help-block"></p>
-                      </div>
-                      <div class="form-group">
-                        <div class="checkbox">
-                          <label for="user[professional]" class="control-label" style="width:100%">
-                            <input type="checkbox" value="true" name="user[professional]" id="mrsl_user_professional" class="">I am a professional chef, sommelier, mixologist, etc.</label>
-                        </div>
-                        <p class="help-block"></p>
-                      </div>
-                    <div id="morsel-progress" class="progress" style="display:none;">
-                      <div style="width:100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="100%" role="progressbar" class="progress-bar progress-bar-striped active">Your request is processing, please wait.</div>
-                    </div>
-                      <div class="form-group clearfix">
-                        <span id="mrsl-signup-submit-btn-span" data-original-title="Please complete all required fields" data-toggle="tooltip" data-placement="top" class="btn-submit-wrap btn-submit-block disabled">
-                          <button id="mrsl-signup-submit-btn" class="btn btn-primary btn-lg" type="submit">Sign Up</button>
-                        </span>
-                      </div>
-                      <div>By continuing you indicate that you have read and agree to our <a target="_blank" href="http://eatmorsel.com/terms">Terms of Service</a></div>
-                    </div>
-                  </div>
-                </form>
-                      </div>
-                      <div ui-view="additionalInfo" class=""></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div id="mrsl-login-section" style="display:none">
-                <div class="container-fluid login-page">
-                    <h1 class="text-center">Log In to <?php echo ucwords($blog_title = get_bloginfo('name')); ?></h1>
-                    <form action="<?php echo site_url()?>/index.php" class="padded-form" method="post" name="loginForm" id="morsel-front-login-form">
-                        <div class="row">
-                          <div class="col-md-12 center-block">
-                              <div class="form-group">
-                                <label for="login" class="control-label required">Email or Username</label>
-                                <input type="text" name="user[login]" id="mrsl-login" class="form-control " placeholder="johnsmith@example.com or johnnyboy" >
-                                <p class="help-block"></p>
-                              </div>
-                              <div class="form-group">
-                                <label class="control-label required">Password</label>
-                                <input type="password" name="user[password]" id="mrsl-password" class="form-control" placeholder="" >
-                                <p class="help-block"></p>
-                            </div>
-                            <div class="form-group clearfix" >
-                              <span id="mrsl-submit-btn-span" class="btn-submit-wrap btn-submit-block disabled" title="Please complete all required fields" data-toggle="tooltip" data-placement="top">
-                                <button id="mrsl-submit-btn" class="btn btn-primary btn-lg" type="submit" >Login</button>
-                              </span>
-                            </div>
-                            <div class="text-center"><a class="open-site-link" data-toggle="modal" data-src="https://www.eatmorsel.com/auth/password-reset" data-height=500 data-width=100% data-target="#forgetPasswordModal" >Forgot your password?</a></div>
-                            <div class="have-an-account text-center"><span id="dontHaveAccount">Don't have an account?</span><span id="notMyAccount" style="display:none;">That is not my username and email.</span> <a target="_blank" href="#">Sign up here.</a></div>
-                          </div>
-                        </div>
-                        <input type="hidden" name="pagename" value="morsel_user_login">
-                      </form>
-                  </div>
-              </div>
-          </div>
-          <div class="powered-by-morsel">
-            <a target="_blank" href="http://www.eatmorsel.com/">Powered by Morsel</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-  <!-- </div>  End # morsel-login-content -->
-  <!-- forget password  -->
-  <!-- <div class="modal fade" id="forgetPasswordModal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-         <div class="modal-content">
-            <div class="modal-body">
-               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <iframe frameborder="0"></iframe>
-            </div>
-        </div>
-     </div>
-  </div> -->
-  <!-- end forget password  -->
-  <!-- End Login Modal -->
   <!-- Embed Code Modal-->
   <div class="modal fade" id="morsel-embed-modal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -848,7 +592,6 @@ function morsel_post_des(){
          <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <!-- <h4 class="modal-title">Comments</h4> -->
             </div>
 
             <div class="modal-body">
@@ -860,8 +603,8 @@ function morsel_post_des(){
                 </form>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               <button id="morsel-subscribe" type="button" class="btn btn-primary orange-btn" data-dismiss="modal">Sign Up</button>
+              <br><a href="javascript:void(0)" class="noIdontWant" data-dismiss="modal">No thank you, I do not want to receive email updates.</a> 
             </div>
         </div><!-- /.modal-content -->
      </div><!-- /.modal-dialog -->
@@ -874,7 +617,6 @@ function morsel_post_des(){
          <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <!-- <h4 class="modal-title">Comments</h4> -->
             </div>
             <div class="modal-body">
                 <p>For add morsel from here, you have to associate with the administrator account of the host site.</p>
@@ -907,7 +649,6 @@ function morsel_post_des(){
       var key = "<?php echo $_SESSION['morsel_user_obj']->id.':'.$_SESSION['morsel_user_obj']->auth_token;?>";
       var morselId = "<?php echo $_REQUEST['morselid'];?>";
       var post_data = {
-                        //user:{subscriptions_attributes : [{morsel_id:morselId}] },
                         user:{subscribed_morsel_ids : [morselId] },
                         api_key:key
                       };
@@ -918,7 +659,6 @@ function morsel_post_des(){
           type: 'POST',
           data: post_data,
           complete: function(){
-            //alert("Action Complete");
             waitingDialog.hide();
           },
           beforeSend: function(xhr) {
@@ -986,8 +726,6 @@ function morsel_post_des(){
 
           },
           success: function(response, status){
-            /*console.log("response :: ",response); */
-
             if(status == 'success'){
               //increase link commnet count by 1
               jQuery('[item-id="'+itemId+'"]').attr('comment-count',parseInt(jQuery('[item-id="'+itemId+'"]').attr('comment-count'))+1);
@@ -1012,14 +750,7 @@ function morsel_post_des(){
     // on click of comment link show modal
     jQuery(".comment-popup-link").click(function(event){
       event.preventDefault();
-
-      /*var sessionUserId =  "<?php echo $_SESSION['morsel_user_obj']->id;?>"
-      if(sessionUserId == ''){
-        jQuery(".open-morsel-login").trigger('click');
-        return;
-      }*/
-
-      //set page no 1 for view more
+     //set page no 1 for view more
       jQuery("#view-more-comments").attr("page-no",1);
 
       //clear comment list
@@ -1225,10 +956,8 @@ function morsel_metatags() {
     $options = get_option( 'morsel_settings');
     $api_key = $options['userid'] . ':' .$options['key'];
     $jsonurl = MORSEL_API_URL."morsels/".$_REQUEST['morselid']."?api_key=".$api_key;
-    // $morsel_detail = get_json($jsonurl)->data;
     $morsel_detail = json_decode(wp_remote_retrieve_body(wp_remote_get($jsonurl)))->data;
-    // var_dump($morsel_detail->morsel_keywords[0]->id);
-   
+       
     $userJsonUrl = MORSEL_API_USER_URL.$morsel_detail->creator->id.".json";
     $morsel_user_detail = get_json($userJsonUrl)->data;
 
@@ -1289,7 +1018,6 @@ function queue_my_admin_scripts() {
         "morsel_api_url" => MORSEL_API_URL,
         "morsel_api_user_url" => MORSEL_API_USER_URL,
         "morsel_site" => MORSEL_SITE,
-        //"current_morsel_user_psd" => $_SESSION['current_morsel_user_psd'],
         "current_morsel_id" => $_REQUEST["morselid"]
       )
     );
@@ -1309,23 +1037,5 @@ function userIsLike($users){
     }
   }
   return $result;
-}
-
-
-function extract_unit($string, $start, $end)
-{
-  $pos = stripos($string, $start);
-   
-  $str = substr($string, $pos);
-   
-  $str_two = substr($str, strlen($start));
-   
-  $second_pos = stripos($str_two, $end);
-   
-  $str_three = substr($str_two, 0, $second_pos);
-   
-  $unit = trim($str_three); // remove whitespaces
-   
-  return $unit;
 }
 ?>

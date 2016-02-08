@@ -83,13 +83,7 @@
                             </div>
                             <p class="help-block"></p>
                           </div>
-                          <div class="form-group">
-                            <div class="checkbox">
-                              <label for="user[email_not]" class="control-label" style="width:100%">
-                                <input type="checkbox" value="true" name="user[email_not]" id="mrsl_user_email_not" class="">Email Recieved by site.</label>
-                            </div>
-                            <p class="help-block"></p>
-                          </div>
+
                           <!-- <div id="morsel-progress" class="progress" style="display:none;">
                             <div style="width:100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="100%" role="progressbar" class="progress-bar progress-bar-striped active">Your request is processing, please wait.</div>
                           </div> -->
@@ -132,16 +126,16 @@
                             <button id="mrsl-submit-btn" class="btn btn-primary btn-lg" type="submit" >Login</button>
                           </span>
                         </div>
-       <!--                  <div class="form-group clearfix" >
-                          <span id="mrsl-submit-btn-span" class="btn-submit-wrap btn-submit-block disabled" title="Please complete all required fields" data-toggle="tooltip" data-placement="top">
-                            <a class="btn btn-primary btn-lg">Login with Facebook</a>
+                        <div class="form-group clearfix" >
+                          <span id="mrsl-submit-btn-span" class="btn-submit-wrap btn-submit-block disabled" title="Login with Facebook" data-toggle="tooltip" data-placement="top">
+                            <a class="btn btn-primary btn-lg" href="<?php echo site_url()?>/index.php?pagename=morselSocialLogin&provider=facebook&url=<? echo 'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];?>">Login with Facebook</a>
                           </span>
-                        </div> -->
-                        <!-- <div class="form-group clearfix" >
-                          <span id="mrsl-submit-btn-span" class="btn-submit-wrap btn-submit-block disabled" title="Please complete all required fields" data-toggle="tooltip" data-placement="top">
-                            <a href="<?php echo site_url()?>/index.php?pagename=morsel_twitter_login" class="btn btn-primary btn-lg">Login with Twitter</a>
+                        </div>
+                        <div class="form-group clearfix" >
+                          <span id="mrsl-submit-btn-span" class="btn-submit-wrap btn-submit-block disabled" title="Login with Twitter" data-toggle="tooltip" data-placement="top">
+                            <a href="<?php echo site_url()?>/index.php?pagename=morselSocialLogin&provider=twitter&url=<? echo 'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];?>" class="btn btn-primary btn-lg">Login with Twitter</a>
                           </span>
-                        </div> -->
+                        </div>
                         <div class="text-center"><a class="open-site-link" data-toggle="modal" data-src="https://www.eatmorsel.com/auth/password-reset" data-height=500 data-width=100% data-target="#forgetPasswordModal" >Forgot your password?</a></div>
                         <div class="have-an-account text-center"><span id="dontHaveAccount">Don't have an account?</span><span id="notMyAccount" style="display:none;">That is not my username and email.</span> <a target="_blank" href="#">Sign up here.</a></div>
                       </div>
@@ -293,6 +287,7 @@
           },
           error:function(response){
               console.log("Error response :: ",response);
+              if(typeof response.responseJSON.errors != "undefined")
               if( (typeof response.responseJSON.errors.email != "undefined") && response.responseJSON.errors.email[0] === "has already been taken"){
                 var signUpEmail = jQuery( "#mrsl_user_email" ).val();
                 alert("Looks like you already have an account, please log in.");
@@ -355,7 +350,11 @@ jQuery(document).ready(function(){
     jQuery("#mrsl_user_username").val("<?=$_SESSION['morsel']['access_tokenn']['screen_name']?>");
 });
 //change text
-<?php } ?>
+<?php } 
+  if(isset($_SESSION["morselSocialLoginFail"]) && $_SESSION["morselSocialLoginFail"] != ""){?>
+    alert("<?=$_SESSION['morselSocialLoginFail'];?>");
+<? unset($_SESSION["morselSocialLoginFail"]);
+} ?>
 </script>
 
 

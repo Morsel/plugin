@@ -136,9 +136,9 @@ function morsel_user_preference($atts){
                     <h1 class="h2 morsel-block-title"><a class="white-link" href="'+morsel_desc_url+'?morselid='+value.first_morsel.id+'">'+value.first_morsel.title+'</a></h1>\
                     <div class="morsel-info-bottom">\
                         <h3 class="h6 morsel-block-place">';
-                          if(value.creator_info.photos._144x144){
-                            blocks += '<img class="morselUserImage" src="'+value.creator_info.photos._144x144+'"/>';
-                          }
+                           if(value.creator_info != undefined && value.creator_info.photos != undefined  && value.creator_info.photos._144x144){
+                             blocks += '<img class="morselUserImage" src="'+value.creator_info.photos._144x144+'"/>';
+                           }
                 blocks += '<a class="white-link overflow-ellipsis" href="'+morsel_desc_url+'?morselid='+value.first_morsel.id+'">'+value.creator_info.first_name+' '+value.creator_info.last_name+'</a>\
                         </h3>\
                     </div>\

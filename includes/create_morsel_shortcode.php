@@ -11,9 +11,42 @@
  * main function for create morsel shortcode
  */
 function create_morsel() {
+  ob_start();
   //load scripts and styles
   add_create_morsel_scripts();
 ?>
+
+  <style type="text/css">
+  ::-webkit-input-placeholder { color: inherit; }
+:-moz-placeholder { /* Firefox 18- */
+  color: #d8d8d8 !important;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+  color: #d8d8d8 !important;
+}
+
+:-ms-input-placeholder { /* IE 10+ */
+  color: #d8d8d8 !important;
+}
+
+::-ms-input-placeholder { /* Edge */
+  color: #d8d8d8 !important;
+}
+
+:placeholder-shown { /* Standard one last! */
+  color: #d8d8d8 !important;
+}
+.col-md-6.col-sm-6.item-description.mrsl-item-part > form {
+  text-align: center;
+}
+/*.lastRowMorsel{
+  margin-top: 40px;
+}*/
+.headingItem{
+  margin-bottom: 20px !important;
+}
+  </style>
   <!-- edit Morsel Start -->
   <input type= "hidden" id="new_mrsl_id"/>
   <input type= "hidden" id="is_morsel_submit"/>
@@ -44,9 +77,6 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
     $api_key = $user_id.':'.$token;
 ?>
     <div class='row'>
-      <div class="col-sm-12 text-center">
-      <h3>New Morsel</h3>
-      </div>
       <div class="col-sm-12" style="text-align:right;">
         <span>Logged in with : <b><?php echo $full_name ?></b></span>
         <!-- <a href="<?php echo site_url()?>/index.php?pagename=morsel_logout" class="label label-danger">Logout</a> -->
@@ -58,47 +88,42 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
                   <label for="morselTitle">Title:</label>
                   <input type="hidden" name="morselId" id="morselId" value=""/>
                   <input type="text" class="form-control" name="morselTitle" id="morselTitle" value=""/>
+                  <span id="morselTitleSpan" style="display:none; font-size:16px;">html</span>
                 </div>
-                <button id="post_title_savebtn" class=" btn btn-danger  morselSave" onclick="saveMorsel('morselTitle','title',this)">Save</button>
+                <button id="post_title_editbutton" class="btn btn-success  morselSave" style="display:none;">Edit</button>
+                <button id="post_title_savebtn" class="btn btn-success  morselSave" onclick="saveMorsel('morselTitle','title',this)">Save</button>
                 <img style="display:none;" class="smallAjaxLoader" src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif">
               </div> 
-              <!-- End morsel-title-area col-md-12 col-sm-12 -->
-              <div class="morsel-title-area col-md-12 col-sm-12 mrsl-top-border">
-                <div class="form-group">
-                  <label for="morselTitle">Video(Embedded Code):</label>
-                  <textarea class="form-control" name="morselVideo" id="morselVideo"></textarea>
-                </div>
-                <div class="form-group">
-                  <label for="morselTitle">Video Text:</label>
-                  <textarea class="form-control" name="video_text" id="video_text"></textarea>
-                </div>
-                <button id="post_video_savebtn" class=" btn btn-danger  morselSave" onclick="saveMorselVideo('morsel_video','video_text',this)">Save</button>
-                <img style="display:none;" class="smallAjaxLoader" src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif">
-              </div>
-              
               <div class="morsel-item-list-area col-md-12 col-sm-12 mrsl-top-border">
                 <h3>Items:</h3>
                 <!-- <div style="float:right;"></div> -->
                 <div class="wp-list-table widefat posts addItemTable row">
-                  <div class="mrsl-top-border">
-                    <div class="manage-column column-date col-md-2 col-sm-2 text-center" scope="col"><b>Item Image</b></div>
+                  <div class="mrsl-top-border headingItem">
+                    <div class="manage-column column-date col-md-4 col-sm-4 text-center" scope="col"><b>Item Image</b></div>
                     <div class="manage-column item-description sortable desc col-md-6 col-sm-6 text-center" scope="col"><b>Item Description</b></div>
-                    <div class="manage-column column-title sortable asc col-md-4 col-sm-4 text-center" scope="col"><b>Action</b></div>
+                    <div class="manage-column column-title sortable asc col-md-2 col-sm-2 text-center" scope="col"><b>Action</b></div>
                   </div>
                   <div id="items-body" class="container-fluid"></div>
                 </div>
               </div> <!-- End div.morsel-item-list-area col-md-12 col-sm-12 -->
-              <div class="morsel-action-btn-area col-md-12 col-sm-12 mrsl-top-border">
-                <a id="submit-mrsl-btn" class="btn btn-success" onclick="submitMorsel()" disabled="">Submit Morsel</a>
-                <a id="create-mrsl-btn" class="btn btn-default" style="display:none;" onclick="createNewMorsel()">Create New Morsel</a>
+              <div class="morsel-action-btn-area col-md-12 col-sm-12 mrsl-top-border" style="margin:5px 5px 5px -5px !important;">
                 <a class="btn btn-default" onclick="addItemMorsel();"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Add Item</a>
-                <a class="btn btn-info" style="margin-right:5px;" onclick="openDialog();"><i class="glyphicon glyphicon-share"></i>&nbsp;Connect to social</a>
                 <img class="center-block clearfix" src="<?php echo MORSEL_PLUGIN_WIDGET_ASSEST;?>/images/loader.gif" id="smallAjaxLoaderAddItem" style="display:none;"/>
               </div>
         </div> <!-- End div.row -->
       </div> <!-- End div.form-table MorselEdit -->
     </div>
+    <div class="row lastRowMorsel">
+      <div class="paddingNone" style="float: left;">
+        <a class="btn btn-info" onclick="openDialog();"><i class="glyphicon glyphicon-share"></i>&nbsp;Connect to social</a>
+      </div>
+      <div class="paddingNone" style="float: right;">
+        <a id="submit-mrsl-btn" class="btn btn-danger" onclick="submitMorsel()">Submit Story</a>
+        <a id="create-mrsl-btn" class="btn btn-default" style="display:none;" onclick="createNewMorsel()">Create New Story</a>
+      </div>
+    </div>
    </div> <!-- End div.container-fluid -->
+
   <div class="modal fade" id="morselSocialId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
      <!-- Modal content-->
@@ -108,7 +133,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
           <h4 class="modal-title">Connect to social</h4>
         </div>
         <div class="modal-body">
-          <iframe  src="" width="100%" height="100%" style="border: 0px;"></iframe>
+          <iframe src="" width="100%" height="100%" style="border: 0px;"></iframe>
         </div>
        <!--  <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -118,7 +143,14 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
   </div>
 </div> <!-- End editMorsels morsel-iso bootstrap-iso -->
 
-
+<style type="text/css">
+  .itemContentImage{
+    padding: 2px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .spanDescription iframe { display: none;}
+</style>
 <script type="text/javascript">
   var morselGlobal= jQuery('#new_mrsl_id').val();
   /**
@@ -165,6 +197,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
   }//function end call_preliminary_api
 
   function mrsl_call_get_api() {
+     console.log("morsel-call-get-api");
      var morsel_id = jQuery('#new_mrsl_id').val();
     jQuery.ajax({
         url:"<?php echo MORSEL_API_MORSELS_URL;?>"+morsel_id+".json",
@@ -184,30 +217,34 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
 
             if(response.data.title!=""){
               jQuery('#submit-mrsl-btn').removeAttr('disabled');
-              jQuery('#morselTitle').val(response.data.title);
-            }
 
+              jQuery('#morselTitle').css("display","none");
+              jQuery('#morselTitleSpan').css("display","block");
+              jQuery('#morselTitle').val(response.data.title);
+              jQuery('#morselTitleSpan').html(response.data.title);
+              jQuery("#post_title_savebtn").css("display","none");
+              jQuery("#post_title_editbutton").css("display","block");
+            }
            var new_item;
            jQuery.each(response.data.items, function( index, new_item ) {
             var html = "";
-            html += '<div class="row itemMorsel'+new_item.id+' mrsl-top-border"><div class="col-md-2 col-sm-2 column-date text-center mrsl-item-part">';
+            html += '<div class="row itemMorsel'+new_item.id+' mrsl-top-border itemContentImage"><div class="col-md-4 col-sm-4 column-date text-center mrsl-item-part">';
             //noImageMorsel.png
             if(new_item.photos){
             html += '<img id="item-thumb-'+new_item.id+'" onClick="uploadMorselItemImage('+new_item.id+')" src = "'+new_item.photos._100x100+'" width="100"/>';
             }else{
             html += '<img id="item-thumb-'+new_item.id+'" onClick="uploadMorselItemImage('+new_item.id+')" src = "<?php echo MORSEL_PLUGIN_IMG_PATH;?>noImageMorsel.png" width="100"/>';
             }
-            html += '<input type="file" id="imageUpload'+new_item.id+'" style="display:none;"><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderItemImage'+new_item.id+'" style="display:none;margin:0 auto;"/>';
-
+            html += '<input type="file" onchange="saveUploadImageItem('+new_item.id+')" id="imageUpload'+new_item.id+'" style="display:none;"><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderItemImage'+new_item.id+'" style="display:none;margin:0 auto;"/>';
             var des = (new_item.description == null)?'<i>Please enter some description about item.</i>':new_item.description;
             var desText = (new_item.description == null)?'':new_item.description;
 
             html += '</div><div class="col-md-6 col-sm-6 item-description mrsl-item-part">\
             <form action="submit.php" id="form'+new_item.id+'" onsubmit="saveItemDes('+new_item.id+');return false;">\
-            <span id="span'+new_item.id+'"><i>'+des+'</i></span>\
+            <span id="span'+new_item.id+'" style="word-wrap:break-word"><i>'+des+'</i></span>\
             <textarea id="textareaItem'+new_item.id+'" name="nameTextareaItem'+new_item.id+'" class="widgEditor nothing editor" style="width:100%; display:none;">'+desText+'</textarea>\
             </form></div>\
-            <div class="col-md-4 col-sm-4 column-title text-center mrsl-item-part">\
+            <div class="col-md-2 col-sm-2 column-title text-center mrsl-item-part">\
             <a class="btn btn-success" id="saveButton'+new_item.id+'" style="display:none;" onClick = "formSubmitItem('+new_item.id+')"><i class="glyphicon glyphicon-ok"></i></a>\
             <a class="btn btn-default" onClick = "editMorselItem('+new_item.id+')"  id="editButton'+new_item.id+'">\
             <i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;\
@@ -215,10 +252,9 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
             <i class="glyphicon glyphicon-trash"></i></a></div></form></div>';
             jQuery("#items-body").append(html);
             });
-
           }
         },error:function(){/*waitingDialog.hide();*/},
-        complete:function(){
+        complete:function(response){
           console.log("mrsl_call_get_api complete");
           waitingDialog.hide();
         }
@@ -234,7 +270,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
 
   function openDialog()
   {
-    var frameSrc = 'http://dev.eatmorsel.com/auth/loginifrm?id=<?php echo $user_id ?>&token=<?php echo $token ?>';
+    var frameSrc = 'http://dev.eatmorsel.com/auth/loginifrm?id=<?php echo $user_id ?>&token=<?php echo $token ?>&page=iframe';
     jQuery("#morselSocialId").find('iframe').attr('src',frameSrc);
     jQuery('#morselSocialId').find('.modal-body').css('height','450px');
     jQuery("#morselSocialId").modal('show');
@@ -360,37 +396,6 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
     return result;
   }
 
-function saveMorselVideo(fieldId1,fieldId2,element){
-    console.log("this element",element);
-        if(jQuery("#"+fieldId1).val() == ""){
-          alert("Please Enter Video embedded code");
-          return false;
-        } else if(jQuery("#"+fieldId2).val() == ""){
-        alert("Please Enter Text for video");
-          return false;
-        } else {
-         data = {
-           api_key:"<?php echo $api_key;?>",
-           morsel : { "morsel_video" : jQuery("#"+fieldId1).val() , "video_text" : jQuery("#"+fieldId2).val()}
-         }
-        jQuery.ajax({
-        url:"<?php echo MORSEL_API_URL;?>"+"morsels/"+morselGlobal,
-        type:"PUT",
-        data:data,
-        beforeSend: function(response) {
-          jQuery("#"+element.id).next("img.smallAjaxLoader").show();
-        },
-        success: function(response) {
-          console.log("morsel_response add------------",response);
-        },error:function(){
-          jQuery("#"+element.id).next("img.smallAjaxLoader").hide();
-        },complete:function(){
-          jQuery("#"+element.id).next("img.smallAjaxLoader").hide();
-        }
-          });
-        }
-  }
-
   function editMorsel(morselid){
       console.log("editMorsel---------------",morselid);
       morselGlobal = morselid;
@@ -415,31 +420,32 @@ function saveMorselVideo(fieldId1,fieldId2,element){
           var items = data.items;
           //title
           jQuery("#morselTitle").val(data.title);
+          jQuery("#morselTitleSpan").html(data.title);
+          jQuery('#morselTitle').css("display","none");
+          jQuery('#morselTitleSpan').css("display","block");
+          jQuery("#post_title_savebtn").css("display","none");
+          jQuery("#post_title_editbutton").css("display","block");
+          
           jQuery("#morsel_description_text").val(data.summary);
           jQuery("#items-body").html("");
+          
           for(var i in items){
 
-            var html = '<div class="row itemMorsel'+items[i].id+' mrsl-top-border"><div class="col-md-2 col-sm-2 column-date text-center mrsl-item-part">';
+            var html = '<div class="row itemMorsel'+items[i].id+' mrsl-top-border itemContentImage"><div class="col-md-4 col-sm-4 column-date text-center mrsl-item-part">';
             if(items[i].photos != null && items[i].photos._100x100 != undefined && items[i].photos._100x100 != null && items[i].photos._100x100 != ''){
                 html += '<img id="item-thumb-'+items[i].id+'" onClick="uploadMorselItemImage('+items[i].id+')" src = "'+items[i].photos._100x100+'"/>';
             } else {
               //noImageMorsel.png
               html += '<img id="item-thumb-'+items[i].id+'" onClick="uploadMorselItemImage('+items[i].id+')" src = "<?php echo MORSEL_PLUGIN_IMG_PATH;?>noImageMorsel.png" width="100"/>';
             }
-            html += '<input type="file" id="imageUpload'+items[i].id+'" style="display:none;"><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderItemImage'+items[i].id+'" style="display:none;margin:0 auto;"/>';
-
+            html += '<input type="file" onchange="saveUploadImageItem('+items[i].id+')" id="imageUpload'+items[i].id+'" style="display:none;"><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderItemImage'+items[i].id+'" style="display:none;margin:0 auto;"/>';
             var des = ((items[i].description == null) || (items[i].description == "") )?'<i>Please enter some description about item.</i>':items[i].description;
             var desText = (items[i].description == null)?'':items[i].description;
-
-            /*console.log("des:",des);
-            console.log("items[i].description:",items[i].description);*/
-
-            html += '</div><div class="col-md-6 col-sm-6 item-description mrsl-item-part"><form action="submit.php" id="form'+items[i].id+'" onsubmit="saveItemDes('+items[i].id+');return false;"><span id="span'+items[i].id+'">'+des+'</span><textarea id="textareaItem'+items[i].id+'" name="nameTextareaItem'+items[i].id+'" class="widgEditor nothing editor" style="width:100%; display:none;">'+desText+'</textarea></form></div><div class="col-md-4 col-sm-4 column-title text-center mrsl-item-part"><a class="btn btn-success" id="saveButton'+items[i].id+'" style="display:none;" onClick = "formSubmitItem('+items[i].id+')"><i class="glyphicon glyphicon-ok"></i></a><a class="btn  btn-default" onClick = "editMorselItem('+items[i].id+')"  id="editButton'+items[i].id+'"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;<a onClick = "deleteMorselItem('+items[i].id+')" class ="btn btn-danger " ><i class="glyphicon glyphicon-trash"></i></a></div></form></div>';
+            html += '</div><div class="col-md-6 col-sm-6 item-description mrsl-item-part"><form action="submit.php" id="form'+items[i].id+'" onsubmit="saveItemDes('+items[i].id+');return false;"><span class="spanDescription" id="span'+items[i].id+'" style="word-wrap:break-word">'+des+'</span><textarea id="textareaItem'+items[i].id+'" name="nameTextareaItem'+items[i].id+'" class="widgEditor nothing editor" style="width:100%; display:none;">'+desText+'</textarea></form></div><div class="col-md-2 col-sm-2 column-title text-center mrsl-item-part"><a class="btn btn-success" id="saveButton'+items[i].id+'" style="display:none;" onClick = "formSubmitItem('+items[i].id+')"><i class="glyphicon glyphicon-ok"></i></a><a class="btn  btn-default" onClick = "editMorselItem('+items[i].id+')"  id="editButton'+items[i].id+'"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;<a onClick = "deleteMorselItem('+items[i].id+')" class ="btn btn-danger " ><i class="glyphicon glyphicon-trash"></i></a></div></form></div>';
             jQuery("#items-body").append(html);
           }
-          //jQuery(".editMorsels").css("display","block");
         },error:function(){},
-        complete:function(){
+        complete:function(response){
           console.log("editMorsel complete");
           waitingDialog.hide();
         }
@@ -449,62 +455,63 @@ function saveMorselVideo(fieldId1,fieldId2,element){
   function formSubmitItem(formID){
      jQuery("#form"+formID).submit();
   }
+  jQuery("#post_title_editbutton").click(function(){
+    jQuery('#morselTitleSpan').css("display","none");
+    jQuery('#morselTitle').css("display","block");
+    jQuery("#post_title_editbutton").css("display","none");
+    jQuery("#post_title_savebtn").css("display","block");
+  })
 
   var acceptedExt = ["jpg","JPG","png","PNG","jpeg","JPEG","gif","GIF"];
 
-  function uploadMorselItemImage(itemID){
-    //alert("image Item");
-      jQuery("#imageUpload"+itemID).click();
-      jQuery("#imageUpload"+itemID).change(function(){
+  function saveUploadImageItem(itemID){
       var fileObject = {};
       fileObject = document.getElementById("imageUpload"+itemID).files[0];
       var fileName = fileObject.name,
       ext = fileName.split(".")[fileName.split(".").length - 1];
       if(jQuery.inArray(ext, acceptedExt) >= 0){
-        jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","block");
-        jQuery('#item-thumb-'+itemID).css("display",'none');
-        //submit the form here
-        //event.preventDefault();
-        var fd = new FormData();
-        //fd.append("user[email]",jQuery( "#mrsl_user_email" ).val());
-        if (fileObject) {
-          fd.append("item[photo]", fileObject);
+        var _URL = window.URL || window.webkitURL;
+          if (fileObject) {
+            var img = new Image();
+            img.onload = function () {
+                if(this.width <= 1200 && this.height <= 800){
+                  alert("Image resolution should be 1200x800");
+                  return;
+                } else {
+                  jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","block");
+              var fd = new FormData();
+              fd.append("item[photo]", fileObject);
+              jQuery.ajax({
+                url:"<?php echo MORSEL_API_URL;?>"+"items/"+itemID+".json?api_key=<?php echo $api_key;?>&prepare_presigned_upload=true",
+                data: fd,
+                type: 'PUT',
+                contentType: false,
+                cache: false,
+                processData: false,
+                beforeSend: function(xhr) {},
+                complete: function() {},
+                success: function(response) {
+                  console.log('test response', response);
+                  setTimeout(function() {
+                    checkItemPhoto(itemID);
+                  }, 8000);
+                },
+                error: function(response) {},
+                complete: function(){}
+              });
+                }
+            };
+            img.src = _URL.createObjectURL(fileObject);
         }
-        jQuery.ajax({
-          url:"<?php echo MORSEL_API_URL;?>"+"items/"+itemID+".json?api_key=<?php echo $api_key;?>&prepare_presigned_upload=true",
-          data: fd,
-          type: 'PUT',
-          contentType: false,
-          cache: false,
-          processData: false,
-          beforeSend: function(xhr) {
-            jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","block");
-            jQuery('#item-thumb-'+itemID).css("display",'none');
-            jQuery("#item-thumb-"+itemID).attr("src","");
-          },
-          complete: function() {},
-          success: function(response) {
-            console.log('test response', response);
-            //alert("uploadMorselItemImage is success");
-            setTimeout(function() {
-              //called the click of save button for perticular item
-              //jQuery("#saveButton"+itemID).click();
-              //editMorsel(morselGlobal);
-              checkItemPhoto(itemID);
-            },2000);
-          },
-          error: function(response) {},
-          complete: function(){
-            /*setTimeout(function() {
-              jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","none");
-              },7000);*/
-          }
-        });
       } else {
         alert("Please upload valid image, image extension must be jpg, JPG, png, PNG, jpeg,JPEG, gif, GIF");
         return false;
       }
-    });
+  }
+
+
+  function uploadMorselItemImage(itemID){
+    jQuery("#imageUpload"+itemID).click();
   }
 
   // Regular function with arguments
@@ -526,7 +533,7 @@ function saveMorselVideo(fieldId1,fieldId2,element){
             } else {
               console.log("Get item photo");
               jQuery("#item-thumb-"+itemID).attr("src",response.data.photos._100x100);
-              jQuery('#item-thumb-'+itemID).css("display",'block');
+              jQuery('#item-thumb-'+itemID).css("display",'initial');
               jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","none");
 
             }
@@ -592,12 +599,16 @@ function saveMorselVideo(fieldId1,fieldId2,element){
         jQuery("#"+element.id).next("img.smallAjaxLoader").hide();
       },complete:function(){
         jQuery("#"+element.id).next("img.smallAjaxLoader").hide();
+        jQuery("#morselTitleSpan").html(morsel_title);
+        jQuery("#morselTitle").css("display","none");
+        jQuery("#morselTitleSpan").css("display","block");
+        jQuery("#post_title_savebtn").css("display","none");
+        jQuery("#post_title_editbutton").css("display","block");
       }
     });
   }
 
   function addItemMorsel(sort_order, make_item_primary){
-    // if (typeof(sort_order) === "undefined") { sort_order = ""; }
     if (typeof(make_item_primary) === "undefined") { make_item_primary = false; }
 
     if(typeof(sort_order) === "undefined"){
@@ -612,8 +623,6 @@ function saveMorselVideo(fieldId1,fieldId2,element){
         "template_order": 99,
         "sort_order": sort_order };
     }
-
-    //jQuery("#smallAjaxLoaderAddItem").css("display","inline-block");
     var new_item;
     jQuery.ajax({
       url:"<?php echo MORSEL_API_URL;?>"+"items.json",
@@ -621,27 +630,21 @@ function saveMorselVideo(fieldId1,fieldId2,element){
       beforeSend: function(response) {
          jQuery("#smallAjaxLoaderAddItem").css("display","block");
          console.log("new item added.start")
-         //waitingDialog.show('Please wait while loading...');
       },
       data:userData,
       success: function(response) {
         if(response.meta.status == "200" && response.meta.message == "OK"){
-          //editMorsel(morselGlobal);
           new_item  = response.data;
           if(make_item_primary){
             setPrimaryItem(morselGlobal,new_item.id);
           } else {
             //means its not first time so we directly show in item list of morsel
-            var html = '<div class="row itemMorsel'+new_item.id+' mrsl-top-border"><div class="col-md-2 col-sm-2 column-date text-center mrsl-item-part">';
-            //noImageMorsel.png
+            var html = '<div class="row itemMorsel'+new_item.id+' mrsl-top-border itemContentImage"><div class="col-md-4 col-sm-4 column-date text-center mrsl-item-part">';
             html += '<img id="item-thumb-'+new_item.id+'" onClick="uploadMorselItemImage('+new_item.id+')" src = "<?php echo MORSEL_PLUGIN_IMG_PATH;?>noImageMorsel.png" width="100"/>';
-
-            html += '<input type="file" id="imageUpload'+new_item.id+'" style="display:none;"><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderItemImage'+new_item.id+'" style="display:none;margin:0 auto;"/>';
-
+            html += '<input type="file" onchange="saveUploadImageItem('+new_item.id+')" id="imageUpload'+new_item.id+'" style="display:none;"><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" id="smallAjaxLoaderItemImage'+new_item.id+'" style="display:none;margin:0 auto;"/>';
             var des = (new_item.description == null)?'<i>Please enter some description about item.</i>':new_item.description;
             var desText = (new_item.description == null)?'':new_item.description;
-
-            html += '</div><div class="col-md-6 col-sm-6 item-description mrsl-item-part"><form action="submit.php" id="form'+new_item.id+'" onsubmit="saveItemDes('+new_item.id+');return false;"><span id="span'+new_item.id+'"><i>Please enter some description about item.</i></span><textarea id="textareaItem'+new_item.id+'" name="nameTextareaItem'+new_item.id+'" class="widgEditor nothing editor" style="width:100%; display:none;">'+desText+'</textarea></form></div><div class="col-md-4 col-sm-4 column-title text-center mrsl-item-part"><a class="btn btn-success" id="saveButton'+new_item.id+'" style="display:none;" onClick = "formSubmitItem('+new_item.id+')"><i class="glyphicon glyphicon-ok"></i></a><a class="btn btn-default" onClick = "editMorselItem('+new_item.id+')"  id="editButton'+new_item.id+'"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;<a onClick = "deleteMorselItem('+new_item.id+')" class ="btn btn-danger" ><i class="glyphicon glyphicon-trash"></i></a></div></form></div>';
+            html += '</div><div class="col-md-6 col-sm-6 item-description mrsl-item-part"><form action="submit.php" id="form'+new_item.id+'" onsubmit="saveItemDes('+new_item.id+');return false;"><span id="span'+new_item.id+'" style="word-wrap:break-word"><i>Please enter some description about item.</i></span><textarea id="textareaItem'+new_item.id+'" name="nameTextareaItem'+new_item.id+'" class="widgEditor nothing editor" style="width:100%; display:none;">'+desText+'</textarea></form></div><div class="col-md-2 col-sm-2 column-title text-center mrsl-item-part"><a class="btn btn-success" id="saveButton'+new_item.id+'" style="display:none;" onClick = "formSubmitItem('+new_item.id+')"><i class="glyphicon glyphicon-ok"></i></a><a class="btn btn-default" onClick = "editMorselItem('+new_item.id+')"  id="editButton'+new_item.id+'"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;&nbsp;<a onClick = "deleteMorselItem('+new_item.id+')" class ="btn btn-danger" ><i class="glyphicon glyphicon-trash"></i></a></div></form></div>';
             jQuery("#items-body").append(html);
           }
         }
@@ -651,7 +654,6 @@ function saveMorselVideo(fieldId1,fieldId2,element){
       complete:function(){
         jQuery("#smallAjaxLoaderAddItem").css("display","none");
         console.log("new item added. complete")
-        //waitingDialog.hide();
       }
     });
     return new_item;
@@ -660,12 +662,13 @@ function saveMorselVideo(fieldId1,fieldId2,element){
   //initlize ck editor on an element with id
   function initEditor(id){
     jQuery(id).ckeditor(function() { /* callback code */ },
-                        { toolbar : [
-                                      { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
-                                      { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
-                                      { name: 'styles', items : [ 'Styles','Format' ] }
-                                    ]
-                         });
+      { toolbar : [
+          { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat','Source' ] },
+          { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
+          { name: 'styles', items : [ 'Styles','Format' ] }
+        ],
+        allowedContent: 'iframe[*]'
+      });
   }
 
   //hide ck editor via element id
@@ -682,10 +685,33 @@ function saveMorselVideo(fieldId1,fieldId2,element){
 
   // function that save item description
   function saveItemDes(itemID) {
-    // jQuery("#smallAjaxLoaderAddItem").css("display","inline-block");
+    console.log("check-------------11");
     old_value = jQuery('#span'+itemID).text();
     new_value = jQuery("#textareaItem"+itemID).val();
     new_value = jQuery(new_value).text();
+
+        /*For getting Iframe*/
+        var IFRAME = jQuery("#textareaItem"+itemID).val();
+          if (IFRAME.indexOf('iframe') > -1){
+              iframe_txt = IFRAME.match(/(iframe.+?\/iframe)/g)[0];
+              var regex = /iframe.*?src=&quot;(.*?)&quot;/;
+              if(regex.exec(iframe_txt) == undefined || regex.exec(iframe_txt)==null){
+                var regex = /iframe.*?src="(.*?)"/;
+              }
+              var src = regex.exec(iframe_txt)[1];
+              var data_id = src.split("/").pop();
+              if(src.indexOf('youtube') > -1){
+                img_src ="http://img.youtube.com/vi/"+data_id+"/hqdefault.jpg";
+                callForGetFileObject(img_src,itemID);
+              }else{
+                jQuery.get("https://crossorigin.me/http://vimeo.com/api/v2/video/"+data_id+".json")
+                  .then(function(response) {
+                  img_src = (response[0].thumbnail_large).replace("_640","");
+                  callForGetFileObject(img_src,itemID);
+                });
+              }
+/*For getting Iframe*/
+          } else {   
     if (old_value.indexOf(new_value) > -1)
     {
         jQuery("#span"+itemID).html(jQuery("#textareaItem"+itemID).val());
@@ -695,38 +721,35 @@ function saveMorselVideo(fieldId1,fieldId2,element){
         destroyEditor("textareaItem"+itemID);
         jQuery("#smallAjaxLoaderAddItem").css("display","none");
         return;
+    }       
+          jQuery.ajax({
+            url:"<?php echo MORSEL_API_URL;?>items/"+itemID+".json",
+            type:"PUT",
+            data:{
+              api_key : "<?php echo $api_key;?>",
+              item : {"description": jQuery("#textareaItem"+itemID).val() }
+            },
+            beforeSend:function(){
+              console.log("saveItemDes start");
+              waitingDialog.show('Please wait while loading...');
+            },
+            success: function(response) {
+              console.log("morsel_response Item Get------------",response);
+              jQuery("#span"+itemID).html(jQuery("#textareaItem"+itemID).val());
+              jQuery("#span"+itemID).css("display","block");
+              jQuery("#saveButton"+itemID).css("display","none");
+              jQuery("#editButton"+itemID).css("display","inline-block");
+              destroyEditor("textareaItem"+itemID);
+            },error:function(){},
+            complete:function(){
+              console.log("saveItemDes complete");
+              waitingDialog.hide();
+            }
+      });
     }
-
-    jQuery.ajax({
-      url:"<?php echo MORSEL_API_URL;?>items/"+itemID+".json",
-      type:"PUT",
-      data:{
-        api_key : "<?php echo $api_key;?>",
-        item : {"description": jQuery("#textareaItem"+itemID).val() }
-      },
-      beforeSend:function(){
-        console.log("saveItemDes start");
-        waitingDialog.show('Please wait while loading...');
-      },
-      success: function(response) {
-        console.log("morsel_response Item Get------------",response);
-        jQuery("#span"+itemID).html(jQuery("#textareaItem"+itemID).val());
-        jQuery("#span"+itemID).css("display","block");
-        jQuery("#saveButton"+itemID).css("display","none");
-        jQuery("#editButton"+itemID).css("display","inline-block");
-        destroyEditor("textareaItem"+itemID);
-        //editMorsel(morselGlobal);
-        // jQuery("#smallAjaxLoaderAddItem").css("display","none");
-      },error:function(){},
-      complete:function(){
-        console.log("saveItemDes complete");
-        waitingDialog.hide();
-      }
-    });
   }
 
   function deleteMorselItem(itemID){
-    //jQuery("#smallAjaxLoaderAddItem").css("display","inline-block");
     jQuery.ajax({
       url:"<?php echo MORSEL_API_URL;?>items/"+itemID+".json",
       type:"DELETE",
@@ -751,11 +774,8 @@ function saveMorselVideo(fieldId1,fieldId2,element){
   function editMorselItem(itemID){
     console.log("editMorselItem called");
     jQuery("#span"+itemID).css("display","none");
-    //jQuery("#textareaItem"+itemID+"WidgContainer").css("display","block");
-
     //add editor to text area
     initEditor("#textareaItem"+itemID);
-
     jQuery("#editButton"+itemID).css("display","none");
     jQuery("#saveButton"+itemID).css("display","inline-block");
   }
@@ -763,19 +783,75 @@ function saveMorselVideo(fieldId1,fieldId2,element){
   jQuery(".add_ItemMorsel").click(function(event) {
     jQuery(this).parents('.form-table').remove();
   });
+
+        var getFileBlob = function (url, cb) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.responseType = "blob";
+
+            xhr.addEventListener('load', function() {
+                cb(xhr.response);
+            });
+            xhr.send();
+        };
+
+        var blobToFile = function (blob, name) {
+            blob.lastModifiedDate = new Date();
+            blob.name = name;
+            return blob;
+        };
+
+        var getFileObject = function(filePathOrUrl, cb) {
+            getFileBlob(filePathOrUrl, function (blob) {
+                blob.lastModifiedDate = new Date();
+              var file = new File([blob], "maxresdefault.jpg",{ type: "image/jpeg" });
+              cb(file);
+            });
+        };
+        var callForGetFileObject = function(img_src,itemID){
+        getFileObject("https://crossorigin.me/"+img_src, function (fileObject) {
+        jQuery("#smallAjaxLoaderItemImage"+itemID).css("display","block");
+        var fd = new FormData();
+        fd.append("item[photo]", fileObject);
+        jQuery.ajax({
+            url:"<?php echo MORSEL_API_URL;?>"+"items/"+itemID+".json?api_key=<?php echo $api_key;?>&prepare_presigned_upload=true",
+            data: fd,
+            type: 'PUT',
+            contentType: false,
+            cache: false,
+            processData: false,
+            beforeSend: function(xhr) {},
+            complete: function() {},
+            success: function(response) {
+              console.log('test response', response);
+                    jQuery.ajax({
+                url:"<?php echo MORSEL_API_URL;?>items/"+itemID+".json",
+                type:"PUT",
+                data:{ api_key : "<?php echo $api_key;?>" , item : {"description": jQuery("#textareaItem"+itemID).val() } },
+                success: function(response) {
+                  editMorsel(morselGlobal);
+                  checkItemPhoto(itemID);
+                      jQuery("#smallAjaxLoaderAddItem").css("display","none");
+                },error:function(){},
+                complete:function(){}
+                  });
+            },
+            error: function(response) {},
+            complete: function(){}
+          });
+            });
+        }
 </script>
 
 <?php
   } //else end
-  //include authentication
-  //require_once(MORSEL_PLUGIN_URL_PATH. 'includes/authentication.php');
+  return ob_get_clean();
 } //function end create_morsel
 add_shortcode('create_morsel', 'create_morsel');
 
 /**
  * add support files for shortcode
  */
-//add_action('wp_enqueue_scripts', 'add_create_morsel_scripts');
 function add_create_morsel_scripts() {
   if(!is_admin()){
     /*scroll css*/

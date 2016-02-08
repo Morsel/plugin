@@ -44,7 +44,7 @@
 
 	$autoplay=$morselSliderSettings['show_navigation'];
 
-	echo "<div class='shs_admin_wrapper'><h5 style='text-align:center' class='shs_shortinfo'>Use Shortcode <br> <span style='font-size:14px;font-weight: bold;'>[morselDisplaySlider]</span></h5></div>";
+	echo "<div class='shs_admin_wrapper'><h5 style='text-align:center' class='shs_shortinfo'>Use Shortcode <br> <span style='font-size:14px;font-weight: bold;'>[morseldisplayslider]</span></h5></div>";
 	echo '<div id="poststuff" style="position:relative;">
 		  <div class="postbox shs_admin_wrapper">
 		  <div class="handlediv" title="Click to toggle"><br/></div>
@@ -53,44 +53,71 @@
 			echo "<form name='settings' method='post'>";
 			echo "<table>";
 			?>
-			<tr><td><?php _e('Width','shs'); ?></td><td><input type='text' name='width' value='<?php echo $width; ?>' /> <?php _e('eg:200px','shs'); ?></td></tr>
-			<!-- <tr><td><?php _e('Height','shs'); ?></td><td><input type='text' name='height' value='<?php echo $height; ?>' /> <?php _e('eg:200px','shs'); ?></td></tr>
-			 -->
 			<tr>
-				<td><?php _e('AutoPlay','shs'); ?></td>
-				<td>
-					<select name="show_navigation">
+			    <td>
+			        <div class="sliderField"><?php _e('Width: ','shs'); ?></div>
+			        <div class="sliderValue">
+			           <span>You can add width in "px" or in "%" like 200px or 100%</span><br>
+			           <input placeholder="200px Or 100%" type='text' name='width' value='<?php echo $width; ?>' />
+			        </div>
+			    </td>
+			</tr>
+			<tr>
+			    <td>
+			        <div class="sliderField"><?php _e('Slider Duration: ','shs'); ?></div>
+                    <div class="sliderValue">
+                        <span>You can set a interval duration between slides (in ms).</span><br>
+			            <input placeholder="7000 milliseconds" type='text' name='pause_time' value='<?php echo $pause_time; ?>' />
+			        </div>    
+			    </td>
+			</tr>
+			<tr>
+				<td><div class="sliderField"><?php _e('AutoPlay: ','shs'); ?></div> 
+					<select name="show_navigation" class="sliderSelection">
 						<option <?php sliderCheckForSelected($autoplay,"true"); ?> ><?php _e('true','shs'); ?></option>
 						<option <?php sliderCheckForSelected($autoplay,"false"); ?> ><?php _e('false','shs'); ?></option>
 					</select>
 				</td>
 			</tr>
-			<tr><td><?php _e('Slider Duration','shs'); ?></td><td><input type='text' name='pause_time' value='<?php echo $pause_time; ?>' /> <?php _e('eg:7000','shs'); ?></td></tr>
-			<tr><td colspan="2" style="font-weight:normal;"><input type='submit' name='jsetsub'  class='button-primary' value='SAVE SETTINGS' /></td></tr>
+			<tr><td style="font-weight:normal;"><input type='submit' name='jsetsub'  class='button-primary' value='SAVE SETTINGS' /></td></tr>
 			<?php
 			echo "</table>";
 			echo "</form>";
 			echo '</div></div></div>';
-	?>
-	<?php
 	echo '</div>'; // .wrap
-function sliderCheckForSelected($option,$check){
-	if($option==$check){
-		echo "selected='selected'";
-	}
-}
+
+	//function for selcted checkbox
+    function sliderCheckForSelected($option,$check){
+		if($option==$check){
+			echo "selected='selected'";
+		}
+    }
 
 ?>
 <style type="text/css">
 	.shs_shortinfo{
-    background: none repeat scroll 0 0 #DBEFFE;
-    border: 1px solid #98B9D0;
-    color: #333333;
-    font-size: 12px;
-    font-weight: normal;
-    line-height: 22px;
-    padding: 10px;
-}
+	    background: none repeat scroll 0 0 #DBEFFE;
+	    border: 1px solid #98B9D0;
+	    color: #333333;
+	    font-size: 12px;
+	    font-weight: normal;
+	    line-height: 22px;
+	    padding: 10px; 
+    }
+    .sliderSelection {
+    	width: 204px;
+    }
+    .sliderValue{ float: right;}
+    @media screen and (max-width: 400px) {
+	    .saveSlides{
+	    	float: none !important;
+	    	margin: 0 !important;
+	    }
+    }
+    .sliderField {
+    	width : 200px;
+    	float: left;
+    }
 </style>
     <?php
 	if(isset($_POST['joptsv'])){
@@ -101,15 +128,16 @@ function sliderCheckForSelected($option,$check){
       <div class="updated" style="width:686px;"><p><strong><font color="green"><?php _e('Slides Saved','shs'); ?></font></strong></p></div>
     <?php
 	}
+
     $contents = get_option('shs_slider_contents');
   ?>
-	<div id="poststuff" style="position:relative;">
+ 	<div id="poststuff" style="position:relative;">
 		<form name="qord" method="post">
 			<div class="postbox shs_admin_wrapper">
 				<div class="handlediv" title="Click to toggle"><br/></div>
-				<h3 class="hndle"><span><?php _e('Select Morsel as Slides for slider','shs'); ?></span><input type="submit" name="joptsv" class="button-primary" value="SAVE SLIDES" style="float:right;margin:-4px" /></h3>
+				<h3 class="hndle"><span><?php _e('Select morsels slides by checkbox to display in your slider','shs'); ?></span><input type="submit" name="joptsv" class="button-primary saveSlides" value="SAVE SLIDES" style="float:right;margin:-4px" /></h3>
          <div class="inside" style="padding: 15px;margin: 0;">
-          <table class="wp-list-table widefat posts fixed">
+            <table class="widefat posts fixed">
 						<thead>
 							<tr>
 								<th scope='col' class='manage-column column-title sortable desc' style="padding-left: 10px;">Morsel Name</th>
@@ -126,31 +154,33 @@ function sliderCheckForSelected($option,$check){
 						</tfoot>
 					    <tbody id="joptions">
 					    <?php
-
 					    foreach ($jsonPost->data as $row) {
-					    	if(!$row->is_submit){
-					     ?>
-
+					    	if(!$row->is_submit){ 
+								$morsel_url = add_query_arg( array('morselid' => $row->id), get_permalink($morsel_page_id));				   
+					    	?>
 					    	<tr>
-					    		<td><a href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?></a></td>
 					    		<td>
-					    			<?php
-					    				$imageUrl = "";
-                     	if($row->primary_item_photos->_992x992 != ''){
-                      	$imageUrl = str_replace("_992x992_", "", $row->primary_item_photos->_992x992);
-                      	$imageUrlAdmin = $row->primary_item_photos->_100x100;
-							      ?>
-							      <a href="<?php echo $imageUrl;?>" target="_blank" ><img src="<?php echo $imageUrlAdmin;?>" height="100" width="100"><a>
+					    		    <a href="<?php echo $morsel_url?>" target="_blank">
+					    		       <?php echo $row->title?>
+					    		    </a>
 					    		</td>
-					    		<td>
-					    			<input type="checkbox" <? if(array_key_exists($row->id, $contents)){?>checked<? } ?> name="cnt[<?=$row->id;?>]" value="<?=$imageUrl?>">
-					    		</td>
-					    		<? } else { ?>
-					    		</td>
-					    		<td></td>
-					    		<? } ?>
+					    		<?php $imageUrl = "";
+					    		if($row->primary_item_photos->_992x992 != ''){
+				                      	$imageUrl = str_replace("_992x992_", "", $row->primary_item_photos->_992x992);
+				                      	$imageUrlAdmin = $row->primary_item_photos->_100x100;
+							        ?>
+							        <td>
+					    		        <a href="<?php echo $imageUrl;?>" target="_blank" ><img src="<?php echo $imageUrlAdmin;?>" height="100" width="100"><a>
+					    			</td>
+						    		<td>
+						    		    <input type="checkbox" <? if(array_key_exists($row->id, $contents)){?>checked<? } ?> name="cnt[<?=$row->id;?>]" value="<?=$imageUrl.'@@$@@'.$row->title.'@@$@@'.$row->creator->photos->_72x72;?>">
+						    		</td>
+					    		<? } else {
+						    		echo '<td colspan="2">No Image</td>';					                	
+					            }?>
 					    	</tr>
-					    <? } } ?>
+					        <? } 
+					    } ?>
 					    </tbody>
 				  </table>
 				  <div class="clear"><br></div>
@@ -167,7 +197,6 @@ function sliderCheckForSelected($option,$check){
 	</form>
 </div>
 
-
 <script type="text/javascript">
 var noMoreMorsel;
 var sliderMorsePageCount = 1;
@@ -181,13 +210,13 @@ jQuery(window).scroll(function() {
 			    jQuery.ajax({
 		        url: "<?php echo site_url()?>" + "/index.php?pagename=morsel_ajax_admin&view=slider&page_id=" + parseInt(++sliderMorsePageCount),
 		        success: function(data) {
-							if (data.trim().length > 1) {
-								jQuery('#joptions tr:last').after(data);
-							} else {
-								sliderMorsePageCount--;
-								noMoreMorsel = true;
-								jQuery('#no-moreSlider').show();
-							}
+					if (data.trim().length > 1) {
+						jQuery('#joptions tr:last').after(data);
+					} else {
+						sliderMorsePageCount--;
+						noMoreMorsel = true;
+						jQuery('#no-moreSlider').show();
+					}
 		        },
 		        error: function() {
 			        sliderMorsePageCount--;
@@ -206,11 +235,4 @@ jQuery(".checkAllCheckbox").change(function () {
     jQuery("input:checkbox").prop('checked', jQuery(this).prop("checked"));
 });
 
-jQuery(".checkBoxSlider").change(function(){
-	if(jQuery(this).attr('checked')) {
-	    alert("checked");
-	} else {
-	    alert("unchecked");
-	}
-})
 </script>
