@@ -56,7 +56,7 @@ function create_morsel() {
 <?php
 /*checked eatmorsel user isn't logged in*/
 if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_obj']))){
-  // echo $options["hide_login_btn"]; 
+  // echo $options["hide_login_btn"];
   if(get_option('morsel_other_settings')['hide_login_btn'] != 1) {
     ?>
     <div class='row'>
@@ -71,6 +71,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
       $host_id = $host_info["userid"];
     }
     $user = $_SESSION['morsel_user_obj'];
+
     $full_name = ucfirst($user->first_name).' '.ucfirst($user->last_name);
     $user_id = $user->id;
     $token = $user->auth_token;
@@ -93,7 +94,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
                 <button id="post_title_editbutton" class="btn btn-success  morselSave" style="display:none;">Edit</button>
                 <button id="post_title_savebtn" class="btn btn-success  morselSave" onclick="saveMorsel('morselTitle','title',this)">Save</button>
                 <img style="display:none;" class="smallAjaxLoader" src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif">
-              </div> 
+              </div>
               <div class="morsel-item-list-area col-md-12 col-sm-12 mrsl-top-border">
                 <h3>Items:</h3>
                 <!-- <div style="float:right;"></div> -->
@@ -270,10 +271,13 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
 
   function openDialog()
   {
-    var frameSrc = 'http://dev.eatmorsel.com/auth/loginifrm?id=<?php echo $user_id ?>&token=<?php echo $token ?>&page=iframe';
-    jQuery("#morselSocialId").find('iframe').attr('src',frameSrc);
-    jQuery('#morselSocialId').find('.modal-body').css('height','450px');
-    jQuery("#morselSocialId").modal('show');
+
+    var frameSrc = '<?php echo MORSEL_SITE ?>auth/loginifrm?id=<?php echo $user_id ?>&token=<?php echo $token ?>&page=iframe&callback='+window.location.href;
+    console.log(frameSrc);
+    window.location.href = frameSrc;
+    // jQuery("#morselSocialId").find('iframe').attr('src',frameSrc);
+    // jQuery('#morselSocialId').find('.modal-body').css('height','450px');
+    // jQuery("#morselSocialId").modal('show');
 
     //showDialog(frameSrc);
   }
@@ -425,10 +429,10 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
           jQuery('#morselTitleSpan').css("display","block");
           jQuery("#post_title_savebtn").css("display","none");
           jQuery("#post_title_editbutton").css("display","block");
-          
+
           jQuery("#morsel_description_text").val(data.summary);
           jQuery("#items-body").html("");
-          
+
           for(var i in items){
 
             var html = '<div class="row itemMorsel'+items[i].id+' mrsl-top-border itemContentImage"><div class="col-md-4 col-sm-4 column-date text-center mrsl-item-part">';
@@ -711,7 +715,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
                 });
               }
 /*For getting Iframe*/
-          } else {   
+          } else {
     if (old_value.indexOf(new_value) > -1)
     {
         jQuery("#span"+itemID).html(jQuery("#textareaItem"+itemID).val());
@@ -721,7 +725,7 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
         destroyEditor("textareaItem"+itemID);
         jQuery("#smallAjaxLoaderAddItem").css("display","none");
         return;
-    }       
+    }
           jQuery.ajax({
             url:"<?php echo MORSEL_API_URL;?>items/"+itemID+".json",
             type:"PUT",
