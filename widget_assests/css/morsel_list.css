@@ -711,8 +711,10 @@
 
 .morsel-iso .btn-submit-wrap.btn-submit-block .btn-lg {
   border-radius: 3px;
-  font-size: 17px;
-  padding: 10px 16px;
+  font-size: 13px;
+  padding: 10px;
+  /*font-size: 17px;
+  padding: 10px 16px;*/
 }
 
 .morsel-iso .btn-submit-wrap.btn-submit-block .btn-primary {
@@ -1314,15 +1316,39 @@
   padding: 5px;
 }
 
-#morsel-progress {
+.morsel-iso #morsel-progress {
   margin: 20px auto 0;
   max-width: 78%;
 }
 
-#login-messages {
+.morsel-iso #login-messages {
   max-width: 94%;
 }
 
+.morsel-iso .morsel-btn-social:before{
+  content:"";
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.morsel-iso .morsel-btn-facebook:before{
+  background: url("../images/morsel-social.png") no-repeat scroll 0 -72px rgba(0, 0, 0, 0);
+  height: 24px;
+  width: 24px;
+}
+
+.morsel-iso .morsel-btn-twitter:before{
+  background: url("../images/morsel-social.png") no-repeat scroll 0 -216px rgba(0, 0, 0, 0);
+  height: 24px;
+  width: 24px;
+}
+.morsel-iso .btn.btn-primary.morsel-btn-social.morsel-btn-facebook,.morsel-iso .morsel-btn-facebook {
+  background-color: #2a5e9d;
+}
+.morsel-iso .btn.btn-primary.morsel-btn-social.morsel-btn-twitter,.morsel-iso .morsel-btn-twitter {
+  background-color: #00c2f6;
+}
 /*end create item details shortcode css*/
 .mrsl-message-wrapper.morsel-iso.bootstrap-iso {
   clear: both;

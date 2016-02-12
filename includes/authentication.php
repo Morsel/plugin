@@ -13,7 +13,7 @@
         <div id="login-messages" class="center-block"></div>
           <div id="mrsl-signup-section">
             <div class="container-fluid join-page">
-              <div class="row">
+              <div class="row">                
                 <div class="col-md-12">
                   <h1 class="text-center">Please Sign Up</h1>
                   <div id="mrsl-signup-error-box" class="alert alert-danger" style="display:none"></div>
@@ -53,7 +53,8 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-10 col-md-offset-1">
+                        <!-- <div class="col-md-10 col-md-offset-1"> -->
+                        <div class="col-md-12">
                           <div class="form-group">
                             <label for="user[username]" class="control-label required">Username</label>
                             <input type="text" name="user[username]" id="mrsl_user_username" class="form-control" placeholder="johnnyboy" required="required">
@@ -92,6 +93,18 @@
                               <button id="mrsl-signup-submit-btn" class="btn btn-primary btn-lg" type="submit">Sign Up</button>
                             </span>
                           </div>
+                          <!-- social signup buttons -->
+                          <div class="form-group col-md-6" >
+                            <span class="btn-submit-wrap btn-submit-block" title="Login with Facebook" data-toggle="tooltip" data-placement="top">
+                              <a class="btn btn-primary btn-lg morsel-btn-social morsel-btn-facebook" href="<?php echo site_url()?>/index.php?pagename=morselSocialLogin&provider=facebook&url=<? echo 'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];?>">Sign Up with Facebook</a>
+                            </span>
+                          </div>
+                          <div class="form-group col-md-6" >
+                            <span class="btn-submit-wrap btn-submit-block" title="Login with Twitter" data-toggle="tooltip" data-placement="top">
+                              <a href="<?php echo site_url()?>/index.php?pagename=morselSocialLogin&provider=twitter&url=<? echo 'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];?>" class="btn btn-primary btn-lg morsel-btn-social morsel-btn-twitter">Sign Up with Twitter</a>
+                            </span>
+                          </div>
+                          <!--End social signup buttons -->
                           <div>By continuing you indicate that you have read and agree to our <a target="_blank" href="http://eatmorsel.com/terms">Terms of Service</a></div>
                         </div>
                       </div>
@@ -126,14 +139,14 @@
                             <button id="mrsl-submit-btn" class="btn btn-primary btn-lg" type="submit" >Login</button>
                           </span>
                         </div>
-                        <div class="form-group clearfix" >
-                          <span id="mrsl-submit-btn-span" class="btn-submit-wrap btn-submit-block disabled" title="Login with Facebook" data-toggle="tooltip" data-placement="top">
-                            <a class="btn btn-primary btn-lg" href="<?php echo site_url()?>/index.php?pagename=morselSocialLogin&provider=facebook&url=<? echo 'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];?>">Login with Facebook</a>
+                        <div class="form-group col-md-6" >
+                          <span id="mrsl-fb-btn-span" class="btn-submit-wrap btn-submit-block" title="Login with Facebook" data-toggle="tooltip" data-placement="top">
+                            <a class="btn btn-primary btn-lg morsel-btn-social morsel-btn-facebook" href="<?php echo site_url()?>/index.php?pagename=morselSocialLogin&provider=facebook&url=<? echo 'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];?>">Log in with Facebook</a>
                           </span>
                         </div>
-                        <div class="form-group clearfix" >
-                          <span id="mrsl-submit-btn-span" class="btn-submit-wrap btn-submit-block disabled" title="Login with Twitter" data-toggle="tooltip" data-placement="top">
-                            <a href="<?php echo site_url()?>/index.php?pagename=morselSocialLogin&provider=twitter&url=<? echo 'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];?>" class="btn btn-primary btn-lg">Login with Twitter</a>
+                        <div class="form-group col-md-6" >
+                          <span id="mrsl-tw-btn-span" class="btn-submit-wrap btn-submit-block" title="Login with Twitter" data-toggle="tooltip" data-placement="top">
+                            <a href="<?php echo site_url()?>/index.php?pagename=morselSocialLogin&provider=twitter&url=<? echo 'http://'. $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];?>" class="btn btn-primary btn-lg morsel-btn-social morsel-btn-twitter">Log in with Twitter</a>
                           </span>
                         </div>
                         <div class="text-center"><a class="open-site-link" data-toggle="modal" data-src="https://www.eatmorsel.com/auth/password-reset" data-height=500 data-width=100% data-target="#forgetPasswordModal" >Forgot your password?</a></div>
@@ -356,6 +369,3 @@ jQuery(document).ready(function(){
 <? unset($_SESSION["morselSocialLoginFail"]);
 } ?>
 </script>
-
-
-
