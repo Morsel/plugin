@@ -264,13 +264,12 @@ function hideAdvancedTabFunction(buttonId){
 
 </div>
 <div id="shortcode_model_id" style="display:none;">
-	 <span>Copy and Paste the shortcode below onto page where your community can shair their morsels and support your brand.<br><b>[create_morsel]</b></span>
-	 <br><br>
+	 <span>Create a new page on your website where you would like to direct users to share their stories. Then copy and paste the shortcode below onto your new page. Anyone with the link can create a morsel and support your brand.<br><br><h5 class="mrsl-action-btn">[create_morsel]</h5></span>
 </div>
 <script type="text/javascript">
- function other_shortcode(){
-		   var url = "#TB_inline?width=570&height=122&inlineId=shortcode_model_id";
-			 tb_show("Shortcode for community", url);
+ 	function other_shortcode(){
+   var url = "#TB_inline?width=570&height=110&inlineId=shortcode_model_id";
+	 tb_show("Shortcode for community", url);
 	}
 
 function checkAdvancedTab(buttonID){

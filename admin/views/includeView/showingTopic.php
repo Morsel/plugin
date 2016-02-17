@@ -14,12 +14,13 @@
 			<!--<select id = "select_TopicId" multiple="multiple" placeholder class="widefat" style="width:auto;">
 			    <option value="blank"></option>
 			</select>-->
-			<div class="selectBoxForTopic">
-				
-			</div>
-		    <br>
-		    <a id = "morsel_topic_button" class="button button-primary ">Select</a>&nbsp;&nbsp;
-		    <a class="morselClosePopup button">Close</a>
+      <div class="morsel-topic-select-wrapper">
+  			<div class="selectBoxForTopic"></div>
+        <div class="mrsl-action-btn">
+  		    <a id = "morsel_topic_button" class="button button-primary ">Save</a>&nbsp;&nbsp;
+  		    <a class="morselClosePopup button">Close</a>
+        </div>
+      </div>
 		</form>
     </div>
 
@@ -59,9 +60,9 @@
 							html += '<option '+selected+' value="'+allTopics.id+'">'+allTopics.name+'</option>';
 						});
 				  		html += "</select>";
-	
+
 						jQuery('.selectBoxForTopic').append(html);
-					    var url = "#TB_inline?width=500&height=210&inlineId=modal-window-TopicId";
+					    var url = "#TB_inline?width=400&height=400&inlineId=modal-window-TopicId";
 					    tb_show("Add Morsel Topic", url);
 					    jQuery('.testSelAll').SumoSelect({okCancelInMulti:true, selectAll:true });
 					}
@@ -127,12 +128,12 @@
 				});
 				jQuery("#morsel_post-"+morsel_id).find('td:eq(5)').html(stringhtml);
 				jQuery("#morsel_post-"+morsel_id).find(".all_morsel_TopicId").text('Update Topics');
-			  	
+
     	},error:function(){
 			console.log("Some issue to add Topic to morsel");
 		},complete:function(){}
         });
 	}
 	/*Topic End*/
-</script>    
+</script>
 

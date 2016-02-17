@@ -183,7 +183,22 @@
   .editAboveImage {margin:0 10px 0 0;}
   .actionButtonMorsel{ margin-bottom: 5px !important;}
   .morselPostListTableDiv {  overflow-x: auto; clear: both;}
-/*post tab end*/ 
+  .morsel-topic-select-wrapper {
+    margin: 0 auto;
+    width: 202px;
+  }
+  .mrsl-action-btn {
+    text-align: center;
+    margin: 10px 0px;
+  }
+  .morsel-topic-select-wrapper .SumoSelect > .optWrapper > .options{
+    max-height: 250px;
+  }
+  #the-list code {
+    float: left;
+    margin: 2px 0 0 2px;
+  }
+/*post tab end*/
 
 /*edit morsel*/
 /*.form-table span {
@@ -263,12 +278,12 @@ width: 100%;
   #TB_window{margin-left: -37% !important ; width: 250px !important;}
   #TB_ajaxContent { width: auto !important;}
 }
-/*edit morsel end*/  
+/*edit morsel end*/
 @media screen and (min-width: 800px) {
   #morsel-shortcode-form{
        width: 800px !important;
   }
-}   
+}
 /*meta Post*/
 .metapost-outer {
     float: left;
@@ -308,14 +323,14 @@ width: 100%;
      .div2 { width:980px; background-color: #88FF88; overflow: auto; }
      .widgSelectBlock { width: 85px !important;}
   }
-/*morsel List End*/  
+/*morsel List End*/
 
 /*Settings morsel*/
-  .settings td { padding: 0;} 
+  .settings td { padding: 0;}
   .settings tr>td:first-child{
     width: 126px;
   }
-  .settingsHost td { padding: 0; vertical-align: top;} 
+  .settingsHost td { padding: 0; vertical-align: top;}
   .settingsHost tr>td:first-child{
     width: 126px;
     padding: 7px 0 0 0;
@@ -324,7 +339,7 @@ width: 100%;
     width:50%;
   }
   .settingsHost .buttonLogo {
-     margin: 0; 
+     margin: 0;
   }
   .otherSettingsMorsel td { padding: 7px; vertical-align: top;}
   .etabs {display: block;}
@@ -333,7 +348,7 @@ width: 100%;
       .etabs{ display: none;}
       .mobileMenu{display: block !important;}
   }
-/*settings morsel end*/  
+/*settings morsel end*/
 
 /*shotcode tab*/
 .verticalTop{
@@ -341,5 +356,3 @@ width: 100%;
   white-space:nowrap;
   width: 207px;
 }
-
-
