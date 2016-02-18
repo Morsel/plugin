@@ -39,7 +39,7 @@ define('MORSEL_PLUGIN_ADMIN_ASSEST', plugin_dir_url( __FILE__ ).'admin/assets/' 
 //for switch to development env set this constant value "dev"
 //and for local env set this constant value "local"
 
-define('MORSEL_PLUGIN_ENV','dev');
+define('MORSEL_PLUGIN_ENV','prod');
 
 if(MORSEL_PLUGIN_ENV == 'prod'){
   define('MORSEL_API_URL', 'https://api.eatmorsel.com/');
@@ -199,7 +199,7 @@ function morsel_query_vars( $query_vars ){
 
             $message = '<body><center><table width="600" background="#FFFFFF" style="text-align:left;" cellpadding="0" cellspacing="0"><tr><td colspan="3"><!--CONTENT STARTS HERE--><table cellpadding="0" cellspacing="0"><tr><td width="15"><div style="line-height: 0px; font-size: 1px; position: absolute;">&nbsp;</div></td><td width="325" style="padding-right:10px; font-family:Trebuchet MS, Verdana, Arial; font-size:12px;" valign="top"><span style="font-family:Trebuchet MS, Verdana, Arial; font-size:17px; font-weight:bold;"> Welcome '.$newUserName.'</span><br /><p>Your new account has been created successfully on '.get_site_url().'.</p><p>Your username is '.$newUserName.'. If you forget your password, you can retrieve it from the site.</p><br />   Best Regards,<br/>'.get_bloginfo( 'name').'</td></tr></table></td></tr></table><br /><table cellpadding="0" style="border-top:1px solid #e4e4e4; text-align:center; font-family:Trebuchet MS, Verdana, Arial; font-size:12px;" cellspacing="0" width="600"><tr><td style="font-family:Trebuchet MS, Verdana, Arial; font-size:12px;"><br />'.get_bloginfo( 'name').'<br /><!-- <a href="{!remove_web}">Unsubscribe </a> --></td></tr></table></center></body>';
 
-          
+
           //send email to new user
             wp_mail($result->data->email,'New Registration',$message);
           // login user
@@ -250,7 +250,7 @@ function morsel_query_vars( $query_vars ){
 
     $result = @file_get_contents(MORSEL_API_URL.'users/sign_in.json', false, $context);
     //$result = @wp_remote_retrieve_body(wp_remote_get(MORSEL_API_URL.'users/sign_in.json', false, $context));
-    
+
     $result = json_decode($result);
     //$login_result["api_result"] = $result;
     if(empty($result)) { //result not found by eatmorsel
@@ -296,9 +296,9 @@ function morsel_query_vars( $query_vars ){
           $newWpUserID = wp_create_user($newUserName,$random_password,$result->data->email);
           $newlyCreatedUser = new WP_User($newWpUserID);
           $newlyCreatedUser->set_role('subscriber');
-          
+
           $message = '<body><center><table width="600" background="#FFFFFF" style="text-align:left;" cellpadding="0" cellspacing="0"><tr><td colspan="3"><!--CONTENT STARTS HERE--><table cellpadding="0" cellspacing="0"><tr><td width="15"><div style="line-height: 0px; font-size: 1px; position: absolute;">&nbsp;</div></td><td width="325" style="padding-right:10px; font-family:Trebuchet MS, Verdana, Arial; font-size:12px;" valign="top"><span style="font-family:Trebuchet MS, Verdana, Arial; font-size:17px; font-weight:bold;"> Welcome '.$newUserName.'</span><br /><p>Your new account has been created successfully on '.get_site_url().'.</p><p>Your username is '.$newUserName.'. If you forget your password, you can retrieve it from the site.</p><br />   Best Regards,<br/>'.get_bloginfo( 'name').'</td></tr></table></td></tr></table><br /><table cellpadding="0" style="border-top:1px solid #e4e4e4; text-align:center; font-family:Trebuchet MS, Verdana, Arial; font-size:12px;" cellspacing="0" width="600"><tr><td style="font-family:Trebuchet MS, Verdana, Arial; font-size:12px;"><br />'.get_bloginfo( 'name').'<br /><!-- <a href="{!remove_web}">Unsubscribe </a> --></td></tr></table></center></body>';
-          
+
            add_filter( "wp_mail_content_type", "set_html_content_type" );
           //send email to new user
             wp_mail($result->data->email,'New Registration',$message);
@@ -334,9 +334,9 @@ function morsel_query_vars( $query_vars ){
      echo $result;
      exit(0);
    }
-   
+
    if($_REQUEST['pagename']=='morsel_ajax_admin_slider')
-    { 
+    {
       $sliderId = mysql_escape_string($_REQUEST["sliderId"]);
       $morsel_page_id = get_option( 'morsel_plugin_page_id');
       $options = get_option( 'morsel_settings');
@@ -347,7 +347,7 @@ function morsel_query_vars( $query_vars ){
       unset($sliderContent);
       if($sliderId != undefined && $sliderId != ""){
          $sliderContent = $contents[$sliderId-1];
-      }  
+      }
       //$json = get_json($jsonurl); //getting whole data
       $json = json_decode(wp_remote_retrieve_body(wp_remote_get($jsonurl)));
       echo "Slider Name: &nbsp;&nbsp;&nbsp;<input type='text' name='sliderName' id='sliderNameSlider' value='".$sliderContent['name']."' placeholder='Slider Name'>";?>
@@ -372,8 +372,8 @@ function morsel_query_vars( $query_vars ){
                 </tr>
               </tfoot>
               <tbody>
-          
-      <? 
+
+      <?
       foreach ($json->data as $row) {?>
               <tr class="sliderTr">
                  <td class="sliderTd1"><a href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?></a></td>
@@ -390,7 +390,7 @@ function morsel_query_vars( $query_vars ){
                     <input type="checkbox" class="sliderCheckbox" <? if(array_key_exists($row->id, $sliderContent['slider'])){?>checked<? } ?> name="cnt[<?=$row->id;?>]" value="<?=$mainValue?>">
                   </td>
                   <? } else  {
-                    echo '<td colspan="2">No Image</td>';                           
+                    echo '<td colspan="2">No Image</td>';
                     }
                   ?>
                   </tr>
@@ -399,7 +399,7 @@ function morsel_query_vars( $query_vars ){
           </table>
 
   <? exit;
-  }  
+  }
 
   if($_REQUEST['pagename'] == "getSliderListing"){
   $contents = get_option('shs_slider_contents');
@@ -425,8 +425,8 @@ function morsel_query_vars( $query_vars ){
         $contents[$sliderID-1]['name'] = $_REQUEST['sliderName'];
       } else {
         if(count($contents) > 0 ) { $count = count($contents);} else {$count = 0;}
-          $contents[$count]['slider'] = $checkboxValue; 
-          $contents[$count]['name'] = $_REQUEST['sliderName']; 
+          $contents[$count]['slider'] = $checkboxValue;
+          $contents[$count]['name'] = $_REQUEST['sliderName'];
           echo $count+1;
       }
       update_option('shs_slider_contents',$contents);
@@ -456,7 +456,7 @@ function morsel_query_vars( $query_vars ){
 
       $json = get_json($jsonurl); //getting whole data
       //$json = json_decode(wp_remote_retrieve_body(wp_remote_get($jsonurl)));
-  
+
       {
       foreach ($json->data as $row) {
         $morsel_url = add_query_arg( array('morselid' => $row->id), get_permalink($morsel_page_id));?>
@@ -471,7 +471,7 @@ function morsel_query_vars( $query_vars ){
                          <?php echo $row->title;?>
                          <span>&nbsp;(UNPUBLISHED)</span>
                       </font>
-                  <? } else { echo $row->title; } ?>    
+                  <? } else { echo $row->title; } ?>
               </a>
             </strong>
           </td>
@@ -494,8 +494,8 @@ function morsel_query_vars( $query_vars ){
               <abbr title="<?php echo date("m/d/Y", strtotime($row->published_at));?>"><?php echo date("m/d/Y", strtotime($row->published_at));?></abbr>
             <br />PUBLISHED
             <?php } else if($row->local_schedual_date){
-                echo "Schedualed at <span class='schedualDate'>".date('d-m-Y H:i', strtotime($row->local_schedual_date))."<span><br>";?> 
-                        <a morsel-id="<?php echo $row->id ?>" morsel-schedualdate="<?php echo $row->schedual_date;?>" class="all_unpublish_morsel_scheduled button">Reschedule</a> 
+                echo "Schedualed at <span class='schedualDate'>".date('d-m-Y H:i', strtotime($row->local_schedual_date))."<span><br>";?>
+                        <a morsel-id="<?php echo $row->id ?>" morsel-schedualdate="<?php echo $row->schedual_date;?>" class="all_unpublish_morsel_scheduled button">Reschedule</a>
             <? } else { echo "-";} ?>
         </td>
         <td>
@@ -570,24 +570,24 @@ function morsel_query_vars( $query_vars ){
   }
 
   //saveSessionforComment End
-  
+
   //morselMetaPreview
   if($_REQUEST['pagename'] == 'morselMetaPreview'){
     $url = $_REQUEST["url"];
     $tags = get_meta_tags($url);
     $res = file_get_contents($url);
-    preg_match("~(.*?)~", $res, $match);//fetching title 
-    $title = $match[1]; 
+    preg_match("~(.*?)~", $res, $match);//fetching title
+    $title = $match[1];
     $description = $tags['description'];
     $image = $tags['image'];
     // print_r($tags);
 
     if($title == ""){ //for title
       $title = ($tags['twitter:title'])?$tags['twitter:title']:$tags['og:title'];
-    } 
+    }
     if($description == ""){ //for description
       $description = ($tags['twitter:description'])?$tags['twitter:description']:$tags['og:description'];
-    } 
+    }
     if($image == ""){ //for image src
       $image = ($tags['twitter:image:src'])?$tags['twitter:image:src']:$tags['og:image'];
     }
