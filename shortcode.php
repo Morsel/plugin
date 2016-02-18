@@ -693,10 +693,17 @@ function morsel_post_des(){
       event.preventDefault();
       var creatorId = "<?php echo $_SESSION['morsel_user_obj']->id;?>";
       if(creatorId == ''){
-        jQuery("#morsel-comment-modal").modal('hide');
-        jQuery(".open-morsel-login").trigger('click');
+        
+        jQuery.ajax({
+          url: "<?php echo site_url()?>" + "/index.php?pagename=saveSessionforComment",
+          data:{"morselId":<?=$_REQUEST['morselid']?>,"itemId":jQuery("#form-item-id").val(),"comment":jQuery("#comment-text").val()},
+          complete: function(){
+              jQuery("#morsel-comment-modal").modal('hide');
+              jQuery(".open-morsel-login").trigger('click');
+          }
+        });
         return;
-      }
+      } else {
       var morselSite = "<?php echo MORSEL_SITE;?>";
       var avatar_image = "<?php echo MORSEL_PLUGIN_IMG_PATH.'avatar_72x72.jpg'?>";
       var itemId = jQuery("#form-item-id").val();
@@ -745,7 +752,8 @@ function morsel_post_des(){
               return false;
           }
       });
-    });
+    }
+  });
 
     // on click of comment link show modal
     jQuery(".comment-popup-link").click(function(event){
@@ -862,17 +870,10 @@ function morsel_post_des(){
       });
     });
 
-    //morsel like function
+ //morsel like function
     jQuery("#like-btn-link").click(function(){
 
       var sessionUserId =  "<?php echo $_SESSION['morsel_user_obj']->id;?>";
-      if(sessionUserId == ''){
-        jQuery(".open-morsel-login").trigger('click');
-        return;
-      }
-
-      var likeUrl = "<?php echo MORSEL_API_MORSELS_URL.$_REQUEST['morselid'].'/like.json?api_key='.$_SESSION['morsel_user_obj']->id.':'.$_SESSION['morsel_user_obj']->auth_token;?>";
-
       var reqType = 'POST';
       var activity = 'morsel-like';
       //if user already liked than unlike
@@ -880,7 +881,17 @@ function morsel_post_des(){
         reqType = 'DELETE';
         activity = 'morsel-unlike';
       }
-
+      if(sessionUserId == ''){
+        jQuery(".open-morsel-login").trigger('click');
+        jQuery.ajax({
+          url: "<?php echo site_url()?>" + "/index.php?pagename=saveSessionforLike",
+          data:{"morselId":<?=$_REQUEST['morselid']?>,"reqType":reqType,"activity":activity},
+          complete: function(){
+          }
+        });
+        return;
+      } else {
+      var likeUrl = "<?php echo MORSEL_API_MORSELS_URL.$_REQUEST['morselid'].'/like.json?api_key='.$_SESSION['morsel_user_obj']->id.':'.$_SESSION['morsel_user_obj']->auth_token;?>";
       jQuery.ajax({
           url: likeUrl,
           type: reqType,
@@ -928,8 +939,120 @@ function morsel_post_des(){
               return false;
           }
       });
+     }
     });
   });
+<?php if(isset($_SESSION["likeMorsel"]) && $_SESSION["likeMorsel"] !=""){?>
+      var sessionUserId =  "<?php echo $_SESSION['morsel_user_obj']->id;?>";
+      console.log("sessionId------------",sessionUserId);
+
+       var likeUrl = "<?php echo MORSEL_API_MORSELS_URL.$_SESSION['likeMorsel']['morselid'].'/like.json?api_key='.$_SESSION['morsel_user_obj']->id.':'.$_SESSION['morsel_user_obj']->auth_token;?>";
+       //var likeUrl = "<?php echo MORSEL_API_MORSELS_URL.$_SESSION['likeMorsel']['morselid'].'/like.json?api_key='.$_SESSION['morsel_user_obj']->id.':'.$_SESSION['morsel_user_obj']->auth_token;?>";
+      jQuery.ajax({
+          url: likeUrl,
+          type: "<?=$_SESSION['likeMorsel']['reqType'];?>",
+          complete: function(){
+          },
+          beforeSend: function(xhr) {
+            // xhr.setRequestHeader('host-site',"<?php echo get_site_url(); ?>");
+            xhr.setRequestHeader('share-by',"morsel-plugin")
+            if("<?=$_SESSION['likeMorsel']['activity'];?>"=="morsel-like") {
+              xhr.setRequestHeader('activity',"Like");
+            } else {
+              xhr.setRequestHeader('activity',"Unlike");
+            }
+            xhr.setRequestHeader('activity-id',"<?php echo $_SESSION['likeMorsel']['morselid'];?>");
+            xhr.setRequestHeader('activity-type',"Morsel");
+            xhr.setRequestHeader('user-id',"<?php echo $_SESSION['morsel_user_obj']->id;?>");
+          },
+          success: function(response, status){
+            console.log("response :: ",response);
+            console.log("status :: ",status);
+
+            if(status == 'success'){
+              if("<?=$_SESSION['likeMorsel']['reqType'];?>" == "POST"){
+                jQuery("#like-btn-link i").attr("class","common-like-filled");
+                jQuery("#like-btn-link").attr("title","You have already liked this morsel");
+                likesCountText(true);
+                jQuery("#morsel-like-others-modal").modal('show');
+              } else {
+                jQuery("#like-btn-link i").attr("class","common-like-empty");
+                jQuery("#like-btn-link").attr("title","Like morsel");
+                likesCountText(false);
+              }
+
+            } else {
+              alert("Opps Something wrong happend!");
+              return false;
+            }
+          },
+          error:function(response, status, xhr){
+              console.log("error response :: ",response);
+              console.log("errors :: ",response.responseJSON.errors);
+              console.log("errors :: ",response.responseJSON.errors.morsel[0]);
+              if(response.responseJSON.errors.morsel[0] == "already liked")
+                alert("You have already liked this morsel."); 
+              jQuery("#like-btn-link").attr("title","You've "+response.responseJSON.errors.morsel[0]+" this morsel.");
+              return false;
+          }
+      });
+    <?php 
+    } unset($_SESSION["likeMorsel"]); ?>
+
+<?php if(isset($_SESSION["commentMorsel"]) && $_SESSION["commentMorsel"] !=""){?>
+      var sessionUserId =  "<?php echo $_SESSION['morsel_user_obj']->id;?>";
+      console.log("sessionId------------",sessionUserId);
+    
+      var morselSite = "<?php echo MORSEL_SITE;?>";
+      var avatar_image = "<?php echo MORSEL_PLUGIN_IMG_PATH.'avatar_72x72.jpg'?>";
+      var itemId = "<?=$_SESSION['commentMorsel']['itemId']?>";
+      var commentUrl = "<?php echo MORSEL_API_ITEMS_URL;?>"+itemId+"/comments.json";
+      var api_key = "<?php echo $_SESSION['morsel_user_obj']->id.':'.$_SESSION['morsel_user_obj']->auth_token;?>";
+      commentUrl += '?api_key='+api_key;
+      var commentObj = {"comment":{"description":"<?=$_SESSION['commentMorsel']['comment']?>"}};
+
+      jQuery.ajax({
+          url: commentUrl,
+          type: "POST",
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          data: JSON.stringify(commentObj),
+          complete: function(){
+            jQuery("#comment-text").val('');
+          },
+          beforeSend: function(xhr) {
+            jQuery("#add-comment-btn").prop("disabled",true);
+            //set custome headers
+
+            xhr.setRequestHeader('share-by',"morsel-plugin");
+            xhr.setRequestHeader('activity','Comment');
+            xhr.setRequestHeader('activity-id',itemId);
+            xhr.setRequestHeader('activity-type',"Item");
+            xhr.setRequestHeader('user-id',"<?php echo $_SESSION['morsel_user_obj']->id;?>");
+
+          },
+          success: function(response, status){
+            if(status == 'success'){
+              //increase link commnet count by 1
+              jQuery('[item-id="'+itemId+'"]').attr('comment-count',parseInt(jQuery('[item-id="'+itemId+'"]').attr('comment-count'))+1);
+
+              var html = creatCommentList(response.data,morselSite,avatar_image);
+              jQuery("#comment-list").append(html);
+              timeAgo();
+              commentsCountText(itemId,true);
+            } else {
+              alert("Opps Something wrong happend!");
+              return false;
+            }
+          },
+          error:function(response, status, xhr){
+              alert("Opps Something wrong happend!");
+              console.log("error response :: ",response);
+              return false;
+          }
+      });
+    <?php 
+    } unset($_SESSION["commentMorsel"]); ?>
 </script>
 <?php
 }

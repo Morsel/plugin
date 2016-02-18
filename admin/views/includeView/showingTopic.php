@@ -76,7 +76,6 @@
         	return;
         }
         var morsel_id = jQuery('#eatmorsel_id').val();
-        console.log("Topic----------------------",jQuery('#select_TopicId').val());
         jQuery.ajax({
 			url: "<?php echo MORSEL_API_URL.'morsels/update_topic.json';?>",
 		    type:'post',
@@ -104,8 +103,7 @@
 	});
 
 	function getMorselTopic(morsel_id){
-		console.log("getMorselTopic--------",morsel_id);
-	    jQuery.ajax({
+		jQuery.ajax({
 		url:"<?php echo MORSEL_API_URL?>"+"topics/selected_morsel_topic",
 		type:"POST",
 		data:{
@@ -116,7 +114,6 @@
 			api_key:"<?php echo $api_key ?>"
 			},
 		success: function(response) {
-            console.log("response----------------",response);
             var allTopics =JSON.parse(jQuery('#post_topic_id').val());
             var stringhtml = '';
 		  		jQuery.each(allTopics, function( allTopics_index,allTopics){
@@ -134,5 +131,4 @@
         });
 	}
 	/*Topic End*/
-</script>    
-
+</script>

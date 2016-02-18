@@ -8,15 +8,15 @@ function sliderFrontendScripts() {
   }
 }
 
-function morseldisplayslider()
-{
+function morseldisplayslider($atts)
+{ 
+  ob_start();
 
+  //print_r($atts);
+  $atts = shortcode_atts( array("slider" => "1") , $atts, 'morseldisplayslider' );
   $shs_settings=get_option('morselSliderSettings');
   $slider_duration=$shs_settings['pause_time'];
-  // $trans_time=$shs_settings['trans_time'];
   $width= ($shs_settings['width'] != "")?$shs_settings['width']:'100%';
-  // $height=$shs_settings['height'];
-  // $direction=$shs_settings['direction'];
   $autoplay=$shs_settings['show_navigation'];
   $slug = get_post(get_option("morsel_plugin_page_id"))->post_name;
   ?>
@@ -54,18 +54,25 @@ function morseldisplayslider()
         <div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 0px; width: 1200px; height: 800px; overflow: hidden;">
         <?php $contents = get_option('shs_slider_contents');
           //print_r($contents);
-          foreach ($contents as $key => $value) { 
+          for($S=0;$S<count($contents);$S++){
+            if($atts['slider'] == $contents[$S]["name"]){
+               $sliderContent = $contents[$S]["slider"];
+               break;
+            }
+          }
+          //print_r($sliderContent);
+          foreach ($sliderContent as $key => $value) { 
             $imageArray = explode("@@$@@", $value);
             //print_r($imageArray);
             ?>
             <div data-p="225.00" style="display: none;">
               <div class="sliderPTag"><?=$imageArray[1]?>
                 <? if($imageArray[2] != ''){?>
-                  <p class="img-circular" style="background-image: url(<?=$imageArray[2]?>);"></p>
+                  <p class="img-circular" style="background-image: url(https://morsel-staging.s3.amazonaws.com/<?=$imageArray[2]?>);"></p>
                 <? } ?>
               </div>
               <a class="morsel-slider-img" target="blank" href="<?php echo site_url(),"/",$slug,"/?morselid=",$key;?>">
-              <img data-u="image" src="<?=$imageArray[0]?>" />
+              <img data-u="image" src="https://morsel-staging.s3.amazonaws.com/<?=$imageArray[0]?>" />
               </a>
             </div>
             <? } ?>
@@ -120,6 +127,8 @@ function morseldisplayslider()
         });
     </script>
 
-<? } //function end
+<? 
+return ob_get_clean();
+} //function end
   add_shortcode('morseldisplayslider', 'morseldisplayslider');
 

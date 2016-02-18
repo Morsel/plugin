@@ -224,7 +224,6 @@
 jQuery( document ).ready(function() {
     console.log( "ready!",window.location.href.split("#")[1]);
     setTimeout(function(){ 
-    	// console.log("----------------",jQuery(".etabs li.active a").attr("href"));
     	var mobile = jQuery(".etabs li.active a").attr("href")+"_li";
     	jQuery(mobile).attr("selected", "selected");
     }, 1000);

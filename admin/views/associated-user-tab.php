@@ -1,4 +1,4 @@
-<?php  if(isset($hostCompany) && $hostCompany != ""){	?>
+<?php if(isset($hostCompany) && $hostCompany != ""){	?>
 <script type="text/javascript">
 	jQuery( document ).ready(function() {
 		getAssociatedData("<?php echo $options['userid'] ?>","<?php echo $options['userid'].':'.$options['key'] ?>");
@@ -50,21 +50,6 @@
     return true;
     }
 </script>
-
-<style type="text/css">
-/*    .noResult{ text-align: center; font-weight: bold;}
-	.associatedUserDiv { width: 100%; overflow: auto;}
-	.associatedUserList tr:hover { background: #FFFFFF;}
-	.associatedUserListTD { text-align: center !important;}
-	.associatedAdd td { padding: 0;}
-	.associatedAdd td input[type="text"] { margin: 0; width: 300px;}
-	.associatedAdd td input[type="button"] { margin: 10px 0 ;}
-	.associatedAdd .textTd { width: 285px; margin-bottom:8px;}
-	#morsel_associated_user_list {display: "table-cell" !important;}
-	#ajaxLoaderPostForAssociatedUser {display:none; text-align:center;}
-*/
-</style>
-
 <form method="post"> 	         	
    	<table class="form-table associatedAdd">
   		<tr>  			

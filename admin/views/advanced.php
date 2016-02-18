@@ -33,15 +33,6 @@
 	<div id="short-code-preview_advanced"></div>
 	<form method="post" action="" id="morsel-shortcode-form_advanced">
 	   <table class="form-table">
-	  		<!-- <tr valign="top">
-	  			<td class="wid-15" scope="row">Number to Display * : </td>
-				<td><input type="text" name="morsel_shortcode_count" id="morsel_shortcode_count" value=""/>
-					<span class="attr-info">An integer value , define how much latest morsel you want to show.</span>
-					<span class="attr-info">How many morsels would you like to display on your page?<br>
-					For example, <a href="http://virtuecider.com/home/">please see this page where three morsels are displayed.</a> </span>
-				</td>
-	  		</tr> -->
-
 	  		<!-- Use Default Value -->
 	  		<tr valign="top">
 	  			<td class="wid-15" scope="row">Gap In Morsel * : </td>
@@ -60,21 +51,6 @@
 				</td>
 	  		</tr>
 	  		<!-- Use Default Value End -->
-<!--
-	  		<?php if($options["morsel_keywords"]!="blank") { ?>
-	  		<tr valign="top">
-	  			<td class="wid-15" scope="row">Pick Keyword:</td>
-				<td>
-				<select id="shortcode_keyword">
-					<option id ="none" value = "0">- Please select keyword -</option>
-					<?php foreach(json_decode($options["morsel_keywords"]) as $row){ ?>
-					<option value="<?php echo $row->id;?>" ><?php echo $row->name;?></option>
-					<?php } ?>
-				</select>
-				<span class="attr-info">Select which morsels will display by choosing keywords. Every morsel associated to a keyword will display on the page automatically.</span>
-				</td>
-	  		</tr>
-	  		<?php } ?> -->
 	  		<tr valign="top">
 	  			<td class="wid-15" scope="row">Center Block : </td>
 				<td><input type="checkbox" name="morsel_shortcode_center" id="morsel_shortcode_center_advanced" value="1"/>
@@ -113,12 +89,6 @@ function hideAdvancedTabFunction(buttonId){
 
 		$("#morsel-shortcode-form_advanced").validate({
 		  rules: {
-		    // morsel_shortcode_count: {
-		    //   required: true,
-		    //   number: true,
-		    //   max:20,
-		    //   min:0
-		    // },
 		    morsel_shortcode_gap_advanced: {
 		      required: true,
 		      number: true
@@ -165,11 +135,5 @@ function hideAdvancedTabFunction(buttonId){
 		    $("#short-code-preview_advanced").html("<h3>Here is your shortcode : \n\n"+code+"</h3>");
 		  }
 		});
-		/*$('#morsel_shortcode_submit').click(function(event){
-			event.preventDefault();
-			$("#morsel-shortcode-form_advanced").validate();
-			var code = "[morsel_post_display count='"+$("morsel_shortcode_count").val()+"' gap_in_morsel='"+$("morsel_shortcode_gap").val()+"' gap_in_morsel='"+$("morsel_shortcode_center_advanced").val()+"']"
-			alert(code);
-		})*/
 	}(jQuery))
 </script>

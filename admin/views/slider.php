@@ -1,14 +1,46 @@
 <?php
+if(isset($hostCompany) && $hostCompany != ""){
+?>
+<style type="text/css">
+	.shs_shortinfo{
+	    background: none repeat scroll 0 0 #DBEFFE;
+	    border: 1px solid #98B9D0;
+	    color: #333333;
+	    font-size: 12px;
+	    font-weight: normal;
+	    line-height: 22px;
+	    padding: 10px; 
+    }
+    .sliderSelection {
+    	width: 204px;
+    }
+    .sliderValue{ float: right;}
+    @media screen and (max-width: 400px) {
+	    .saveSlides{
+	    	float: none !important;
+	    	margin: 0 !important;
+	    }
+    }
+    .sliderField {
+    	width : 200px;
+    	float: left;
+    }
+    /*css for slider table*/
+    .sliderTd1 { width: 130px;}
+    .sliderTd2 { width: 150px;}
+    .sliderTd3 { width: 50px;}
+</style>
+<?php
     if(get_option("morselSliderSettings") == ""){
 		//add slider option by Default
 	   	$morselSliderSettings['pause_time']=7000;
-			$morselSliderSettings['trans_time']=1000;
-			$morselSliderSettings['width']="250px";
-			$morselSliderSettings['height']="200px";
-			$morselSliderSettings['direction']="Up";
-			$morselSliderSettings['pause_on_hover']="Yes";
-			$morselSliderSettings['show_navigation']="Yes";
-			add_option("morselSliderSettings", $morselSliderSettings);
+		$morselSliderSettings['trans_time']=1000;
+		$morselSliderSettings['width']="250px";
+		$morselSliderSettings['height']="200px";
+		$morselSliderSettings['direction']="Up";
+		$morselSliderSettings['pause_on_hover']="Yes";
+		$morselSliderSettings['show_navigation']="Yes";
+		add_option("morselSliderSettings", $morselSliderSettings);
     }
 
 
@@ -50,8 +82,8 @@
 		  <div class="handlediv" title="Click to toggle"><br/></div>
 		  <h3 class="hndle"><span>General Settings</span></h3>
 		  <div class="inside" style="padding: 15px;margin: 0;">';
-			echo "<form name='settings' method='post'>";
-			echo "<table>";
+		echo "<form name='settings' method='post'>";
+		echo "<table>";
 			?>
 			<tr>
 			    <td>
@@ -59,7 +91,7 @@
 			        <div class="sliderValue">
 			           <span>You can add width in "px" or in "%" like 200px or 100%</span><br>
 			           <input placeholder="200px Or 100%" type='text' name='width' value='<?php echo $width; ?>' />
-			        </div>
+				        </div>
 			    </td>
 			</tr>
 			<tr>
@@ -94,145 +126,117 @@
     }
 
 ?>
-<style type="text/css">
-	.shs_shortinfo{
-	    background: none repeat scroll 0 0 #DBEFFE;
-	    border: 1px solid #98B9D0;
-	    color: #333333;
-	    font-size: 12px;
-	    font-weight: normal;
-	    line-height: 22px;
-	    padding: 10px; 
-    }
-    .sliderSelection {
-    	width: 204px;
-    }
-    .sliderValue{ float: right;}
-    @media screen and (max-width: 400px) {
-	    .saveSlides{
-	    	float: none !important;
-	    	margin: 0 !important;
-	    }
-    }
-    .sliderField {
-    	width : 200px;
-    	float: left;
-    }
-</style>
-    <?php
-	if(isset($_POST['joptsv'])){
-
-	  $contents=$_POST['cnt'];
-	  update_option('shs_slider_contents',$contents);
-	?>
-      <div class="updated" style="width:686px;"><p><strong><font color="green"><?php _e('Slides Saved','shs'); ?></font></strong></p></div>
-    <?php
-	}
-
-    $contents = get_option('shs_slider_contents');
-  ?>
- 	<div id="poststuff" style="position:relative;">
-		<form name="qord" method="post">
+<div class="sliderDiv">
+<a href="javascript:void(0);" onclick="editSliderById()">Add New</a><img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" class="loaderImageSlider" id="loaderImageSliderAdd" style="display:none;"/>
+ <table class="widefat sliderDivList">
+	<thead>
+		<tr>
+			<th class='manage-column column-categories'><span>Slider</span></th>
+			<th class='manage-column column-title sortable desc'><span>Shortcode</span></th>
+			<th class='manage-column column-date sortable asc'>Action</th>
+	  	</tr>
+	</thead>
+	<tbody id="sliderListTbody">
+	    
+	</tbody>
+	<tfoot>
+		<tr>			
+			<th class='manage-column column-categories'><span>Slider</span></th>
+			<th class='manage-column column-title sortable desc '><span>Shortcode</span></th>
+			<th class='manage-column column-date sortable asc '>Action</th>	
+		</tr>
+	</tfoot>
+ </table>
+</div> 
+<div id="addSliderDiv" style="display:none;">
+	  	<div style="position:relative;">
+		<form name="qord" method="post" id="slideFormSubmit">
 			<div class="postbox shs_admin_wrapper">
 				<div class="handlediv" title="Click to toggle"><br/></div>
-				<h3 class="hndle"><span><?php _e('Select morsels slides by checkbox to display in your slider','shs'); ?></span><input type="submit" name="joptsv" class="button-primary saveSlides" value="SAVE SLIDES" style="float:right;margin:-4px" /></h3>
-         <div class="inside" style="padding: 15px;margin: 0;">
-            <table class="widefat posts fixed">
-						<thead>
-							<tr>
-								<th scope='col' class='manage-column column-title sortable desc' style="padding-left: 10px;">Morsel Name</th>
-								<th scope='col' class='manage-column column-author'>Image</th>
-								<th scope='col' class='manage-column column-categories'><input type="checkbox" name="main" class="checkAllCheckbox" value="main" style="margin:0px"></th>
-							</tr>
-						</thead>
-						<tfoot>
-							<tr>
-								<th scope='col' class='manage-column column-title sortable desc' style="padding-left: 10px;">Morsel Name</th>
-								<th scope='col' class='manage-column column-author'>Image</th>
-								<th scope='col' class='manage-column column-categories'><input type="checkbox" name="main" class="checkAllCheckbox" value="main"  style="margin:0px"></th>
-							</tr>
-						</tfoot>
-					    <tbody id="joptions">
-					    <?php
-					    foreach ($jsonPost->data as $row) {
-					    	if(!$row->is_submit){ 
-								$morsel_url = add_query_arg( array('morselid' => $row->id), get_permalink($morsel_page_id));				   
-					    	?>
-					    	<tr>
-					    		<td>
-					    		    <a href="<?php echo $morsel_url?>" target="_blank">
-					    		       <?php echo $row->title?>
-					    		    </a>
-					    		</td>
-					    		<?php $imageUrl = "";
-					    		if($row->primary_item_photos->_992x992 != ''){
-				                      	$imageUrl = str_replace("_992x992_", "", $row->primary_item_photos->_992x992);
-				                      	$imageUrlAdmin = $row->primary_item_photos->_100x100;
-							        ?>
-							        <td>
-					    		        <a href="<?php echo $imageUrl;?>" target="_blank" ><img src="<?php echo $imageUrlAdmin;?>" height="100" width="100"><a>
-					    			</td>
-						    		<td>
-						    		    <input type="checkbox" <? if(array_key_exists($row->id, $contents)){?>checked<? } ?> name="cnt[<?=$row->id;?>]" value="<?=$imageUrl.'@@$@@'.$row->title.'@@$@@'.$row->creator->photos->_72x72;?>">
-						    		</td>
-					    		<? } else {
-						    		echo '<td colspan="2">No Image</td>';					                	
-					            }?>
-					    	</tr>
-					        <? } 
-					    } ?>
-					    </tbody>
-				  </table>
-				  <div class="clear"><br></div>
-				  <div>
-				  	<div id="no-moreSlider" class="no-more" style="display:none;">No More Morsels</div>
-					  <div id="ajaxLoaderSlider" class="ajaxLoader">
-					    <span><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajax-loader.gif"></span>
-					  </div>
-					</div>
-						<!-- <input type="submit" name="joptsv" class="button-primary" style="margin-left: 13px;" value="SAVE SLIDES" /> -->
-				</div>
-			</div>
-		</div>
-	</form>
+				<h3 class="hndle" style="font-size:12px; margin:0; padding:6px;"><span><?php _e('Select morsels slides by checkbox to display in your slider','shs'); ?></span></h3>
+				<div style="clear:both; text-align:center; padding:10px 0 0 0px;"><input type="button" name="joptsv" class="button-primary saveSlides" value="SAVE SLIDES" onclick="saveMorselSlider()" /></div>
+				<div class="inside" style="padding: 15px;margin: 0;">
+				 <div id="joptions"></div>	                
+			    </div>
+		    </div>
+	    </form>
+    </div>
 </div>
-
 <script type="text/javascript">
-var noMoreMorsel;
-var sliderMorsePageCount = 1;
-jQuery(window).scroll(function() {
-	//if(jQuery('#joptions').css('display') != 'none'){
-		if(jQuery('#sliderTab').css('display') != 'none'){
-	    if(noMoreMorsel != true){
-	    	if (jQuery(window).scrollTop() + jQuery(window).height() == jQuery(document).height()) {
-			    jQuery('#no-moreSlider').hide();
-			    jQuery("#ajaxLoaderSlider").css("display", "block");
-			    jQuery.ajax({
-		        url: "<?php echo site_url()?>" + "/index.php?pagename=morsel_ajax_admin&view=slider&page_id=" + parseInt(++sliderMorsePageCount),
-		        success: function(data) {
-					if (data.trim().length > 1) {
-						jQuery('#joptions tr:last').after(data);
-					} else {
-						sliderMorsePageCount--;
-						noMoreMorsel = true;
-						jQuery('#no-moreSlider').show();
-					}
-		        },
-		        error: function() {
-			        sliderMorsePageCount--;
-			    	},
-			    	complete: function() {
-			        jQuery("#ajaxLoaderSlider").css("display", "none");
-			    	}
-			    });
-		    }
-	    }
-		}
+jQuery( document ).ready(function() {
+	getSliderList();	
 });
+var sliderID;
+function editSliderById(sliderId){
+  // jQuery('#joptions').html("");
+  if(sliderId == undefined){
+  	sliderID = "";
+    jQuery("#loaderImageSliderAdd").css('display','block'); 
+  } else {
+	jQuery("#loaderImageSlider"+sliderId).css('display','block'); 
+  	sliderID = sliderId
+  }
+  jQuery.ajax({
+    url: "<?php echo site_url()?>" + "/index.php?pagename=morsel_ajax_admin_slider&sliderId="+sliderID,
+    beforeSend: function(data){
+    	jQuery('#joptions').html("");
+    },
+    success: function(data) {
+		if (data.trim().length > 1) {
+		   	jQuery('#joptions').append(data);
+		} 
+	},
+    complete: function() {
+        var url = "#TB_inline?width=500&height=400&inlineId=addSliderDiv";
+	    tb_show("Slider", url);
+	    jQuery(".loaderImageSlider").css('display','none'); 
+    }
+  });
+}
 
-//for check and uncheck
-jQuery(".checkAllCheckbox").change(function () {
-    jQuery("input:checkbox").prop('checked', jQuery(this).prop("checked"));
-});
+function saveMorselSlider(){
+	if (jQuery('#sliderNameSlider').val() == "") {
+      alert("Please enter slider name.");
+      return;
+    }
+	if (jQuery('.sliderCheckbox:checked').length == 0) {
+      alert("Select atleast 1 slide.");
+      return;
+    }
+  	jQuery.ajax({
+	    url: "<?php echo site_url()?>" + "/index.php?pagename=sliderSave&sliderID="+sliderID,
+	    data:jQuery("#slideFormSubmit input").serialize(),//only input
+	    success: function(data) {
+			getSliderList();
+            tb_remove();
+			//location.reload();
+		}
+	}); 
+}
+
+function getSliderList(){
+	jQuery("#sliderListTbody").html("");
+	jQuery.ajax({
+	    url: "<?php echo site_url()?>" + "/index.php?pagename=getSliderListing",
+	    success: function(html) {
+			jQuery("#sliderListTbody").append(html);
+		}
+	}); 
+}
+
+function deleteSliderById(sliderID){
+  	jQuery.ajax({
+	    url: "<?php echo site_url()?>" + "/index.php?pagename=sliderDelete&sliderID="+sliderID,
+	    success: function(data) {
+			//location.reload();
+			getSliderList();
+		}
+	}); 
+}
+
 
 </script>
+
+<? } else { ?>
+Please Enter Host Details First.
+<? } ?>

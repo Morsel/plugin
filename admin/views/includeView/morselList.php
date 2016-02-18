@@ -1,12 +1,5 @@
 
 <style type="text/css">
-/*for upper scroll over morsel list table*/
-/*	@media screen and (max-width: 820px) {
-	   .wrapper1, .wrapper2{ width: 100%; border: none 0px RED; overflow-x: scroll; overflow-y:hidden;}
-       .wrapper1{ height: 20px; }
-       .div1 { width:980px; height: 20px; }
-	   .div2 { width:980px; background-color: #88FF88; overflow: auto; }
-}*/
 #the-list code { font-family: "Open Sans",sans-serif !important; }    
 </style>
 
@@ -335,6 +328,11 @@
 	jQuery('.all_unpublish_morsel_scheduled').click(function(){
         var all_morsel_keyowrd_id = jQuery(this);
 		var morsel_id = jQuery(this).attr("morsel-id");
+		var fontColumn =jQuery('#morsel_post-'+morsel_id).find('td').find('font').text().trim();
+		if(fontColumn == '(UNPUBLISHED)'){
+		 alert("Title is blanked, Please enter title for morsel");
+		 return 
+		}  
 	    jQuery('#schedualMorsel').val(morsel_id);
         var url = "#TB_inline?width=500&height=200&inlineId=modal-datetimepicker-id";
 	    tb_show("Schedule", url);

@@ -126,9 +126,7 @@ function morsel_rewrites_init(){
 add_filter( 'query_vars', 'morsel_query_vars' );
 function morsel_query_vars( $query_vars ){
 
-  if($_REQUEST['pagename']=='morsel_ajax')
-    {
-
+  if($_REQUEST['pagename']=='morsel_ajax'){
       $options = get_option( 'morsel_settings');
       $api_key = $options['userid'] . ':' .$options['key'];
       $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&page=".$_REQUEST['page_id']."&count=".MORSEL_API_COUNT;
@@ -140,27 +138,20 @@ function morsel_query_vars( $query_vars ){
       } else {
         $morsel_post_settings = array();
       }
-
       $morsel_page_id = get_option( 'morsel_plugin_page_id'); //gettting discription page id
-
       if(array_key_exists('posts_id', $morsel_post_settings))
        $post_selected = $morsel_post_settings['posts_id'];
       else
         $post_selected = array();
-
         foreach ($json->data as $row_sht) {
           if(in_array($row_sht->id, $post_selected))continue;
           echo grid($row_sht,$morsel_page_id);
         }
     exit(0);
   }
-
   if($_REQUEST['pagename']=='morsel_user_login'){
-
     unset($_POST['pagename']);
-
     $postdata = http_build_query($_POST);
-
     $opts = array('http' =>
         array(
             'method'  => 'POST',
@@ -168,35 +159,22 @@ function morsel_query_vars( $query_vars ){
             'content' => $postdata
         )
     );
-
     $context  = stream_context_create($opts);
-
     $result = @file_get_contents(MORSEL_API_URL.'users/sign_in.json', false, $context);
-
-    $result = json_decode($result);
-
-
+    //$result = json_decode($result);
     if(empty($result)) { //result not found by eatmorsel
-
       $_SESSION['morsel_error'] = true;
       header('Location:'.$_SERVER['HTTP_REFERER']);
       exit(0);
-
     }else{
-
       //get user by email
       $userByEmail = get_user_by_email($result->data->email);
-
       if($userByEmail){ //if found
-
         $wpUser =  $userByEmail->data;
-
         if(is_user_logged_in()) { //if anyother user logged in logg them off
           $currentUserId = get_current_user_id( );
-
           if($currentUserId != $wpUser->ID){ //current user and login user not matched
             wp_logout();
-
             // login user
             if ( !is_wp_error($wpUser) ) {
               getUserLoggedIn($wpUser->ID);
@@ -205,7 +183,6 @@ function morsel_query_vars( $query_vars ){
             }
           }
         } else { // if no one is logged in
-
             // login user
             if ( !is_wp_error($wpUser) ) {
               getUserLoggedIn($wpUser->ID);
@@ -213,35 +190,20 @@ function morsel_query_vars( $query_vars ){
               $_SESSION['host_morsel_errors'] = $wpUser->get_error_messages();
             }
         }
-
       } else { //not found create user
-
-          // $newUserName = getUniqueUsername($result->data->username.'-'.$result->data->id);
-
           $newUserName = getUniqueUsername($result->data->username);
-
-          //if(!username_exists($newUserName) ){ //check username is exist or not
           $random_password = wp_generate_password(6,false);
           $newWpUserID = wp_create_user($newUserName,$random_password,$result->data->email);
           $newlyCreatedUser = new WP_User($newWpUserID);
           $newlyCreatedUser->set_role('subscriber');
-          //}
-
-          /*$message = "Welcome ".$newUserName.",
-                        Your new account has been created successfully on ".get_site_url().".
-                          your username is ".$newUserName." and password is ".$random_password."
-                          Thank you.";*/
 
             $message = '<body><center><table width="600" background="#FFFFFF" style="text-align:left;" cellpadding="0" cellspacing="0"><tr><td colspan="3"><!--CONTENT STARTS HERE--><table cellpadding="0" cellspacing="0"><tr><td width="15"><div style="line-height: 0px; font-size: 1px; position: absolute;">&nbsp;</div></td><td width="325" style="padding-right:10px; font-family:Trebuchet MS, Verdana, Arial; font-size:12px;" valign="top"><span style="font-family:Trebuchet MS, Verdana, Arial; font-size:17px; font-weight:bold;"> Welcome '.$newUserName.'</span><br /><p>Your new account has been created successfully on '.get_site_url().'.</p><p>Your username is '.$newUserName.'. If you forget your password, you can retrieve it from the site.</p><br />   Best Regards,<br/>'.get_bloginfo( 'name').'</td></tr></table></td></tr></table><br /><table cellpadding="0" style="border-top:1px solid #e4e4e4; text-align:center; font-family:Trebuchet MS, Verdana, Arial; font-size:12px;" cellspacing="0" width="600"><tr><td style="font-family:Trebuchet MS, Verdana, Arial; font-size:12px;"><br />'.get_bloginfo( 'name').'<br /><!-- <a href="{!remove_web}">Unsubscribe </a> --></td></tr></table></center></body>';
 
           
           //send email to new user
-          // if($result->data->email_not == true)
             wp_mail($result->data->email,'New Registration',$message);
-
           // login user
           if ( !is_wp_error($newWpUserID) ) {
-
             if(is_user_logged_in()) { //if anyother user logged in logg them off
               wp_logout();
             }
@@ -250,13 +212,11 @@ function morsel_query_vars( $query_vars ){
             $_SESSION['host_morsel_errors'] = $newWpUserID->get_error_messages();
           }
       }
-
       if(!isset($_SESSION['host_morsel_errors'])){ //if no error set morsel session
         $_SESSION['morsel_login_userid'] = $result->data->id;
         $_SESSION['morsel_user_obj'] = $result->data;
         //$_SESSION['current_morsel_user_psd'] = base64_encode($_POST['user']['password']);
       }
-
       header('Location:'.$_SERVER['HTTP_REFERER']);
       exit(0);
     }
@@ -275,15 +235,10 @@ function morsel_query_vars( $query_vars ){
 
    //make ajax morsel login functionality
    if($_REQUEST['pagename']=='morsel_ajax_user_login'){
-
     $login_result = array("status"=>false,"msg"=>"");
-
     unset($_POST['pagename']);
-    
     $users = $_REQUEST["user"];
-
     $postdata = http_build_query($_POST);
-    
     $opts = array('http' =>
         array(
             'method'  => 'POST',
@@ -291,32 +246,21 @@ function morsel_query_vars( $query_vars ){
             'content' => $postdata
         )
     );
-
     $context  = stream_context_create($opts);
 
     $result = @file_get_contents(MORSEL_API_URL.'users/sign_in.json', false, $context);
     //$result = @wp_remote_retrieve_body(wp_remote_get(MORSEL_API_URL.'users/sign_in.json', false, $context));
     
     $result = json_decode($result);
-     
-
-
     //$login_result["api_result"] = $result;
-    
     if(empty($result)) { //result not found by eatmorsel
-
-      //$_SESSION['morsel_error'] = true;
       $login_result["msg"] = array("Sorry your userid/email or password not matched, please try again.");
-
     } else {
-
       //get user by email
       $userByEmail = get_user_by_email($result->data->email);
 
       if($userByEmail){ //if found
-
         $wpUser =  $userByEmail->data;
-
         if(is_user_logged_in()) { //if anyother user logged in logg them off
           $currentUserId = get_current_user_id( );
 
@@ -329,7 +273,6 @@ function morsel_query_vars( $query_vars ){
               $login_result["msg"] = array("You are successfully logged in.");
               $login_result["status"] = true;
             } else {
-              //$_SESSION['host_morsel_errors'] = $wpUser->get_error_messages();
               $login_result["msg"] = $wpUser->get_error_messages();
             }
           }
@@ -341,47 +284,34 @@ function morsel_query_vars( $query_vars ){
               $login_result["msg"] = array("You are successfully logged in.");
               $login_result["status"] = true;
             } else {
-              //$_SESSION['host_morsel_errors'] = $wpUser->get_error_messages();
               $login_result["msg"] = $wpUser->get_error_messages();
             }
         }
 
       } else { //not found create user
 
-          // $newUserName = getUniqueUsername($result->data->username.'-'.$result->data->id);
-          
           $newUserName = getUniqueUsername($result->data->username);
 
-          //if(!username_exists($newUserName) ){ //check username is exist or not
           $random_password = wp_generate_password(6,false);
           $newWpUserID = wp_create_user($newUserName,$random_password,$result->data->email);
           $newlyCreatedUser = new WP_User($newWpUserID);
           $newlyCreatedUser->set_role('subscriber');
-          //}
-
-          /*$message = "Welcome ".$newUserName.",
-                        Your new account has been created successfully on ".get_site_url().".
-                          your username is ".$newUserName." and password is ".$random_password."
-                          Thank you.";*/
+          
           $message = '<body><center><table width="600" background="#FFFFFF" style="text-align:left;" cellpadding="0" cellspacing="0"><tr><td colspan="3"><!--CONTENT STARTS HERE--><table cellpadding="0" cellspacing="0"><tr><td width="15"><div style="line-height: 0px; font-size: 1px; position: absolute;">&nbsp;</div></td><td width="325" style="padding-right:10px; font-family:Trebuchet MS, Verdana, Arial; font-size:12px;" valign="top"><span style="font-family:Trebuchet MS, Verdana, Arial; font-size:17px; font-weight:bold;"> Welcome '.$newUserName.'</span><br /><p>Your new account has been created successfully on '.get_site_url().'.</p><p>Your username is '.$newUserName.'. If you forget your password, you can retrieve it from the site.</p><br />   Best Regards,<br/>'.get_bloginfo( 'name').'</td></tr></table></td></tr></table><br /><table cellpadding="0" style="border-top:1px solid #e4e4e4; text-align:center; font-family:Trebuchet MS, Verdana, Arial; font-size:12px;" cellspacing="0" width="600"><tr><td style="font-family:Trebuchet MS, Verdana, Arial; font-size:12px;"><br />'.get_bloginfo( 'name').'<br /><!-- <a href="{!remove_web}">Unsubscribe </a> --></td></tr></table></center></body>';
           
            add_filter( "wp_mail_content_type", "set_html_content_type" );
           //send email to new user
-          // if($users["email_not"] == true)
             wp_mail($result->data->email,'New Registration',$message);
 
           // login user
           if ( !is_wp_error($newWpUserID) ) {
-
             if(is_user_logged_in()) { //if anyother user logged in logg them off
               wp_logout();
             }
-
             $login_result["msg"] = array("You are successfully logged in.");
             $login_result["status"] = true;
             getUserLoggedIn($newWpUserID);
           } else { //if error
-            //$_SESSION['host_morsel_errors'] = $newWpUserID->get_error_messages();
             $login_result["msg"] = $newWpUserID->get_error_messages();
           }
       }
@@ -389,7 +319,6 @@ function morsel_query_vars( $query_vars ){
       if($login_result["status"]){ //if no error set morsel session
         $_SESSION['morsel_login_userid'] = $result->data->id;
         $_SESSION['morsel_user_obj'] = $result->data;
-        //$_SESSION['current_morsel_user_psd'] = base64_encode($_POST['user']['password']);
       }
     }
     echo json_encode($login_result);
@@ -405,8 +334,118 @@ function morsel_query_vars( $query_vars ){
      echo $result;
      exit(0);
    }
+   
+   if($_REQUEST['pagename']=='morsel_ajax_admin_slider')
+    { 
+      $sliderId = mysql_escape_string($_REQUEST["sliderId"]);
+      $morsel_page_id = get_option( 'morsel_plugin_page_id');
+      $options = get_option( 'morsel_settings');
+      $api_key = $options['userid'] . ':' .$options['key'];
+      $morsel_post_settings = get_option('morsel_post_settings');//getting excluding id
+      $contents = get_option('shs_slider_contents');
+      $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&submit=true";
+      unset($sliderContent);
+      if($sliderId != undefined && $sliderId != ""){
+         $sliderContent = $contents[$sliderId-1];
+      }  
+      //$json = get_json($jsonurl); //getting whole data
+      $json = json_decode(wp_remote_retrieve_body(wp_remote_get($jsonurl)));
+      echo "Slider Name: &nbsp;&nbsp;&nbsp;<input type='text' name='sliderName' id='sliderNameSlider' value='".$sliderContent['name']."' placeholder='Slider Name'>";?>
+      <script type="text/javascript">
+        jQuery(".checkAllCheckbox").change(function () {
+          jQuery("input:checkbox").prop('checked', jQuery(this).prop("checked"));
+        });
+      </script>
+<table class="widefat posts" style="width:480px;">
+              <thead>
+                <tr>
+                  <th scope='col' class='manage-column column-title sortable desc' style="padding-left: 10px;">Morsel Title</th>
+                  <th scope='col' class='manage-column column-author'>Image</th>
+                  <th scope='col' class='manage-column column-categories'><input type="checkbox" name="main" class="checkAllCheckbox" value="main" style="margin:0px"></th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th scope='col' class='manage-column column-title sortable desc' style="padding-left: 10px;">Morsel Title</th>
+                  <th scope='col' class='manage-column column-author'>Image</th>
+                  <th scope='col' class='manage-column column-categories'><input type="checkbox" name="main" class="checkAllCheckbox" value="main"  style="margin:0px"></th>
+                </tr>
+              </tfoot>
+              <tbody>
+          
+      <? 
+      foreach ($json->data as $row) {?>
+              <tr class="sliderTr">
+                 <td class="sliderTd1"><a href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?></a></td>
+                 <?php $imageUrl = "";
+                  if($row->primary_item_photos->_992x992 != ''){
+                        $imageUrl = str_replace("_992x992_", "", $row->primary_item_photos->_992x992);
+                        $imageUrlAdmin = $row->primary_item_photos->_100x100;
+                        $mainValue = str_replace("https://morsel-staging.s3.amazonaws.com/","",$imageUrl.'@@$@@'.$row->title.'@@$@@'.$row->creator->photos->_72x72);
+                  ?>
+                  <td class="sliderTd2">
+                    <a href="<?php echo $imageUrl;?>" target="_blank" ><img src="<?php echo $imageUrlAdmin;?>" height="100" width="100"><a>
+                  </td>
+                  <td class="sliderTd3">
+                    <input type="checkbox" class="sliderCheckbox" <? if(array_key_exists($row->id, $sliderContent['slider'])){?>checked<? } ?> name="cnt[<?=$row->id;?>]" value="<?=$mainValue?>">
+                  </td>
+                  <? } else  {
+                    echo '<td colspan="2">No Image</td>';                           
+                    }
+                  ?>
+                  </tr>
+          <? } ?>
+              </tbody>
+          </table>
 
-   if($_REQUEST['pagename']=='morsel_ajax_admin')
+  <? exit;
+  }  
+
+  if($_REQUEST['pagename'] == "getSliderListing"){
+  $contents = get_option('shs_slider_contents');
+    if(count($contents)>0){
+      for($s=0;$s<count($contents);$s++){?>
+    <tr>
+      <td>Slider <?=$contents[$s]["name"];?></td>
+      <td>[morseldisplayslider slider="<?=$contents[$s]["name"];?>"]</td>
+      <td><a href="javascript:void(0);" onclick="editSliderById(<?=$s+1?>);">Edit</a> || <a href="javascript:void(0);" onclick="deleteSliderById(<?=$s+1?>);">Delete</a>&nbsp;<img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" class="loaderImageSlider" id="loaderImageSlider<?=$s+1?>" style="display:none;"/></td>
+    </tr>
+    <?}
+    } else {
+      echo "<tr><td colspan='3'><b>No Slider</b></td></tr>";
+    }
+    exit;
+  }
+  if($_REQUEST['pagename'] == "sliderSave"){
+      $sliderID = $_REQUEST["sliderID"];
+      $contents = get_option('shs_slider_contents');
+      $checkboxValue = $_REQUEST['cnt'];
+      if($sliderID){
+        $contents[$sliderID-1]['slider'] = $checkboxValue;
+        $contents[$sliderID-1]['name'] = $_REQUEST['sliderName'];
+      } else {
+        if(count($contents) > 0 ) { $count = count($contents);} else {$count = 0;}
+          $contents[$count]['slider'] = $checkboxValue; 
+          $contents[$count]['name'] = $_REQUEST['sliderName']; 
+          echo $count+1;
+      }
+      update_option('shs_slider_contents',$contents);
+      exit;
+   }
+  if($_REQUEST['pagename'] == "sliderDelete"){
+      $sliderID = $_REQUEST["sliderID"];
+      $contents = get_option('shs_slider_contents');
+      $new = [];
+      for($s=0; $s<count($contents);$s++){
+          if ($s+1 != $sliderID) {
+             $new[] = $contents[$s];
+          }
+      }
+      $contents = $new;
+      update_option('shs_slider_contents',$contents);
+      exit;
+   }
+  if($_REQUEST['pagename']=='morsel_ajax_admin')
     {
       $morsel_page_id = get_option( 'morsel_plugin_page_id');
       $options = get_option( 'morsel_settings');
@@ -417,29 +456,8 @@ function morsel_query_vars( $query_vars ){
 
       $json = get_json($jsonurl); //getting whole data
       //$json = json_decode(wp_remote_retrieve_body(wp_remote_get($jsonurl)));
-      //prepare data for morsel slider
-      if($_REQUEST["view"] == "slider"){
-          foreach ($json->data as $row) {?>
-              <tr>
-                 <td><a href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?></a></td>
-                 <?php $imageUrl = "";
-                  if($row->primary_item_photos->_992x992 != ''){
-                        $imageUrl = str_replace("_992x992_", "", $row->primary_item_photos->_992x992);
-                        $imageUrlAdmin = $row->primary_item_photos->_100x100;
-                  ?>
-                  <td>
-                    <a href="<?php echo $imageUrl;?>" target="_blank" ><img src="<?php echo $imageUrlAdmin;?>" height="100" width="100"><a>
-                  </td>
-                  <td>
-                    <input type="checkbox" <? if(array_key_exists($row->id, $contents)){?>checked<? } ?> name="cnt[<?=$row->id;?>]" value="<?=$imageUrl.'@@$@@'.$row->title.'@@$@@'.$row->creator->photos->_72x72;?>">
-                  </td>
-                  <? } else  {
-                    echo '<td colspan="2">No Image</td>';                           
-                    }
-                  ?>
-                  </tr>
-          <? }
-      } else {
+  
+      {
       foreach ($json->data as $row) {
         $morsel_url = add_query_arg( array('morselid' => $row->id), get_permalink($morsel_page_id));?>
         ?>
@@ -528,17 +546,32 @@ function morsel_query_vars( $query_vars ){
       header("location:".MORSEL_SITE."auth/joinsocial?provider=twitter&pagename=morselReturnSocial&callbackurl=".site_url());
     }
     exit;
-    //https://dev.eatmorsel.com/auth/joinsocial?provider=facebook&pagename=morselReturnFb&callbackurl=virtueciderpro.dreamhosters.com
   }
   if($_REQUEST['pagename'] == "morselReturnSocial"){
-    //echo "aa gya------------";
-    //http://localhost/wordpress/?userid=543&auth_token=ofNZxLqQ3PH1szxBFXHG&pagename=morselReturnSocial
     include_once("socialLoginHandler.php");
     $current_url = $_SERVER["REQUEST_URI"];
-    //$url = strtok($current_url, '?');    
-    //wp_redirect($url);
     exit;
   }
+  //check for morsel like at time of login
+  if($_REQUEST['pagename'] == 'saveSessionforLike'){
+     unset($_SESSION["likeMorsel"]);
+          $_SESSION["likeMorsel"]['morselid'] = $_REQUEST["morselId"];
+          $_SESSION["likeMorsel"]['reqType'] = $_REQUEST["reqType"];
+          $_SESSION["likeMorsel"]['activity'] = $_REQUEST["activity"];
+     exit(0);
+  }
+  //check for morsel comment at time of login
+  if($_REQUEST['pagename'] == 'saveSessionforComment'){
+     unset($_SESSION["commentMorsel"]);
+          $_SESSION["commentMorsel"]['morselid'] = $_REQUEST["morselId"];
+          $_SESSION["commentMorsel"]['itemId'] = $_REQUEST["itemId"];
+          $_SESSION["commentMorsel"]['comment'] = $_REQUEST["comment"];
+     exit(0);
+  }
+
+  //saveSessionforComment End
+  
+  //morselMetaPreview
   if($_REQUEST['pagename'] == 'morselMetaPreview'){
     $url = $_REQUEST["url"];
     $tags = get_meta_tags($url);
@@ -667,7 +700,6 @@ function add_morsel_signup_login() {
   echo "</div>";
 }
 
-
-      function set_html_content_type() {
-        return "text/html";
-      }
+function set_html_content_type() {
+  return "text/html";
+}

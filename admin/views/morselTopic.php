@@ -19,6 +19,7 @@ if(isset($hostCompany) && $hostCompany != ""){
 				if(response.data!="blank"){
 			        var data = response.data;
 		            jQuery('#post_topic_id').val(JSON.stringify(data));
+                    jQuery('#shortcode_topic').html("");
                     for(var k in data){
 		                jQuery('#shortcode_topic').append(jQuery("<option>").attr('value',data[k].id).text(data[k].name));
 
@@ -74,16 +75,6 @@ function deleteTopics(topicId){
 	});
 }
 </script>
-<style type="text/css">
-/*	.topicAddMorsel td { padding: 0;}
-	.topicAddMorsel td input[type="text"] { margin: 0; width: 300px;}
-	.topicAddMorsel td input[type="button"] { margin: 10px 0 ;}
-	.topicAddMorsel .textTd { width: 285px; margin-bottom:8px; vertical-align: top; margin-top: 5px;}
-	.topicMorselList { text-align: center !important;}
-	.clearTopic{ clear: both;}
-    .clearTopicWithMargin{ clear: both;margin-bottom: 5px;}
-    .topicListDiv { width: 100%; overflow: auto;}*/
-</style>
 <!-- Edit Form -->
 <!-- <form method="post" action="" id="morsel-host-topics-form">-->
 	<table class="form-table keywordAddMorsel">

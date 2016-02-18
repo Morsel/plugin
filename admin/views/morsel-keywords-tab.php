@@ -73,16 +73,6 @@ function deleteKeywords(keywordID){
 	});
 }
 </script>
-<style type="text/css">
-/*	.keywordAddMorsel td { padding: 0;}
-	.keywordAddMorsel td input[type="text"] { margin: 0; width: 300px;}
-	.keywordAddMorsel td input[type="button"] { margin: 10px 0 ;}
-	.keywordAddMorsel .textTd { width: 285px; margin-bottom:8px; vertical-align: top; margin-top: 5px;}
-	.keywordMorselList { text-align: center !important;}
-	.clearkeyboard{ clear: both;}
-    .clearkeyboardWithMargin{ clear: both;margin-bottom: 5px;}
-    .keywordListDiv { width: 100%; overflow: auto;}*/
-</style>
 <!-- Keyword Edit Form -->
 	<table class="form-table keywordAddMorsel">
   		<tr>  			

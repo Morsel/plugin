@@ -65,23 +65,6 @@ if(isset($_POST["morsel_settings_Preview"])){
 
 
 if(count($jsonPost->data)>0){?>
-<style type="text/css">
-/*	.displayNone {display: none;}
-	.previewText {float:left; width:100%;}
-	.previewText table {margin:0;}
-	.previewText td { padding:15px 0px;}
-	.previewText input[type="text"] { margin-bottom: 0;}
-	.loadNewButton {float: right;}
-	.morselPostListTable tr>th:first-child{ padding-left: 10px;}
-	.morselPostListTable .unPublished { color: red;}
-	.morselPostListTable .unPublished span { font-weight: bold; font-size: 15px;}
-	.morselPostListTable .schedualDate {white-space:nowrap;}
-	.editAboveImage {margin:0 10px 0 0;}
-	.actionButtonMorsel{ margin-bottom: 5px !important;}
-	.morselPostListTableDiv {  overflow-x: auto; clear: both;}*/
-</style>
-
-
 <!-- scroll css-->
 <link rel="stylesheet" type="text/css" href=<?php echo MORSEL_PLUGIN_ADMIN_ASSEST.'infinite-scroll/scroll.css'?>>
 <!-- scroll css-->
