@@ -2,7 +2,7 @@
 function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
   $morsel_url = add_query_arg( array('morselid' => $row_sht->id), get_permalink($morsel_page_id));
   $class_morsel_block = array('1' =>'col-sm-12 col-md-12','2' =>'col-sm-6 col-md-6','3' =>'col-sm-4 col-md-4', '4' =>'col-sm-3 col-md-3', '6'=>'col-sm-2 col-md-2');
-?>  
+?>
     <div class="<?php echo $class_morsel_block[$morsel_in_row];?> shortcode-msl-block">
       <div  class="morsel-block morsel-bg" morsel-url="<?php echo $morsel_url; ?>" >
         <div class="morsel-info">
@@ -20,7 +20,7 @@ function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
                 </h3>
             </div>
         </div>
-        <?php               
+        <?php
               if($row_sht->photos->_800x600){
                 $img_url = $row_sht->photos->_800x600;
               } else {
@@ -28,7 +28,7 @@ function grid($row_sht,$morsel_page_id,$morsel_in_row='3') {
               }
         ?>
         <a class="morsel-img " href="#" style="background-image: url('<?php echo $img_url;?>');"></a>
-        
+
         <img class="spacer loader " src="<?php echo MORSEL_PLUGIN_IMG_PATH.'spacer.png'?>">
         <!-- end ngIf: spacer -->
       </div>
@@ -255,16 +255,16 @@ function morsel_post_des(){
   ?>
 <style type="text/css">
   /*morsel description*/
-  
+
   .videoIframe { width: 992px; height:750px;}
-  
+
   @media screen and (max-width: 420px) {
     .itemDesktop { display: none;}
     .itemMobile {display: block !important;}
     .videoIframe { width: 80%!important; height: 80%!important;}
   }
   .noIdontWant{padding:5px 0; font-size:9px;}
-</style>  
+</style>
 <div class="page-wrapper page-wrapper-details center-block morsel-iso bootstrap-iso">
 
       <div>
@@ -297,7 +297,7 @@ function morsel_post_des(){
                       else
                         $creat_img = MORSEL_PLUGIN_IMG_PATH.'no_image.png';
                   ?>
-                  <h2 bo-text="morsel.title" class="morsel-title"><?php echo $morsel_detail->title;?>                    
+                  <h2 bo-text="morsel.title" class="morsel-title"><?php echo $morsel_detail->title;?>
                     <span>
 
                     <?php //check if hide_login_settings are enabled or not.
@@ -318,7 +318,7 @@ function morsel_post_des(){
                         <?php echo $creator = $morsel_detail->creator->first_name." ".$morsel_detail->creator->last_name; ?>
                   </div>
                 </div>
-        <?php 
+        <?php
         if($morsel_detail->primary_item_photos->_992x992)
           $img_url = $morsel_detail->primary_item_photos->_992x992;
         else
@@ -328,7 +328,7 @@ function morsel_post_des(){
         <!-- Item start -->
         <?php foreach ($items as $row_item) {?>
 
-        <?php 
+        <?php
               $text = html_entity_decode($row_item->description);
               preg_match('/<iframe.*src=\"(.*)\".*><\/iframe>/isU', $text, $matches);
         ?>
@@ -342,7 +342,7 @@ function morsel_post_des(){
                       echo '<iframe class="videoIframe" src="'.$matches[1].'?modestbranding=1&autohide=1&showinfo=0&controls=0"  allowfullscreen></iframe>';
                       $itemDes = preg_replace('/<iframe.*?\/iframe>/i','', $text);
                     } else {
-                      $itemDes = $row_item->description;                 
+                      $itemDes = $row_item->description;
                         if($row_item->photos->_992x992){
                           $items_url = $row_item->photos->_992x992;
                           $items_urlMobile = $row_item->photos->_320x320;
@@ -396,7 +396,7 @@ function morsel_post_des(){
                 </span>
             </div>
             <span class="Unsubscribe_button" style="font-size:18px;"></span>
-          </div>          
+          </div>
         </div>
         <!-- Like & share Part -->
         <div class="morsel-actions-wrap fixed">
@@ -439,10 +439,11 @@ function morsel_post_des(){
             success: function(response) {
               if(response.meta.status == "200" && response.meta.message == "OK"){
                 ids = response.data;
-                if(jQuery.inArray(<?=$morsel_detail->morsel_keywords[0]->id?>,ids)!=-1){
+
+                if(jQuery.inArray(parseInt("<?=$morsel_detail->morsel_keywords[0]->id?>"),ids) >= 0 ){
                   //match
                   jQuery(".Unsubscribe_button").html("<a id='unsubscribe_morsel_info'>Unsubscribe</a>");
-                } else {
+                } else if("<?=$morsel_detail->morsel_keywords[0]->id?>") {
                   jQuery(".Unsubscribe_button").html("<a id='subscribe_morsel_info'>Subscribe</a>");
                 }
                 return;
@@ -457,7 +458,7 @@ function morsel_post_des(){
         jQuery("#unsubscribe_morsel_info").live("click",function(){
           var selected_ids = new Array();
           selected_ids.push(<?=$morsel_detail->morsel_keywords[0]->id;?>);
-          console.log("keyword for unsubscribe : ",<?=$morsel_detail->morsel_keywords[0]->id;?>);
+          //console.log("keyword for unsubscribe : ",<?=$morsel_detail->morsel_keywords[0]->id;?>);
           //unsubscribe the keywords
         jQuery.ajax({
             url:"<?php echo MORSEL_API_USER_URL.$_SESSION['morsel_user_obj']->id;?>"+'/unsubscribe_users_keyword.json',
@@ -521,7 +522,7 @@ function morsel_post_des(){
         });
 
       </script>
-        <?php 
+        <?php
          }
       } ?>   <!-- End else part -->
       </div><!-- end ngIf: morsel && showMorsel -->
@@ -604,7 +605,7 @@ function morsel_post_des(){
             </div>
             <div class="modal-footer">
               <button id="morsel-subscribe" type="button" class="btn btn-primary orange-btn" data-dismiss="modal">Sign Up</button>
-              <br><a href="javascript:void(0)" class="noIdontWant" data-dismiss="modal">No thank you, I do not want to receive email updates.</a> 
+              <br><a href="javascript:void(0)" class="noIdontWant" data-dismiss="modal">No thank you, I do not want to receive email updates.</a>
             </div>
         </div><!-- /.modal-content -->
      </div><!-- /.modal-dialog -->
@@ -693,7 +694,7 @@ function morsel_post_des(){
       event.preventDefault();
       var creatorId = "<?php echo $_SESSION['morsel_user_obj']->id;?>";
       if(creatorId == ''){
-        
+
         jQuery.ajax({
           url: "<?php echo site_url()?>" + "/index.php?pagename=saveSessionforComment",
           data:{"morselId":<?=$_REQUEST['morselid']?>,"itemId":jQuery("#form-item-id").val(),"comment":jQuery("#comment-text").val()},
@@ -991,18 +992,18 @@ function morsel_post_des(){
               console.log("errors :: ",response.responseJSON.errors);
               console.log("errors :: ",response.responseJSON.errors.morsel[0]);
               if(response.responseJSON.errors.morsel[0] == "already liked")
-                alert("You have already liked this morsel."); 
+                alert("You have already liked this morsel.");
               jQuery("#like-btn-link").attr("title","You've "+response.responseJSON.errors.morsel[0]+" this morsel.");
               return false;
           }
       });
-    <?php 
+    <?php
     } unset($_SESSION["likeMorsel"]); ?>
 
 <?php if(isset($_SESSION["commentMorsel"]) && $_SESSION["commentMorsel"] !=""){?>
       var sessionUserId =  "<?php echo $_SESSION['morsel_user_obj']->id;?>";
       console.log("sessionId------------",sessionUserId);
-    
+
       var morselSite = "<?php echo MORSEL_SITE;?>";
       var avatar_image = "<?php echo MORSEL_PLUGIN_IMG_PATH.'avatar_72x72.jpg'?>";
       var itemId = "<?=$_SESSION['commentMorsel']['itemId']?>";
@@ -1051,7 +1052,7 @@ function morsel_post_des(){
               return false;
           }
       });
-    <?php 
+    <?php
     } unset($_SESSION["commentMorsel"]); ?>
 </script>
 <?php
@@ -1080,7 +1081,7 @@ function morsel_metatags() {
     $api_key = $options['userid'] . ':' .$options['key'];
     $jsonurl = MORSEL_API_URL."morsels/".$_REQUEST['morselid']."?api_key=".$api_key;
     $morsel_detail = json_decode(wp_remote_retrieve_body(wp_remote_get($jsonurl)))->data;
-       
+
     $userJsonUrl = MORSEL_API_USER_URL.$morsel_detail->creator->id.".json";
     $morsel_user_detail = get_json($userJsonUrl)->data;
 
