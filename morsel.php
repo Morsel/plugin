@@ -475,7 +475,7 @@ function morsel_query_vars( $query_vars ){
               </a>
             </strong>
           </td>
-          <td>$row->primary_item_photos->_320x320
+          <td>
                 <?php if($row->primary_item_photos->_320x320 != ''){?>
                   <a href="<?php echo $row->primary_item_photos->_320x320;?>" target="_blank" >
                     <img src="<?php echo $row->primary_item_photos->_320x320;?>" height="100" width="100">

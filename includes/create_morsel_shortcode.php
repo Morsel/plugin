@@ -60,10 +60,15 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
   if(get_option('morsel_other_settings')['hide_login_btn'] != 1) {
     ?>
     <div class='row'>
-      <div class='col-md-6'>You must be sign/login before create a morsel, click here for <a id='open-morsel-login1' class='open-morsel-login btn btn-danger btn-xs'>SignUp/Login</a></div>
+      <div class='col-md-6'>You must be signup/login before create a morsel, click here for <a id='open-morsel-login1' class='open-morsel-login btn btn-danger btn-xs'>SignUp/Login</a></div>
     </div>
-<?php
-  } //end login hide
+<?php } else { ?>
+<!-- if admin user integrate the user with morsel signup/login popup -->
+    <div class='row'>
+      <div class='col-md-6'>You must be signup/login before create a morsel</div>
+    </div>
+<?php }
+   //end login hide
     } else { //user is logged in
     //get host admin info
     $host_info = get_option('morsel_settings');

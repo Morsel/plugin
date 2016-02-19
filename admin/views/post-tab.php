@@ -76,7 +76,7 @@ if(count($jsonPost->data)>0){?>
     <div class="previewText">
 		<!-- previewText Start -->
 			<? include_once("includeView/morselPreviewText.php");?>
-		<!-- previewText End -->	   
+		<!-- previewText End -->
 	</div>
 		<!-- Morsel list Start -->
 		<? include_once("includeView/morselList.php");?>
@@ -117,13 +117,13 @@ if(count($jsonPost->data)>0){?>
 				    jQuery.ajax({
 				        url: "<?php echo site_url()?>" + "/index.php?pagename=morsel_ajax_admin&page_id=" + parseInt(++morsePageCount),
 				        success: function(data) {
-							if (data.trim().length > 1) {
-								jQuery('#the-list tr:last').after(data);
-							} else {
-								morsePageCount--;
-								morselNoMore = true;
-								jQuery('#no-more').show();
-							}
+    							if (data.trim().length > 1) {
+    								jQuery('#the-list tr:last').after(data);
+    							} else {
+    								morsePageCount--;
+    								morselNoMore = true;
+    								jQuery('#no-more').show();
+    							}
 				        }, error: function() {
 					        morsePageCount--;
 					    }, complete: function() {
@@ -133,7 +133,7 @@ if(count($jsonPost->data)>0){?>
 			    }
 		    }
 		}
-	});	
+	});
 /*Morsel scroll script*/
 </script>
 <!-- datetimepicker -->
