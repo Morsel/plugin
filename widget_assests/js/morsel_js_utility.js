@@ -1,5 +1,5 @@
 jQuery(function($) {
-  console.log("script_data : ",script_data);
+  //console.log("script_data : ",script_data);
   /*check that check box associate field is enabled or not*/
   $("#mrsl-associate-checkbox").click(function(){
     var checked = $("input#mrsl-associate-checkbox:checked").length;
