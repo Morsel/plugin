@@ -46,6 +46,7 @@ if(MORSEL_PLUGIN_ENV == 'prod'){
   define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-production/embed.js');
   define('MORSEL_SITE', 'https://www.eatmorsel.com/');
   define('MORSEL_PLUGIN_IFRAME_PATH','https://www.eatmorsel.com/addnewmorsel');
+  define('MORSEL_AMAZON_IMAGE_URL','https://morsel.s3.amazonaws.com/');
 } else if((MORSEL_PLUGIN_ENV == 'local') || (MORSEL_PLUGIN_ENV == 'dev')){
   if(MORSEL_PLUGIN_ENV == 'dev'){
     define('MORSEL_API_URL', 'https://api-staging.eatmorsel.com/');
@@ -55,6 +56,7 @@ if(MORSEL_PLUGIN_ENV == 'prod'){
     define('MORSEL_API_URL', 'https://a4b175f4.ngrok.io/');
     define('MORSEL_PLUGIN_IFRAME_PATH','http://localhost:5000/addnewmorsel');
   }
+  define('MORSEL_AMAZON_IMAGE_URL','https://morsel-staging.s3.amazonaws.com/');
   define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-staging/embed.js');
   define('MORSEL_SITE', 'http://dev.eatmorsel.com/');
 }
@@ -381,7 +383,7 @@ function morsel_query_vars( $query_vars ){
                   if($row->primary_item_photos->_992x992 != ''){
                         $imageUrl = str_replace("_992x992_", "", $row->primary_item_photos->_992x992);
                         $imageUrlAdmin = $row->primary_item_photos->_100x100;
-                        $mainValue = str_replace("https://morsel-staging.s3.amazonaws.com/","",$imageUrl.'@@$@@'.$row->title.'@@$@@'.$row->creator->photos->_72x72);
+                        $mainValue = str_replace(MORSEL_AMAZON_IMAGE_URL,"",$imageUrl.'@@$@@'.$row->title.'@@$@@'.$row->creator->photos->_72x72);
                   ?>
                   <td class="sliderTd2">
                     <a href="<?php echo $imageUrl;?>" target="_blank" ><img src="<?php echo $imageUrlAdmin;?>" height="100" width="100"><a>
