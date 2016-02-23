@@ -11,11 +11,11 @@ function morsel_user_preference($atts){
     if(get_option('morsel_other_settings')['hide_login_btn'] != 1) {
     ?>
       <div class='row'>
-        <div class='col-md-6'>Please sign in/log in to get started <a class='open-morsel-login btn btn-danger btn-xs'>Sign Up/Log in</a></div>
+        <div class='col-md-6'>Please sign in/log in to get started. <a class='open-morsel-login btn btn-danger btn-xs'>Sign Up/Log in</a></div>
       </div>
 <?php } else { ?>
       <div class='row'>
-        <div class='col-md-6'>Please sign in/log in to get started</div>
+        <div class='col-md-6'>Please sign in/log in to get started.</div>
       </div>
   <?php  } ?>
 

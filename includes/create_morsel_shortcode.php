@@ -60,12 +60,12 @@ if((!isset($_SESSION['morsel_login_userid'])) && (!isset($_SESSION['morsel_user_
   if(get_option('morsel_other_settings')['hide_login_btn'] != 1) {
     ?>
     <div class='row'>
-      <div class='col-md-6'>Please sign in/log in to get started <a id='open-morsel-login1' class='open-morsel-login btn btn-danger btn-xs'>Sign Up/Log in</a></div>
+      <div class='col-md-6'>Please sign in/log in to get started. <a id='open-morsel-login1' class='open-morsel-login btn btn-danger btn-xs'>Sign Up/Log in</a></div>
     </div>
 <?php } else { ?>
 <!-- if admin user integrate the user with morsel signup/login popup -->
     <div class='row'>
-      <div class='col-md-6'>Please sign in/log in to get started</div>
+      <div class='col-md-6'>Please sign in/log in to get started.</div>
     </div>
 <?php }
    //end login hide
