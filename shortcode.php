@@ -705,15 +705,15 @@ function morsel_post_des(){
         });
         return;
       } else {
-      var morselSite = "<?php echo MORSEL_SITE;?>";
-      var avatar_image = "<?php echo MORSEL_PLUGIN_IMG_PATH.'avatar_72x72.jpg'?>";
-      var itemId = jQuery("#form-item-id").val();
-      var commentUrl = "<?php echo MORSEL_API_ITEMS_URL;?>"+itemId+"/comments.json";
-      var api_key = "<?php echo $_SESSION['morsel_user_obj']->id.':'.$_SESSION['morsel_user_obj']->auth_token;?>";
-      commentUrl += '?api_key='+api_key;
-      var commentObj = {"comment":{"description":jQuery("#comment-text").val()}};
+        var morselSite = "<?php echo MORSEL_SITE;?>";
+        var avatar_image = "<?php echo MORSEL_PLUGIN_IMG_PATH.'avatar_72x72.jpg'?>";
+        var itemId = jQuery("#form-item-id").val();
+        var commentUrl = "<?php echo MORSEL_API_ITEMS_URL;?>"+itemId+"/comments.json";
+        var api_key = "<?php echo $_SESSION['morsel_user_obj']->id.':'.$_SESSION['morsel_user_obj']->auth_token;?>";
+        commentUrl += '?api_key='+api_key;
+        var commentObj = {"comment":{"description":jQuery("#comment-text").val()}};
 
-      jQuery.ajax({
+        jQuery.ajax({
           url: commentUrl,
           type: "POST",
           contentType: "application/json; charset=utf-8",
@@ -742,6 +742,8 @@ function morsel_post_des(){
               jQuery("#comment-list").append(html);
               timeAgo();
               commentsCountText(itemId,true);
+              jQuery("#morsel-comment-modal").modal('hide');
+              jQuery("#morsel-like-others-modal").modal('show');
             } else {
               alert("Opps Something wrong happend!");
               return false;
@@ -1041,6 +1043,8 @@ function morsel_post_des(){
               jQuery("#comment-list").append(html);
               timeAgo();
               commentsCountText(itemId,true);
+              //show morsel subscribe popup
+              jQuery("#morsel-like-others-modal").modal('show');
             } else {
               alert("Opps Something wrong happend!");
               return false;
