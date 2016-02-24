@@ -11,10 +11,14 @@ function morsel_user_preference($atts){
     if(get_option('morsel_other_settings')['hide_login_btn'] != 1) {
     ?>
       <div class='row'>
-        <div class='col-md-6'>You must be sign/login before create a morsel, click here for <a class='open-morsel-login btn btn-danger btn-xs'>SignUp/Login</a></div>
+        <div class='col-md-6'>Please sign in/log in to get started. <a class='open-morsel-login btn btn-danger btn-xs'>Sign Up/Log in</a></div>
       </div>
-  <?php
-    } //end hide login if
+<?php } else { ?>
+      <div class='row'>
+        <div class='col-md-6'>Please sign in/log in to get started.</div>
+      </div>
+  <?php  }
+    //end hide login if
   } else { //user is logged in
     $morsel_desc_url =  get_permalink(get_option( 'morsel_plugin_page_id'));
 
@@ -237,7 +241,7 @@ function morsel_user_preference($atts){
 
       $("input.mrsl-susbcribe-checked").live("click",function(e){
         var htmlElement = this;
-                
+
         if($(this).is(":checked")){
           var subscribeUrl = "<?php echo MORSEL_API_USER_URL.'morsel_subscribe'; ?>";
           var morselId = [parseInt(jQuery(this).attr('morsel-id'))];

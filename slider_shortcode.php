@@ -9,7 +9,7 @@ function sliderFrontendScripts() {
 }
 
 function morseldisplayslider($atts)
-{ 
+{
   ob_start();
 
   //print_r($atts);
@@ -40,7 +40,7 @@ function morseldisplayslider($atts)
   height: 72px;
   display: block;
   border-radius: 50%;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
   </style>
   <div style="width:<?=$width?>;  margin:0 auto;">
@@ -61,18 +61,18 @@ function morseldisplayslider($atts)
             }
           }
           //print_r($sliderContent);
-          foreach ($sliderContent as $key => $value) { 
+          foreach ($sliderContent as $key => $value) {
             $imageArray = explode("@@$@@", $value);
             //print_r($imageArray);
             ?>
             <div data-p="225.00" style="display: none;">
               <div class="sliderPTag"><?=$imageArray[1]?>
                 <? if($imageArray[2] != ''){?>
-                  <p class="img-circular" style="background-image: url(https://morsel-staging.s3.amazonaws.com/<?=$imageArray[2]?>);"></p>
+                  <p class="img-circular" style="background-image: url(<?=MORSEL_AMAZON_IMAGE_URL.$imageArray[2]?>);"></p>
                 <? } ?>
               </div>
               <a class="morsel-slider-img" target="blank" href="<?php echo site_url(),"/",$slug,"/?morselid=",$key;?>">
-              <img data-u="image" src="https://morsel-staging.s3.amazonaws.com/<?=$imageArray[0]?>" />
+              <img data-u="image" src="<?=MORSEL_AMAZON_IMAGE_URL.$imageArray[0]?>" />
               </a>
             </div>
             <? } ?>
@@ -127,7 +127,7 @@ function morseldisplayslider($atts)
         });
     </script>
 
-<? 
+<?
 return ob_get_clean();
 } //function end
   add_shortcode('morseldisplayslider', 'morseldisplayslider');
