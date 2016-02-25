@@ -71,7 +71,7 @@ function morseldisplayslider($atts)
                   <p class="img-circular" style="background-image: url(<?=MORSEL_AMAZON_IMAGE_URL.$imageArray[2]?>);"></p>
                 <? } ?>
               </div>
-              <a class="morsel-slider-img" target="blank" href="<?php echo site_url(),"/",$slug,"/?morselid=",$key;?>">
+              <a class="morsel-slider-img" href="<?php echo site_url(),"/",$slug,"/?morselid=",$key;?>">
               <img data-u="image" src="<?=MORSEL_AMAZON_IMAGE_URL.$imageArray[0]?>" />
               </a>
             </div>
