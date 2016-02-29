@@ -1,35 +1,6 @@
 <?php
 if(isset($hostCompany) && $hostCompany != ""){
 ?>
-<style type="text/css">
-  .shs_shortinfo{
-      background: none repeat scroll 0 0 #DBEFFE;
-      border: 1px solid #98B9D0;
-      color: #333333;
-      font-size: 12px;
-      font-weight: normal;
-      line-height: 22px;
-      padding: 10px;
-    }
-    .sliderSelection {
-      width: 204px;
-    }
-    .sliderValue{ float: right;}
-    @media screen and (max-width: 400px) {
-      .saveSlides{
-        float: none !important;
-        margin: 0 !important;
-      }
-    }
-    .sliderField {
-      width : 200px;
-      float: left;
-    }
-    /*css for slider table*/
-    .sliderTd1 { width: 130px;}
-    .sliderTd2 { width: 150px;}
-    .sliderTd3 { width: 50px;}
-</style>
 <?php
     if(get_option("morselSliderSettings") == ""){
     //add slider option by Default
@@ -121,16 +92,9 @@ if(isset($hostCompany) && $hostCompany != ""){
       echo "</form>";
       echo '</div></div></div>';
   echo '</div>'; // .wrap
-
-     //function for selcted checkbox
-    /*function sliderCheckForSelected($option,$check){
-    if($option==$check){
-      echo "selected='selected'";
-    }
-    }*/
 ?>
 <div class="sliderDiv">
-<a href="javascript:void(0);" onclick="editSliderById()">Add New</a><img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" class="loaderImageSlider" id="loaderImageSliderAdd" style="display:none;"/>
+<a onclick="editSliderById()" class="button-primary">Add New</a><img src="<?=MORSEL_PLUGIN_IMG_PATH;?>ajaxLoaderSmall.gif" class="loaderImageSlider" id="loaderImageSliderAdd" style="display:none;"/>
  <table class="widefat sliderDivList">
   <thead>
     <tr>
@@ -157,21 +121,43 @@ if(isset($hostCompany) && $hostCompany != ""){
       <div class="postbox shs_admin_wrapper">
         <div class="handlediv" title="Click to toggle"><br/></div>
         <h3 class="hndle" style="font-size:12px; margin:0; padding:6px;"><span><?php _e('Select morsels slides by checkbox to display in your slider','shs'); ?></span></h3>
-        <div style="clear:both; text-align:center; padding:10px 0 0 0px;"><input type="button" name="joptsv" class="button-primary saveSlides" value="SAVE SLIDES" onclick="saveMorselSlider()" /></div>
-        <div class="inside" style="padding: 15px;margin: 0;">
+         <div class="inside" style="padding: 15px;margin: 0;">
          <div id="joptions"></div>
-          </div>
+         <div id="no-more-slider">No More Morsels</div>
+         <div id="ajaxLoader-slider" >
+          <span><img src="<?php echo MORSEL_PLUGIN_IMG_PATH;?>ajax-loader.gif"></span>
+         </div>
+        </div>
         </div>
       </form>
     </div>
+
 </div>
 <script type="text/javascript">
+
+    jQuery('.morselClosePopup').click(function(){
+    jQuery( "#TB_closeWindowButton" ).trigger( "click" )
+  });
+
+/* check all checkbox */
+ jQuery(".checkAllCheckbox").live("change", function(){
+   jQuery("input:checkbox").prop('checked', jQuery(this).prop("checked"));
+});
+
+
 jQuery( document ).ready(function() {
   getSliderList();
+
 });
+
+var morselNoMoreSlider;
+var morsePageCountSlider = 1;
 var sliderID;
 function editSliderById(sliderId){
   // jQuery('#joptions').html("");
+
+   morsePageCountSlider = 1;
+   morselNoMoreSlider = false;
   if(sliderId == undefined){
     sliderID = "";
     jQuery("#loaderImageSliderAdd").css('display','block');
@@ -185,12 +171,46 @@ function editSliderById(sliderId){
       jQuery('#joptions').html("");
     },
     success: function(data) {
+      jQuery('#no-more-slider').hide();
     if (data.trim().length > 1) {
         jQuery('#joptions').append(data);
+        jQuery("#sliding_body").scroll(function(){
+          console.log('test');
+
+  var result = jQuery(this).scrollTop() + jQuery(this).innerHeight() >= jQuery(this)[0].scrollHeight
+    console.log(result);
+    console.log('page id',morsePageCountSlider);
+    // if(jQuery('#tabs1-js').css('display') != 'none'){
+        if(morselNoMoreSlider != true){
+          if (result) {
+            console.log('i m in');
+            jQuery('#no-more-slider').hide();
+            jQuery("#ajaxLoader-slider").css("display", "block");
+            jQuery.ajax({
+                url: "<?php echo site_url()?>" + "/index.php?pagename=morsel_ajax_admin_slider&sliderId="+sliderID+"&page_id=" + parseInt(++morsePageCountSlider),
+                 success: function(data) {
+                  if (data.trim().length > 1) {
+                    jQuery('#sliding-table tr:last').after(data);
+                  } else {
+                    morsePageCountSlider--;
+                    morselNoMoreSlider = true;
+                    jQuery('#no-more-slider').show();
+                  }
+                }, error: function() {
+                  morsePageCountSlider--;
+              }, complete: function() {
+                  jQuery("#ajaxLoader-slider").css("display", "none");
+              }
+            });
+          }
+        }
+    //}
+
+       });
     }
   },
     complete: function() {
-        var url = "#TB_inline?width=500&height=400&inlineId=addSliderDiv";
+        var url = "#TB_inline?width=80%&height=500&inlineId=addSliderDiv";
       tb_show("Slider", url);
       jQuery(".loaderImageSlider").css('display','none');
     }
