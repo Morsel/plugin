@@ -132,6 +132,60 @@
   vertical-align: middle;
 }
 
+/*add remove icon for keywords of morsel*/
+
+  .shs_shortinfo{
+      background: none repeat scroll 0 0 #DBEFFE;
+      border: 1px solid #98B9D0;
+      color: #333333;
+      font-size: 12px;
+      font-weight: normal;
+      line-height: 22px;
+      padding: 10px;
+    }
+    .sliderSelection {
+      width: 204px;
+    }
+ .sliderValue{ float: right;}
+ .sliderField {
+      width : 200px;
+      float: left;
+    }
+
+    #sliding-table tr {
+    display: block;
+    }
+
+    #sliding-table > tbody{
+      display: block;
+      height: 300px;
+      overflow-y: scroll;
+    }
+
+    #sliding_body td {
+    width: 46.8%;
+    }
+    #sliding-table th {
+    width: 45%;
+    }
+
+#slideFormSubmit{
+    max-height: 490px;
+    overflow: hidden;
+
+}
+#no-more-slider {
+    background: #eeeeee none repeat scroll 0 0;
+    border: 1px solid #cfcfcf;
+    color: #000000;
+    display: none;
+    font-weight: bold;
+    padding: 5px;
+}
+#ajaxLoader-slider {
+    display: none;
+    text-align: center;
+}
 
 
 /*associated user tab*/
@@ -265,6 +319,7 @@ width: 100%;
   }
   #TB_window{
     width: 400px !important;
+    margin-left: -44% !important
   }
   #TB_window fieldset legend {
     font-size: 18px !important;
@@ -273,10 +328,15 @@ width: 100%;
   #TB_window .form_datetime input{
     width: 145px !important;
   }
+  #TB_ajaxContent { width: auto !important;}
 }
 @media screen and (max-width: 400px) {
   #TB_window{margin-left: -37% !important ; width: 250px !important;}
   #TB_ajaxContent { width: auto !important;}
+  .saveSlides{
+        float: none !important;
+        margin: 0 !important;
+  }
 }
 /*edit morsel end*/
 @media screen and (min-width: 800px) {

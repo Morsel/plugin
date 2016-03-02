@@ -51,14 +51,16 @@ if(MORSEL_PLUGIN_ENV == 'prod'){
   if(MORSEL_PLUGIN_ENV == 'dev'){
     define('MORSEL_API_URL', 'https://api-staging.eatmorsel.com/');
     define('MORSEL_PLUGIN_IFRAME_PATH','http://dev.eatmorsel.com/addnewmorsel');
+    define('MORSEL_SITE', 'http://dev.eatmorsel.com/');
   } else {
-    //define('MORSEL_API_URL', 'http://localhost:3000/');
-    define('MORSEL_API_URL', 'https://a4b175f4.ngrok.io/');
+    define('MORSEL_API_URL', 'http://localhost:3000/');
+    //define('MORSEL_API_URL', 'https://a4b175f4.ngrok.io/');
     define('MORSEL_PLUGIN_IFRAME_PATH','http://localhost:5000/addnewmorsel');
+    define('MORSEL_SITE', 'http://localhost:5000/');
   }
   define('MORSEL_AMAZON_IMAGE_URL','https://morsel-staging.s3.amazonaws.com/');
   define('MORSEL_EMBED_JS', 'https://rawgit.com/nishant-n/morsel/morsel-wp-plugin-staging/embed.js');
-  define('MORSEL_SITE', 'http://dev.eatmorsel.com/');
+
 }
 
 define('MORSEL_API_USER_URL', MORSEL_API_URL.'users/');
@@ -337,70 +339,90 @@ function morsel_query_vars( $query_vars ){
      exit(0);
    }
 
+
+
+
+
    if($_REQUEST['pagename']=='morsel_ajax_admin_slider')
     {
       $sliderId = mysql_escape_string($_REQUEST["sliderId"]);
+      $page_id = mysql_escape_string($_REQUEST["page_id"]);
       $morsel_page_id = get_option( 'morsel_plugin_page_id');
       $options = get_option( 'morsel_settings');
       $api_key = $options['userid'] . ':' .$options['key'];
       $morsel_post_settings = get_option('morsel_post_settings');//getting excluding id
       $contents = get_option('shs_slider_contents');
-      $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&submit=true";
+      $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&page=".$page_id;
       unset($sliderContent);
       if($sliderId != undefined && $sliderId != ""){
          $sliderContent = $contents[$sliderId-1];
       }
       //$json = get_json($jsonurl); //getting whole data
-      $json = json_decode(wp_remote_retrieve_body(wp_remote_get($jsonurl)));
-      echo "Slider Name: &nbsp;&nbsp;&nbsp;<input type='text' name='sliderName' id='sliderNameSlider' value='".$sliderContent['name']."' placeholder='Slider Name'>";?>
-      <script type="text/javascript">
-        jQuery(".checkAllCheckbox").change(function () {
-          jQuery("input:checkbox").prop('checked', jQuery(this).prop("checked"));
-        });
-      </script>
-<table class="widefat posts" style="width:480px;">
+      $json = json_decode(file_get_contents($jsonurl)); //json_decode(wp_remote_retrieve_body(wp_remote_get($jsonurl)));
+
+       if(!$page_id){
+        echo "Slider Name: &nbsp;&nbsp;&nbsp;<input type='text' name='sliderName' id='sliderNameSlider' value='".$sliderContent['name']."' placeholder='Slider Name'>";
+        echo ' <div style="margin-left: 18%; padding-bottom: 5px;"><input type="button" name="joptsv" class="button-primary saveSlides" value="SAVE SLIDES" onclick="saveMorselSlider()" /></div>';
+      ?>
+
+
+      <table id="sliding-table" class="widefat posts">
               <thead>
                 <tr>
                   <th scope='col' class='manage-column column-title sortable desc' style="padding-left: 10px;">Morsel Title</th>
                   <th scope='col' class='manage-column column-author'>Image</th>
-                  <th scope='col' class='manage-column column-categories'><input type="checkbox" name="main" class="checkAllCheckbox" value="main" style="margin:0px"></th>
+                  <th scope='col' class='manage-column column-categories'><input type="checkbox" name="main" class="checkAllCheckbox" value="main" style="margin-right: 13.6px;"></th>
                 </tr>
               </thead>
-              <tfoot>
+              <!-- <tfoot>
                 <tr>
                   <th scope='col' class='manage-column column-title sortable desc' style="padding-left: 10px;">Morsel Title</th>
                   <th scope='col' class='manage-column column-author'>Image</th>
-                  <th scope='col' class='manage-column column-categories'><input type="checkbox" name="main" class="checkAllCheckbox" value="main"  style="margin:0px"></th>
+                  <th scope='col' class='manage-column column-categories'><input type="checkbox" name="main" class="checkAllCheckbox" value="main"  style="margin-left:4px"></th>
                 </tr>
-              </tfoot>
-              <tbody>
+              </tfoot> -->
+              <tbody id = "sliding_body">
 
-      <?
+      <?php }
       foreach ($json->data as $row) {?>
-              <tr class="sliderTr">
-                 <td class="sliderTd1"><a href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?></a></td>
+              <tr>
+                 <td><a href="<?php echo $morsel_url?>" target="_blank"><?php echo $row->title?></a></td>
                  <?php $imageUrl = "";
                   if($row->primary_item_photos->_992x992 != ''){
                         $imageUrl = str_replace("_992x992_", "", $row->primary_item_photos->_992x992);
                         $imageUrlAdmin = $row->primary_item_photos->_100x100;
-                        $mainValue = str_replace(MORSEL_AMAZON_IMAGE_URL,"",$imageUrl.'@@$@@'.$row->title.'@@$@@'.$row->creator->photos->_72x72);
+                        $mainValue = str_replace("https://morsel-staging.s3.amazonaws.com/","",$imageUrl.'@@$@@'.$row->title.'@@$@@'.$row->creator->photos->_72x72);
                   ?>
-                  <td class="sliderTd2">
+                  <td>
                     <a href="<?php echo $imageUrl;?>" target="_blank" ><img src="<?php echo $imageUrlAdmin;?>" height="100" width="100"><a>
                   </td>
-                  <td class="sliderTd3">
+                  <td>
                     <input type="checkbox" class="sliderCheckbox" <? if(array_key_exists($row->id, $sliderContent['slider'])){?>checked<? } ?> name="cnt[<?=$row->id;?>]" value="<?=$mainValue?>">
                   </td>
-                  <? } else  {
+                  <?php } else if($row->photos->_800x600 != '')
+                  { ?>
+                   <td>
+                    <a href="<?php echo $row->photos->_800x600;?>" target="_blank" >
+                      <img src="<?php echo $row->photos->_800x600;?>" height="100" width="100">
+                    <a>
+                  </td>
+                  <td>
+                    <input type="checkbox" class="sliderCheckbox" <? if(array_key_exists($row->id, $sliderContent['slider'])){?>checked<? } ?> name="cnt[<?=$row->id;?>]" value="<?=$mainValue?>">
+                  </td>
+                 <?php }
+                  else  {
                     echo '<td colspan="2">No Image</td>';
                     }
                   ?>
                   </tr>
-          <? } ?>
-              </tbody>
+          <? }
+          if(!$page_id)
+          {
+          ?>
+            </tbody>
           </table>
-
-  <? exit;
+      <? }
+   exit;
   }
 
   if($_REQUEST['pagename'] == "getSliderListing"){

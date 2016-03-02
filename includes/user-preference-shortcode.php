@@ -17,8 +17,7 @@ function morsel_user_preference($atts){
       <div class='row'>
         <div class='col-md-6'>Please sign in/log in to get started.</div>
       </div>
-  <?php  } ?>
-
+  <?php  }
     //end hide login if
   } else { //user is logged in
     $morsel_desc_url =  get_permalink(get_option( 'morsel_plugin_page_id'));
