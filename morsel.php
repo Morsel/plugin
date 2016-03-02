@@ -391,7 +391,7 @@ function morsel_query_vars( $query_vars ){
                   if($row->primary_item_photos->_992x992 != ''){
                         $imageUrl = str_replace("_992x992_", "", $row->primary_item_photos->_992x992);
                         $imageUrlAdmin = $row->primary_item_photos->_100x100;
-                        $mainValue = str_replace("https://morsel-staging.s3.amazonaws.com/","",$imageUrl.'@@$@@'.$row->title.'@@$@@'.$row->creator->photos->_72x72);
+                        $mainValue = str_replace(MORSEL_AMAZON_IMAGE_URL,"",$imageUrl.'@@$@@'.$row->title.'@@$@@'.$row->creator->photos->_72x72);
                   ?>
                   <td>
                     <a href="<?php echo $imageUrl;?>" target="_blank" ><img src="<?php echo $imageUrlAdmin;?>" height="100" width="100"><a>
