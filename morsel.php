@@ -399,7 +399,18 @@ function morsel_query_vars( $query_vars ){
                   <td>
                     <input type="checkbox" class="sliderCheckbox" <? if(array_key_exists($row->id, $sliderContent['slider'])){?>checked<? } ?> name="cnt[<?=$row->id;?>]" value="<?=$mainValue?>">
                   </td>
-                  <? } else  {
+                  <?php } else if($row->photos->_800x600 != '')
+                  { ?>
+                   <td>
+                    <a href="<?php echo $row->photos->_800x600;?>" target="_blank" >
+                      <img src="<?php echo $row->photos->_800x600;?>" height="100" width="100">
+                    <a>
+                  </td>
+                  <td>
+                    <input type="checkbox" class="sliderCheckbox" <? if(array_key_exists($row->id, $sliderContent['slider'])){?>checked<? } ?> name="cnt[<?=$row->id;?>]" value="<?=$mainValue?>">
+                  </td>
+                 <?php }
+                  else  {
                     echo '<td colspan="2">No Image</td>';
                     }
                   ?>
