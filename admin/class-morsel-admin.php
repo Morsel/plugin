@@ -186,7 +186,7 @@ class Morsel_Admin {
 			'manage_options',
 			$this->plugin_slug,
 			array( $this, 'display_plugin_admin_page' ),
-			plugins_url( 'morsel/img/morsel-m_20.png' ),
+			MORSEL_PLUGIN_IMG_PATH.'morsel-m_20.png',
 			"6"
 		);
 	}
