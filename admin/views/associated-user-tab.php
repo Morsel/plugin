@@ -16,12 +16,12 @@
 				if(response.data != ""){
                    console.log("response--------------------",response.data);
                    jQuery("#morsel_associated_user_list").html("");
-                   var data = response.data;         
-					/*create option for shortcode tab*/ 
+                   var data = response.data;
+					/*create option for shortcode tab*/
 		  	     	var sel = jQuery('#morsel_shortcode_user');
 		            for(var k in data){
 		                var html = '<tr id="delete'+data[k].associated_user["id"]+'" class="type-post status-publish format-standard hentry category-uncategorized alternate iedit author-self level-0 deleteUser">';
-		            	html +='<td class="post-title page-title column-title associatedUserListTD"><strong>'+data[k].associated_user["id"]+'</strong></td>';            
+		            	html +='<td class="post-title page-title column-title associatedUserListTD"><strong>'+data[k].associated_user["id"]+'</strong></td>';
 						html +='<td class="categories column-categories associatedUserListTD">'+data[k].associated_user["username"]+'</td>';
 		                html +='<td class="date column-date associatedUserListTD">'+data[k].associated_user["email"]+'</td>';
 						html +='<td class="edit-btn column-categories associatedUserListTD">';
@@ -35,7 +35,12 @@
 						html +='</tr>';
 		                jQuery("#morsel_associated_user_list").append(html);
 		            }
-		        } else {            	
+		            //call sumo select
+								sel.SumoSelect({
+									okCancelInMulti:true,
+									selectAll:true
+								});
+		        } else {
 				    var html = '<tr><td class="noResult" colspan="5">NO RESULT FOUND</td></tr>';
 				    jQuery("#morsel_associated_user_list").prepend(html);
 		        }
@@ -50,16 +55,16 @@
     return true;
     }
 </script>
-<form method="post"> 	         	
+<form method="post">
    	<table class="form-table associatedAdd">
-  		<tr>  			
+  		<tr>
   			<td class="textTd">Request To Morsel User (Username/Email) :</td>
 			<td>
 				<input type="hidden" name="api_key" id="admin-user-key" value="<?php echo $options['userid'].':'.$options['key'] ?>"/>
 				<input type="hidden" name="admin[user_id]" id="admin-user-userid" value="<?php echo $options['userid'] ?>"/>
 				<input type="text" name="associated[name]" id="associated_user_name" value=""/>
 			</td>
-  		</tr>  		
+  		</tr>
 		<tr>
   			<td>&nbsp;</td>
 			<td><input type="button" class="button button-primary" name="save" id="associated-user-submit" value="Add User" onclick="addAssociatedUser()"></td>
@@ -81,17 +86,17 @@
 	  	</tr>
 	</thead>
 	<tfoot>
-		<tr>			
+		<tr>
 			<th class='manage-column column-categories associatedUserListTD'>User ID</th>
 			<th class='manage-column column-title sortable desc associatedUserListTD'><span>User Name</span></th>
 			<th class='manage-column column-date sortable asc associatedUserListTD'><span>Email</span></th>
 			<th class='manage-column column-date sortable asc associatedUserListTD'>Accepted</th>
-			<th class='manage-column column-date sortable asc associatedUserListTD'>Action</th>	
+			<th class='manage-column column-date sortable asc associatedUserListTD'>Action</th>
 		</tr>
 	</tfoot>
 	<tbody id="morsel_associated_user_list"></tbody>
  </table>
-</div> 
+</div>
 
 <script type="text/javascript">
 	function deleteUser(userId){
@@ -102,13 +107,13 @@
 					data: {
 	    				association_request_params:{associated_user_id:userId},
 	    			    api_key:jQuery("#admin-user-key").val()
-	  				},	  				
+	  				},
 					success: function(response) {
 					  	getAssociatedData("<?php echo $options['userid'] ?>","<?php echo $options['userid'].':'.$options['key'] ?>");
-					},error:function(error){						
+					},error:function(error){
 					  console.log("error response------------------",error);
 					},complete:function(){}
-	        	});	
+	        	});
 	}
 	function addAssociatedUser(){
         if(jQuery("#associated_user_name").val() != ""){
@@ -121,14 +126,14 @@
 					data: {
 	    				association_request_params:{name_or_email:associated_username},
 	    			    api_key:jQuery("#admin-user-key").val()
-	  				},	  				
+	  				},
 					success: function(response) {
 						if(response.data != "Invalid user"){
 				            getAssociatedData("<?php echo $options['userid'] ?>","<?php echo $options['userid'].':'.$options['key'] ?>");
-					        jQuery("#associated-user-submit").val('Add User');				
+					        jQuery("#associated-user-submit").val('Add User');
 							jQuery('#associated_user_name').val('');
 						} else {
-							alert("Opps You entered wrong username/email!"); 
+							alert("Opps You entered wrong username/email!");
 							jQuery("#associated-user-submit").val('Add User');
 						}
 					},error:function(){
@@ -137,13 +142,13 @@
 					},complete:function(){
 						console.log('Add morsel Request is complete');
 					}
-	        	});	
+	        	});
 			} else {
 				alert("Please fill username or email!");
 				jQuery("#associated_user_name").focus()
 			}
 	}
-</script> 
+</script>
 <? } else { ?>
 Please Enter Host Details First.
 <? } ?>

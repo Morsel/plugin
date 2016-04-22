@@ -51,10 +51,11 @@ if(isset($hostCompany) && $hostCompany != ""){
             <tr valign="top">
 	  			<td scope="row" class="verticalTop" >Associated user to display: </td>
 				<td>
-				<span class="attr-info">If you are displaying morsels from one user on page, please select the user here.<br></span>
-				<select name="morsel_shortcode_user" id="morsel_shortcode_user">
-					<option value = "0">- Please select User -</option>
-				</select>
+					<span class="attr-info">If you are displaying morsels from one user on page, please select the user here.<br></span>
+					<select name="morsel_shortcode_user" id="morsel_shortcode_user" multiple="multiple" placeholder="Please select User:"  class="" >
+						<!-- <option value = "0">- Please select User -</option> -->
+					</select>
+					<!-- <button id="show-associate-user" onclick="show_tb_popup_box('morsel_shortcode_asso_user',570,110,'Please select the user from below.')">Select User</button> -->
 				</td>
 	  		</tr>
 	  		<tr valign="top">
@@ -195,7 +196,7 @@ function hideAdvancedTabFunction(buttonId){
   jQuery("#showAdvancedTab").css("display","inline-block");
 }
 	(function($){
-
+		jQuery('.sumo-select').SumoSelect({okCancelInMulti:true, selectAll:true });
 		$("#morsel-shortcode-form_advanced").validate({
 		  rules: {
 		    // morsel_shortcode_count: {
@@ -272,6 +273,11 @@ function hideAdvancedTabFunction(buttonId){
 	 tb_show("Shortcode for community", url);
 	}
 
+	function show_tb_popup_box(box_id,width,height,title){
+		var url = "#TB_inline?width="+width+"&height="+height+"&inlineId="+box_id;
+	 	tb_show(title, url);
+	}
+
 function checkAdvancedTab(buttonID){
   jQuery("#"+buttonID).css("display","none");
   jQuery("#advancedData").css("display","inline-block");
@@ -321,12 +327,16 @@ function checkAdvancedTab(buttonID){
 		    var is_center = $("#morsel_shortcode_center").prop('checked') ? 1 : 0;
 		    var keyword_id = $("#shortcode_keyword").val();
 		    var code = "";
+		    var associated_user = $("#morsel_shortcode_user").val();
+		    if(!associated_user){
+		    	associated_user = 0;
+		    }
 		    if($("#morsel_wrapper_width").val() != ""){
 		    	//code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"']";//
-		      	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#shortcode_topic").val()+"' ]";//
+		      	code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' wrapper_width='"+$("#morsel_wrapper_width").val()+"' keyword_id = '"+keyword_id+"' associated_user='"+associated_user+"' topic_name='"+$("#shortcode_topic").val()+"' ]";//
 		    } else {
 		    	//code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"']";
- 	            code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+$("#morsel_shortcode_user").val()+"' topic_name='"+$("#shortcode_topic").val()+"']";
+ 	            code += "[morsel_post_display count='"+$("#morsel_shortcode_count").val()+"' gap_in_morsel='"+$("#morsel_shortcode_gap").val()+$("#morsel_shortcode_gap_unit").val()+"' center_block='"+is_center+"' keyword_id = '"+keyword_id+"' associated_user='"+associated_user+"' topic_name='"+$("#shortcode_topic").val()+"']";
 		    }
 		    $("#short-code-preview").html("<h3>Here is your shortcode &nbsp;: \n\n"+code+"</h3>");
 		  }
