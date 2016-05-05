@@ -416,3 +416,16 @@ width: 100%;
   white-space:nowrap;
   width: 207px;
 }
+/*slider css*/
+.slider-form-half{
+  float: left;
+  width: 47%;
+}
+.postbox.shs_admin_wrapper {
+  display: inline-block;
+  width: 99%;
+}
+.mrsl-slider-img-progress {
+  float: right;
+  margin: 0 20% 10px 0;
+}

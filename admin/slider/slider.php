@@ -11,7 +11,7 @@
 	}
 
 	//add slider option by Default
-   	$morselSliderSettings['pause_time']=7000;
+  $morselSliderSettings['pause_time']=7000;
 	$morselSliderSettings['trans_time']=1000;
 	$morselSliderSettings['width']="250px";
 	$morselSliderSettings['height']="200px";
@@ -33,7 +33,7 @@ function sliderMorsel() {
 		$direction=$_POST['direction'];
 		$pause_hover=$_POST['pause_on_hover'];
 		$show_navigation=$_POST['show_navigation'];
-		
+
 		$morselSliderSettings['pause_time']=$pause_time;
 		$morselSliderSettings['trans_time']=$trans_time;
 		$morselSliderSettings['width']=$width;
@@ -49,7 +49,7 @@ function sliderMorsel() {
 	?>
 	<div class="shs_banner_wrapper">
 		<!-- WP-Banner Starts Here -->
-	
+
 		<!-- WP-Banner Ends Here -->
 	</div>
 	<?php
@@ -61,7 +61,8 @@ function sliderMorsel() {
 	$direction=$morselSliderSettings['direction'];
 	$pause_hover=$morselSliderSettings['pause_on_hover'];
 	$show_navigation=$morselSliderSettings['show_navigation'];
-	echo "<div class='shs_admin_wrapper'><h5 style='text-align:center' class='shs_shortinfo'>Use Shortcode <br> <span style='font-size:14px;font-weight: bold;'>[morselDisplaySlider]</span></h5></div>";
+	//hide on aksing ellen, ticekt #113920095
+	//echo "<div class='shs_admin_wrapper'><h5 style='text-align:center' class='shs_shortinfo'>Use Shortcode <br> <span style='font-size:14px;font-weight: bold;'>[morselDisplaySlider]</span></h5></div>";
 	echo '<div id="poststuff" style="position:relative;">
 		  <div class="postbox shs_admin_wrapper">
 		  <div class="handlediv" title="Click to toggle"><br/></div>
@@ -72,7 +73,7 @@ function sliderMorsel() {
 			?>
 			<tr><td><?php _e('Width','shs'); ?></td><td><input type='text' name='width' value='<?php echo $width; ?>' /> <?php _e('eg:200px','shs'); ?></td></tr>
 			<tr><td><?php _e('Height','shs'); ?></td><td><input type='text' name='height' value='<?php echo $height; ?>' /> <?php _e('eg:200px','shs'); ?></td></tr>
-			
+
 			<tr>
 				<td><?php _e('Show Navigation','shs'); ?></td>
 				<td>
@@ -82,7 +83,7 @@ function sliderMorsel() {
 					</select>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<td><?php _e('Pause on Hover','shs'); ?></td>
 				<td>
@@ -108,7 +109,7 @@ function sliderMorsel() {
 			echo "</table>";
 			echo "</form>";
 			echo '</div></div></div>';
-			
+
 	?>
     <?php
 	if(isset($_POST['joptsv']))
@@ -121,7 +122,7 @@ function sliderMorsel() {
 	}
 	?>
     <style>#joptions{ list-style-type: none; margin: 0; padding: 0; }</style>
-	
+
 	<div id="poststuff" style="position:relative;display:none;">
 		<div class="postbox shs_admin_wrapper">
 			<div class="handlediv" title="Click to toggle"><br/></div>
@@ -163,7 +164,7 @@ function sliderMorsel() {
 			</div>
 		</div>
 	</div>
-	
+
 	<?php
 	echo '</div>'; // .wrap
 }
@@ -187,7 +188,7 @@ function sliderCheckForSelected($option,$check){
 // 			if($content)
 // 			{
 // 			$number++;
-// 			} 
+// 			}
 // 		}
 // 	}
 // return $number;

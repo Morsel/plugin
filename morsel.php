@@ -355,34 +355,61 @@ function morsel_query_vars( $query_vars ){
       $jsonurl = MORSEL_API_URL."users/".$options['userid']."/morsels.json?api_key=$api_key&page=".$page_id;
       unset($sliderContent);
       if($sliderId != undefined && $sliderId != ""){
-         $sliderContent = $contents[$sliderId-1];
+        $sliderContent = $contents[$sliderId-1];
       }
       //$json = get_json($jsonurl); //getting whole data
       $json = json_decode(file_get_contents($jsonurl)); //json_decode(wp_remote_retrieve_body(wp_remote_get($jsonurl)));
 
-       if(!$page_id){
-        echo "Slider Name: &nbsp;&nbsp;&nbsp;<input type='text' name='sliderName' id='sliderNameSlider' value='".$sliderContent['name']."' placeholder='Slider Name'>";
-        echo ' <div style="margin-left: 18%; padding-bottom: 5px;"><input type="button" name="joptsv" class="button-primary saveSlides" value="SAVE SLIDES" onclick="saveMorselSlider()" /></div>';
-      ?>
-
-
-      <table id="sliding-table" class="widefat posts">
-              <thead>
-                <tr>
-                  <th scope='col' class='manage-column column-title sortable desc' style="padding-left: 10px;">Morsel Title</th>
-                  <th scope='col' class='manage-column column-author'>Image</th>
-                  <th scope='col' class='manage-column column-categories'><input type="checkbox" name="main" class="checkAllCheckbox" value="main" style="margin-right: 13.6px;"></th>
-                </tr>
-              </thead>
-              <!-- <tfoot>
-                <tr>
-                  <th scope='col' class='manage-column column-title sortable desc' style="padding-left: 10px;">Morsel Title</th>
-                  <th scope='col' class='manage-column column-author'>Image</th>
-                  <th scope='col' class='manage-column column-categories'><input type="checkbox" name="main" class="checkAllCheckbox" value="main"  style="margin-left:4px"></th>
-                </tr>
-              </tfoot> -->
-              <tbody id = "sliding_body">
-
+      if(!$page_id){ ?>
+      <div class="inside slider-form-half">
+          <div class="control-group">
+              <label class="control-label" for="sliderName">Slider Name: </label>
+              <div class="controls"><input type="text" name='sliderName' id='sliderNameSlider' value="<?php echo $sliderContent['name'];?>" placeholder='Slider Name'/>
+              </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="slider_width">Width: </label>
+            <div class="controls"><input type="text" value="<?php echo $sliderContent['slider_width'];?>" name="slider_width" id="slider_width" placeholder="200px Or 100%"/><br/><span>You can add width in "px" or in "%" like 200px or 100%</span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="slider_pause_time">Slider Duration: </label>
+            <div class="controls">
+              <input type="text" class="form-control" name='slider_pause_time' id='slider_pause_time' placeholder="7000 milliseconds" value="<?php echo $sliderContent['slider_pause_time'];?>"/><br/><span>You can set a interval duration between slides (in ms).</span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="slider_autoplay">AutoPlay: </label>
+            <div class="controls">
+              <select class="form-control sliderSelection" name='slider_autoplay' id='slider_autoplay'>
+                <option <?php if($sliderContent['slider_autoplay'] == "true"){ echo 'selected="selected"'; }?>>true</option>
+                <option <?php if($sliderContent['slider_autoplay'] == "false"){ echo 'selected="selected"'; }?>>false</option>
+              </select>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <input type="button" name="joptsv" class="button-primary saveSlides" value="SAVE SLIDES" onclick="saveMorselSlider()" />
+            </div>
+          </div>
+      </div>
+      <div class="inside slider-form-half">
+        <table id="sliding-table" class="widefat posts">
+          <thead>
+            <tr>
+              <th scope='col' class='manage-column column-title sortable desc' style="padding-left: 10px;">Morsel Title</th>
+              <th scope='col' class='manage-column column-author'>Image</th>
+              <th scope='col' class='manage-column column-categories'><input type="checkbox" name="main" class="checkAllCheckbox" value="main" style="margin-right: 13.6px;"></th>
+            </tr>
+          </thead>
+          <!-- <tfoot>
+            <tr>
+              <th scope='col' class='manage-column column-title sortable desc' style="padding-left: 10px;">Morsel Title</th>
+              <th scope='col' class='manage-column column-author'>Image</th>
+              <th scope='col' class='manage-column column-categories'><input type="checkbox" name="main" class="checkAllCheckbox" value="main"  style="margin-left:4px"></th>
+            </tr>
+          </tfoot> -->
+          <tbody id = "sliding_body">
       <?php }
       foreach ($json->data as $row) {?>
               <tr>
@@ -419,8 +446,9 @@ function morsel_query_vars( $query_vars ){
           if(!$page_id)
           {
           ?>
-            </tbody>
-          </table>
+        </tbody>
+      </table>
+    </div>
       <? }
    exit;
   }
@@ -440,18 +468,33 @@ function morsel_query_vars( $query_vars ){
     }
     exit;
   }
+  //save the slider images and other data
   if($_REQUEST['pagename'] == "sliderSave"){
       $sliderID = $_REQUEST["sliderID"];
       $contents = get_option('shs_slider_contents');
       $checkboxValue = $_REQUEST['cnt'];
+      $slider_width = $_REQUEST['slider_width'];
+      $slider_pause_time = $_REQUEST['slider_pause_time'];
+      $slider_autoplay = $_REQUEST['slider_autoplay'];
+
       if($sliderID){
         $contents[$sliderID-1]['slider'] = $checkboxValue;
         $contents[$sliderID-1]['name'] = $_REQUEST['sliderName'];
+        $contents[$sliderID-1]['slider_width'] = $slider_width;
+        $contents[$sliderID-1]['slider_pause_time'] = $slider_pause_time;
+        $contents[$sliderID-1]['slider_autoplay'] = $slider_autoplay;
       } else {
-        if(count($contents) > 0 ) { $count = count($contents);} else {$count = 0;}
-          $contents[$count]['slider'] = $checkboxValue;
-          $contents[$count]['name'] = $_REQUEST['sliderName'];
-          echo $count+1;
+        if(count($contents) > 0 ) {
+          $count = count($contents);
+        } else {
+          $count = 0;
+        }
+        $contents[$count]['slider'] = $checkboxValue;
+        $contents[$count]['name'] = $_REQUEST['sliderName'];
+        $contents[$count]['slider_width'] = $slider_width;
+        $contents[$count]['slider_pause_time'] = $slider_pause_time;
+        $contents[$count]['slider_autoplay'] = $slider_autoplay;
+        echo $count+1;
       }
       update_option('shs_slider_contents',$contents);
       exit;

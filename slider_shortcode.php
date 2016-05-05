@@ -15,13 +15,28 @@ function morseldisplayslider($atts)
   //print_r($atts);
   $atts = shortcode_atts( array("slider" => "1") , $atts, 'morseldisplayslider' );
   $shs_settings=get_option('morselSliderSettings');
-  $slider_duration=$shs_settings['pause_time'];
+  //global settings for slider
+/*$slider_duration=$shs_settings['pause_time'];
   $width= ($shs_settings['width'] != "")?$shs_settings['width']:'100%';
-  $autoplay=$shs_settings['show_navigation'];
+  $autoplay=$shs_settings['show_navigation'];*/
+
   $slug = get_post(get_option("morsel_plugin_page_id"))->post_name;
+
+  $contents = get_option('shs_slider_contents');
+  for($S=0;$S<count($contents);$S++){
+    if($atts['slider'] == $contents[$S]["name"]){
+       $sliderContent = $contents[$S]["slider"];
+       $width = (!empty($contents[$S]["slider_width"]))?$contents[$S]["slider_width"]:'100%';
+       $autoplay = (!empty($contents[$S]["slider_autoplay"]))? $contents[$S]["slider_autoplay"] : true;
+       $slider_duration = (!empty($contents[$S]["slider_pause_time"]))?$contents[$S]["slider_pause_time"]:7000;
+       break;
+    }
+  }
+
   ?>
   <style type="text/css">
-   .sliderPTag { left: 0;
+   .sliderPTag {
+    left: 0;
     margin: auto;
     padding: 10px;
     right: 0;
@@ -35,31 +50,24 @@ function morseldisplayslider($atts)
     text-shadow: 1px 1px 1px rgb(0, 0, 0);
     text-transform: capitalize;
   }
-.img-circular{
-  width: 72px;
-  height: 72px;
-  display: block;
-  border-radius: 50%;
-  margin: 0 auto;
-}
+  .img-circular{
+    width: 72px;
+    height: 72px;
+    display: block;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
   </style>
   <div style="width:<?=$width?>;  margin:0 auto;">
     <div id="jssor_1" style="position: relative; margin: 0 auto; top: 0px; left: 0px; width: 1200px; height: 800px; overflow: hidden; visibility: hidden;">
         <!-- Loading Screen -->
 
         <div data-u="loading" style="position: absolute; top: 0px; left: 0px;">
-            <div style="filter: alpha(opacity=70); opacity: 0.7; position: absolute; display: block; top: 0px; left: 0px; width: 100%; height: 100%;"></div>
+            <div style="filter: alpha(opacity=70); opacity: 0.7; position: absolute; display: block; top: 0px; left: 0px; width: 100%; Xzheight: 100%;"></div>
             <div class="sliderAboveDiv"></div>
         </div>
         <div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 0px; width: 1200px; height: 800px; overflow: hidden;">
-        <?php $contents = get_option('shs_slider_contents');
-          //print_r($contents);
-          for($S=0;$S<count($contents);$S++){
-            if($atts['slider'] == $contents[$S]["name"]){
-               $sliderContent = $contents[$S]["slider"];
-               break;
-            }
-          }
+        <?php
           //print_r($sliderContent);
           foreach ($sliderContent as $key => $value) {
             $imageArray = explode("@@$@@", $value);
